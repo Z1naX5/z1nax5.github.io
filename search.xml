@@ -256,8 +256,8 @@
 <h5 id="realloc-hook"><a href="#realloc-hook" class="headerlink" title="__realloc_hook:"></a>__realloc_hook:</h5><p>距离<code>__malloc_hook</code>很近，很近的意思是就在 &amp;__malloc_hook-0x08 的地方<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img.png"
-                      alt="img.png"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/!%5Bimg.png%5D(img.png).png"
+                     
                 ></p>
 <h4 id="one-gadget"><a href="#one-gadget" class="headerlink" title="one-gadget:"></a>one-gadget:</h4><p><code>one_gadget -f 路径</code></p>
 <h3 id="something-interesting"><a href="#something-interesting" class="headerlink" title="something interesting"></a>something interesting</h3><h4 id="check-remalloced-chunk-A-P-N"><a href="#check-remalloced-chunk-A-P-N" class="headerlink" title="check_remalloced_chunk(A, P, N)"></a>check_remalloced_chunk(A, P, N)</h4><p>在有关 fast bin 的源码里有这么一个函数：<code>check_remalloced_chunk(A,P,N)</code><br>可能是看到 check 于是DNA动了一下就扒了下源码</p>
