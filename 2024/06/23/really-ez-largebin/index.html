@@ -13,26 +13,24 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://Z1naX5.github.io/z1nax5.github.io/2024/05/07/人生小满，既是圆满/"/>
+    <link rel="canonical" href="https://Z1naX5.github.io/z1nax5.github.io/2024/06/23/really-ez-largebin/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="火车摇啊摇，胡思乱想。">
+        <meta name="description" content="可能有点钻牛角尖的源码分析。 bin_at;skip链表； 可能不是很重要但我不能白花时间。。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="火车摇啊摇">
-<meta property="og:url" content="https://z1nax5.github.io/z1nax5.github.io/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/index.html">
+<meta property="og:title" content="unsortedbin attack &amp; largebin attack">
+<meta property="og:url" content="https://z1nax5.github.io/z1nax5.github.io/2024/06/23/really-ez-largebin/index.html">
 <meta property="og:site_name" content="Z1naX5">
-<meta property="og:description" content="火车摇啊摇，胡思乱想。">
+<meta property="og:description" content="可能有点钻牛角尖的源码分析。 bin_at;skip链表； 可能不是很重要但我不能白花时间。。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://z1nax5.github.io/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png">
-<meta property="article:published_time" content="2024-05-07T13:17:17.000Z">
-<meta property="article:modified_time" content="2024-06-21T16:36:08.190Z">
+<meta property="article:published_time" content="2024-06-23T14:21:52.000Z">
+<meta property="article:modified_time" content="2024-06-23T15:10:41.235Z">
 <meta property="article:author" content="Z1naX5">
-<meta property="article:tag" content="喵喵">
-<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="学习日志">
+<meta property="article:tag" content="Pwn">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://z1nax5.github.io/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png">
     
     
     <!--- Icon Part-->
@@ -44,7 +42,7 @@
     
     <title>
         
-            火车摇啊摇 -
+            unsortedbin attack &amp; largebin attack -
         
         Zena Xu
     </title>
@@ -511,12 +509,8 @@
 
         <div class="article-title relative w-full">
             
-                
-                
-                <img src="https://picture.gptkong.com/20240622/00358ae98dd54a48a7a156ba2621c09808.png" alt="火车摇啊摇" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
-                
-                <div class="w-full flex items-center absolute bottom-0 justify-start">
-                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">火车摇啊摇</h1>
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">unsortedbin attack &amp; largebin attack</h1>
                 </div>
             
             </div>
@@ -535,15 +529,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-05-07 21:17:17</span>
-        <span class="mobile">2024-05-07 21:17:17</span>
+        <span class="desktop">2024-06-23 22:21:52</span>
+        <span class="mobile">2024-06-23 22:21:52</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-06-22 00:36:08</span>
-            <span class="mobile">2024-06-22 00:36:08</span>
+            <span class="desktop">2024-06-23 23:10:41</span>
+            <span class="mobile">2024-06-23 23:10:41</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -555,11 +549,11 @@
             <ul>
                 
                     <li>
-                        <a href="/z1nax5.github.io/tags/%E5%96%B5%E5%96%B5/">喵喵</a>&nbsp;
+                        <a href="/z1nax5.github.io/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/">学习日志</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/z1nax5.github.io/tags/%E9%9A%8F%E7%AC%94/">随笔</a>&nbsp;
+                        | <a href="/z1nax5.github.io/tags/Pwn/">Pwn</a>&nbsp;
                     </li>
                 
             </ul>
@@ -568,13 +562,9 @@
 
     
     
-        <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.5k Words</span>
-        </span>
-    
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>5 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
         </span>
     
     
@@ -593,58 +583,25 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <p><em>_φ</em>_(．．)</p>
-<p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
-<p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
-<h6 id="一"><a href="#一" class="headerlink" title="一"></a>一</h6><p>最先当说的应是高中生活，本就是这句“人生小满，既是圆满”一下把我的思绪拉到了高中。</p>
-<p>差不多去年今日，准备高考时买了一本作文书里面收录了一些和我调性相符还算认可的高考作文，这里还算认可的意思大概是说写得细腻，在限时考试的背景下我仍能从里面看到些许的文字的斟酌或者追求。</p>
-<p>扯远了，这样显得我写东西多清高了，不过文人相轻是常态嘛，也该轮到我清高清高了。</p>
-<p>那时读到有一篇议论文的立意就是“人生小满，既是圆满”，也一样是从节气、自然讲到人生，佐以中华传统文化等素材一道写的饱满充实。不过可能到现在我还是就记住了“人生小满”，也可能当时那些辞藻、结构、渲染就没看进去，当时神经衰弱（现在也神经衰弱）压力挺大的，也就只能看见“人生小满”。</p>
-<h6 id="二"><a href="#二" class="headerlink" title="二"></a>二</h6><p>说到压力大，我前段时间压力就还蛮大的，忙到天天被迫熬夜还看了两次凌晨四点的杭电，不过我还是忙里偷闲会写博客，反而五一忙完了就一直在睡觉或者打打游戏，总之称不上多有营养。</p>
-<p>在忙的时候，时常想着忙完了就狠狠更新博客，把这天上地下的都点评一番，我对象挺不能理解为什么我这么喜欢写博客，还要催他去开一个。除了可以偷窥他在干什么，对我而言博客的意义是这里的确是我可以把心剖开了的地方。这里是如同群聊一样的私域链接，也不会像群聊一样提示你谁更新了，后悔了也能直接撤了文章。我清楚地知道谁可能会看，我也不介意，能知道这个地址的朋友若是有心关心我，来看看我我也挺乐意的。</p>
-<h6 id="三"><a href="#三" class="headerlink" title="三"></a>三</h6><p>原本想要写的一篇，名字就叫“火车摇啊摇”，也就是现在这篇的名字。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png"
-                      alt="img.png"
-                ></p>
-<p>许久不坐绿皮车了，但我以前坐的实在多，以至于一上车闻到那股淡淡烟草味混合着微生物腐臭味的气息时，回忆能一下冲垮了我推论的思路。下午的正赛有点难打，我们是劣势持方，从结果评委的点评来看，我们的言辞需要更精准，论证需要更多环节，要将辩题外的东西来围猎对面，也需要讲辩题外的东西为什么可以讲。对于正方，他们只要简单的讲讲自己就好。</p>
-<p>我从没有为一场辩论模辩过三次，写四五千字的稿子，甚至于失掉辩论的自信。</p>
-<p>在此之前，我一直认为，辩论是一件我擅长却不敢兴趣的事，如果生活不冲突的话，在自己擅长的地方大杀四方当然畅快，但是如果冲突了，那我当然不会忙不感兴趣的事了。</p>
-<p>不过这“最后一场辩论”，让我连是否擅长辩论都不太确信了。或许是我的前置位队友不够给力，让我每次发言都很难受；或许是来找我的学姐言辞凛然，让我总觉得自己做得不够好；或许是真的就是太难了，这个辩题在网上你都找不到一场我方持方打赢的视频…………</p>
-<p>这“最后一场辩论”里我的表现，自我感觉是不好的。我问学长，“感觉我今天打的还没新生杯的时候好”，学长说，“怎么会呢，辩论肯定是越打越好的”。</p>
-<p>火车摇啊摇，胡思乱想。</p>
-<p>绿皮车的气味真是难闻，坐了几十上百次我还是没适应。如果不是我把一周半准备三个辩题误以为一周半准备一个辩题，我应当也不会接下这场全国范围的竞技辩，也不会退掉五一回上海的车票，而买了偏远的杭州南为了确保一定能在下午前到嘉兴比赛。</p>
-<p>杭州南，好像都是绿皮车。</p>
-<p>我记得以前在嘉兴-上海的绿皮车上，我也总爱胡思乱想，过去想想没写完的作业就像现在想想没推完的论，就连不知所措和时间紧迫的焦虑也大差不差。</p>
-<h6 id="四"><a href="#四" class="headerlink" title="四"></a>四</h6><p>输了辩论，但和辩论队的纠葛很难完全了断。</p>
-<p>协会的学长其实都觉得这是没什么大不了的小事，脸皮厚一点就好了。</p>
-<p>但我是个耳根子软的人，旁人随意说两句，我很容易就在意。就像现在准备转专业一样，原本坚定了一个半学期，但是有人在我面前真诚的说上两句，加上一个我确实没考虑过的角度，我就很听劝的开始咨询转专业。</p>
-<p>这种无条件无意义的在意，除了让我费神之外，也给我加上了一层社交体面的被动。“火车摇啊摇”，其实是朋友圈的真心话版，而朋友圈，只是宣告离别辩论的社交仪式。</p>
-<h6 id="五"><a href="#五" class="headerlink" title="五"></a>五</h6><p><em>*上传的时候发现这里被我手滑空格删掉了，那就这样吧，本来这段写的也不好,弥补的事少做一点，前进的事多做一点</em></p>
-<h6 id="六"><a href="#六" class="headerlink" title="六"></a>六</h6><p>人生小满，既是圆满。</p>
-<p>有感触还是因为觉得最近也算人生小满，说人生太大了，要把眼光放的局限一点，再局限一点。</p>
-<p>我5号染了个还不错的头，小满。</p>
-
+            
         </div>
 
         
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> 火车摇啊摇</li>
+        <li><strong>Title:</strong> unsortedbin attack &amp; largebin attack</li>
         <li><strong>Author:</strong> M1aoo0bin</li>
         <li><strong>Created at
-                :</strong> 2024-05-07 21:17:17</li>
+                :</strong> 2024-06-23 22:21:52</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-06-22 00:36:08
+                    :</strong> 2024-06-23 23:10:41
             </li>
         
         <li>
-            <strong>Link:</strong> https://redefine.ohevan.com/2024/05/07/人生小满，既是圆满/
+            <strong>Link:</strong> https://redefine.ohevan.com/2024/06/23/really-ez-largebin/
         </li>
         <li>
             <strong>
@@ -666,11 +623,11 @@
             <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
                 
                     <li class="tag-item mx-0.5">
-                        <a href="/z1nax5.github.io/tags/%E5%96%B5%E5%96%B5/">#喵喵</a>&nbsp;
+                        <a href="/z1nax5.github.io/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/">#学习日志</a>&nbsp;
                     </li>
                 
                     <li class="tag-item mx-0.5">
-                        <a href="/z1nax5.github.io/tags/%E9%9A%8F%E7%AC%94/">#随笔</a>&nbsp;
+                        <a href="/z1nax5.github.io/tags/Pwn/">#Pwn</a>&nbsp;
                     </li>
                 
             </ul>
@@ -681,29 +638,14 @@
         
             <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
                 
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/z1nax5.github.io/2024/05/13/%E7%99%BD%E9%B8%9F%E8%BF%87%E6%B2%B3%E6%BB%A9/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">不定时更新小诗</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/z1nax5.github.io/2024/04/20/%E5%85%B6%E5%AE%9E%E6%88%91%E6%A0%B9%E6%9C%AC%E4%B8%8D%E4%BC%9ACTF%EF%BC%8C%E6%88%91%E5%8F%AA%E4%BC%9A%E7%9E%8E%E5%87%A0%E6%8A%8A%E4%B9%B1%E6%8C%89/"
+                        href="/z1nax5.github.io/2024/06/22/Wandering/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">四月猫饼周记</span>
+                                <span class="post-nav-title-item">Wandering</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -724,7 +666,7 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">火车摇啊摇</div>
+        <div class="page-title">unsortedbin attack &amp; largebin attack</div>
         
 
     </div>
