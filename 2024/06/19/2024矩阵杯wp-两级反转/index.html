@@ -25,20 +25,20 @@
 <meta property="og:site_name" content="Z1naX5">
 <meta property="og:description" content="false">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://z1nax5.github.io/0.png">
-<meta property="og:image" content="https://z1nax5.github.io/img.png">
-<meta property="og:image" content="https://z1nax5.github.io/img_1.png">
-<meta property="og:image" content="https://z1nax5.github.io/new0.png">
-<meta property="og:image" content="https://z1nax5.github.io/img_2.png">
-<meta property="og:image" content="https://z1nax5.github.io/img_3.png">
+<meta property="og:image" content="https://z1nax5.github.io/z1nax5.github.io/0.png">
+<meta property="og:image" content="https://z1nax5.github.io/z1nax5.github.io/img.png">
+<meta property="og:image" content="https://z1nax5.github.io/z1nax5.github.io/img_1.png">
+<meta property="og:image" content="https://z1nax5.github.io/z1nax5.github.io/new0.png">
+<meta property="og:image" content="https://z1nax5.github.io/z1nax5.github.io/img_2.png">
+<meta property="og:image" content="https://z1nax5.github.io/z1nax5.github.io/img_3.png">
 <meta property="article:published_time" content="2024-06-18T21:59:47.000Z">
 <meta property="article:modified_time" content="2024-06-18T22:45:45.998Z">
 <meta property="article:author" content="Z1naX5">
-<meta property="article:tag" content="CV">
 <meta property="article:tag" content="wp">
 <meta property="article:tag" content="Misc">
+<meta property="article:tag" content="CV">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://z1nax5.github.io/0.png">
+<meta name="twitter:image" content="https://z1nax5.github.io/z1nax5.github.io/0.png">
     
     
     <!--- Icon Part-->
@@ -561,15 +561,15 @@
             <ul>
                 
                     <li>
-                        <a href="/z1nax5.github.io/tags/CV/">CV</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/z1nax5.github.io/tags/wp/">wp</a>&nbsp;
+                        <a href="/z1nax5.github.io/tags/wp/">wp</a>&nbsp;
                     </li>
                 
                     <li>
                         | <a href="/z1nax5.github.io/tags/Misc/">Misc</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/z1nax5.github.io/tags/CV/">CV</a>&nbsp;
                     </li>
                 
             </ul>
@@ -609,21 +609,21 @@
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/0.png"
+                     data-src="/z1nax5.github.io/0.png"
                       alt="0.png"
                 ></p>
 <p>没关系，还有一条PS：让我熟悉二维码结构</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img.png"
+                     data-src="/z1nax5.github.io/img.png"
                       alt="img.png"
                 ></p>
 <p>对照一下我们的图片，初见端倪啊。</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img_1.png"
+                     data-src="/z1nax5.github.io/img_1.png"
                       alt="img_1.png"
                 ><br>红框一列的地方黑白是固定的，奇偶的问题解决了；<br>图像处理的范围其实不能完全确定，不是整张图是肯定的，但具体一定要多少呢？其实没有足够明确的证据来佐证<br>但是没关系，二维码图形本身有很好的反混淆，我们既是没有完全复原依旧可以尝试能不能读出信息</p>
 <p>先复原红框的部分<br>拿上次的RCTF脚本略略修改一下</p>
@@ -631,19 +631,19 @@
 <p>结果：<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/new0.png"
+                     data-src="/z1nax5.github.io/new0.png"
                       alt="new0.png"
                 ><br>扫一下，出了。</p>
 <h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><h4 id="有关为什么这个结果这么丑陋："><a href="#有关为什么这个结果这么丑陋：" class="headerlink" title="有关为什么这个结果这么丑陋："></a>有关为什么这个结果这么丑陋：</h4><p>实际上，这张二维码的图片如果拖进画图等可以数像素的软件里人力分析一下，很容易发现，它是25像素对齐的，也就是一个黑点或白点理论上是25*25像素。<br>然而，黑色并不完全遵循这个25对齐，只有当有另一个黑点和它接壤时，他才会在连接处满足25个像素对齐，否则就是24个黑色像素加上一行或一列多余的白色像素。<br>一开始我的确想要处理掉这些像素，方案为统统改为24像素对齐，但是写到一半的时候考虑到<strong>二维码有很好的反混淆性</strong>，说实话1对于24来说就是一个很小的噪声，所以就忽略不计了，把最外围的1像素白边切掉后直接处理图像就ok了。</p>
 <h4 id="有关二维码有很好的反混淆性："><a href="#有关二维码有很好的反混淆性：" class="headerlink" title="有关二维码有很好的反混淆性："></a>有关二维码有很好的反混淆性：</h4><p>这实际上是一个很有意思的知识，二维码是有自己的版本以及纠错级别的，每个二维码出生的时候就被选择了能承载多少的什么形式的信息，但是具体的就不说了，网上有非常多讲这块讲的很清楚的。<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img_2.png"
+                     data-src="/z1nax5.github.io/img_2.png"
                       alt="img_2.png"
                 ><br>可以看到，如果我想要容纳更多的噪声（纠错能力变强），那么能够实际留存的有效信息越少，很符合直觉。<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img_3.png"
+                     data-src="/z1nax5.github.io/img_3.png"
                       alt="img_3.png"
                 ></p>
 
@@ -686,15 +686,15 @@
             <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
                 
                     <li class="tag-item mx-0.5">
-                        <a href="/z1nax5.github.io/tags/CV/">#CV</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item mx-0.5">
                         <a href="/z1nax5.github.io/tags/wp/">#wp</a>&nbsp;
                     </li>
                 
                     <li class="tag-item mx-0.5">
                         <a href="/z1nax5.github.io/tags/Misc/">#Misc</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/z1nax5.github.io/tags/CV/">#CV</a>&nbsp;
                     </li>
                 
             </ul>

