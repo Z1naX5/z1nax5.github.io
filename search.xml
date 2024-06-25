@@ -1,120 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>2024RCTFwp sec-image</title>
-    <url>/z1nax5.github.io/2024/05/28/RCTF2024-wp-sec-image/</url>
-    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
-<h2 id="sec-image"><a href="#sec-image" class="headerlink" title="sec-image"></a>sec-image</h2><p>information: real sec ??</p>
-<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>下了文件解包之后应该映入眼帘的是flag0.png~flag9.png这样十张图<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img.png"
-                     
-                ><br>来看第一张图：<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/flag0.png"
-                     
-                ><br>其实我没太看出来（（，但是大伙都说肉眼可看是RCTF<br>ok，可看&#x3D;&#x3D;可打<br>很明显他是四个字母叠在一起<br>放大看看，我首先去看了字母T中间那一竖的地方：<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img_1.png"
-                     
-                ><br><strong>以普遍理性而言，一个小白格子对于一个字母应该是只有单一的信息</strong><br>所以只应该关注重复的小黑点，那些大大小小的就看作是噪声，可以看到对字母T的特征就是一种整体往左下偏移的网点阵<br>猜想别的字母也是网点阵<br>可以再看一个比较复杂的区域<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img_2.png"
-                     
-                ><br>很明显都是一些有规律的图形，每个重复的单元都可以用2*2的大小表示，就像铺地砖一样铺出来，<br>这里就基本证实我们的猜想，这张图是把不同偏移的网点图叠加在一起：<br>简单分析一下得到这张图的偏移是：</p>
-<table>
-<thead>
-<tr>
-<th align="center">R</th>
-<th align="center">C</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">T</td>
-<td align="center">F</td>
-</tr>
-</tbody></table>
-<p>ok，那就很简单了如果我们把这张图表示这个字母的地方截取出来再拼接，就能看到flag了。<br>以下是脚本：</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=4, offset_y=4, flag=0):</span><br><span class="line">    # 跳过外围黑边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    x = 0</span><br><span class="line">    y = 0</span><br><span class="line">    p = 0</span><br><span class="line">    if flag == 1:</span><br><span class="line">        pass</span><br><span class="line">    elif flag == 2:</span><br><span class="line">        x += 1</span><br><span class="line">    elif flag == 3:</span><br><span class="line">        y += 1</span><br><span class="line">    else:</span><br><span class="line">        x += 1</span><br><span class="line">        y += 1</span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(40):</span><br><span class="line">        for _ in range(6):</span><br><span class="line">            img1 = img[:, :x ]</span><br><span class="line">            img2 = img[:, x + 1:]</span><br><span class="line">            img = cv2.hconcat([img1, img2])</span><br><span class="line">            x+=1</span><br><span class="line">        if i == 39:</span><br><span class="line">            break</span><br><span class="line">        p += 6</span><br><span class="line">        img1=img[:, :p]</span><br><span class="line">        img2=img[:, p+8:]</span><br><span class="line">        img = cv2.hconcat([img1, img2])</span><br><span class="line">    # 再切y</span><br><span class="line">    p=0</span><br><span class="line">    for i in range(40):</span><br><span class="line">        for j in range(7):</span><br><span class="line">            img1 = img[:y , :]</span><br><span class="line">            img2 = img[y + 1:, :]</span><br><span class="line">            img = cv2.vconcat([img1, img2])</span><br><span class="line">            y+=1</span><br><span class="line">        if i == 39:</span><br><span class="line">            break</span><br><span class="line">        p += 7</span><br><span class="line">        img1 = img[ : p , :]</span><br><span class="line">        img2 = img[ p+6 : , :]</span><br><span class="line">        img = cv2.vconcat([img1, img2])</span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">for i in range(10):</span><br><span class="line">    filename = f&quot;flag&#123;i&#125;.png&quot;</span><br><span class="line">    img0 = cv2.imread(filename)</span><br><span class="line">    for j in range(4):</span><br><span class="line">        img = split4db(img=img0, flag=(j + 1))</span><br><span class="line">        savename = f&quot;rctf&#123;(i+1) * 4 -j&#125;.png&quot;</span><br><span class="line">        cv2.imwrite(savename, img)</span><br></pre></td></tr></table></figure></div>
-<p>结果：<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img_3.png"
-                     
-                ></p>
-<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>为了维持干净的wp,把一些思路还是放在后面<br>所以在这个答案之前，我也有过这样的想法：</p>
+    <title>视觉、深度学习相关论文分享</title>
+    <url>/z1nax5.github.io/2024/04/11/AI-2.0-01/</url>
+    <content><![CDATA[<p><em>φ</em>(．．)</p>
+<ol>
+<li>Attention Is All You Need|2017</li>
+<li>An image is worth 16 x 16 words:transformers for image recognition at scale|2021|ICLR</li>
+<li>Masked Autoencoders Are Scalable Vision Learners|2022|CVPR</li>
+</ol>
 <blockquote>
-<p>去根据灰度标记每个白色小方格标志为[0,1,2,3,4]中一个，来表示这个块有几个字母，因为每个图其实都有一个能看出来的字母，然后把这个字母所在方格的标志减掉一，然后反向操作，从标志到灰度，再看看有什么能看出来的字符。</p>
+<p>更新：对于第一篇paper，你可能需要清楚什么是<code>Attention</code>,<code>encoder-decoder</code>,以及一些深度学习的基础知识。这样你会更快了解什么是<code>transformer</code><br>第二篇,你可能需要清楚什么是<code>patch</code>,<code>CNN</code>,以及一些CV的基础知识，他的成果基于<code>transformer</code>,所以也请大致知道<code>transformer</code>是什么。这样你会更快了解什么是<code>VIT</code><br>第三篇，你看到了<code>VIT</code>的无限潜力，在<code>Self-Supervised Learning</code>后，对于像素这样级别很低的输出依然有惊人的表现，这得益于它的非对称<code>encoder-decoder</code>，或许图片里的信息真的太冗余了呢？  </p>
 </blockquote>
-<p>当然，这个思路弊端很明显：</p>
-<ul>
-<li>没有位置信息</li>
-<li>把看的出结果的方格减一很难做得很准确，尤其是在文字边缘</li>
-<li>更有可能出现把已知得字符减去之后，找不到新的字符的情况</li>
-</ul>
-<p>所以放弃这个思路，更仔细的去看每一块的内容，或许cv的题真的可以从出题的角度去看题，从这个题是怎么构成出出来的考虑。<br>于是就想到要去看看具体每一块的内容。</p>
-<p>完结撒花<em>★,°</em>:.☆(￣▽￣)&#x2F;$:<em>.°★</em> 。<br>题的脚本不是很难构造，想到就是想到，很misc的一道题</p>
 ]]></content>
       <tags>
-        <tag>wp</tag>
-        <tag>Misc</tag>
-        <tag>CV</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2024矩阵杯wp 两级反转</title>
-    <url>/z1nax5.github.io/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/</url>
-    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
-<h2 id="两级反转"><a href="#两级反转" class="headerlink" title="两级反转"></a>两级反转</h2><p>两极反转，黑白不分<br>奇变偶不变，横变竖不变<br>(PS:或许你要非常熟悉二维码的结构  </p>
-<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>光看提示大概可以猜到是奇数的横行颜色黑白反转了<br>但是有个问题是index是从0还是1开始计数呢？都很合理啊<br>而且位置探测的三个方块很明显是正确的，那就是处理图像是要跳过这些正确的部分（？</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/0.png"
-                      alt="0.png"
-                ></p>
-<p>没关系，还有一条PS：让我熟悉二维码结构</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img.png"
-                      alt="img.png"
-                ></p>
-<p>对照一下我们的图片，初见端倪啊。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img_1.png"
-                      alt="img_1.png"
-                ><br>红框一列的地方黑白是固定的，奇偶的问题解决了；<br>图像处理的范围其实不能完全确定，不是整张图是肯定的，但具体一定要多少呢？其实没有足够明确的证据来佐证<br>但是没关系，二维码图形本身有很好的反混淆，我们既是没有完全复原依旧可以尝试能不能读出信息</p>
-<p>先复原红框的部分<br>拿上次的RCTF脚本略略修改一下</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=1, offset_y=1, flag=0):</span><br><span class="line">    # 跳过外围白边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    p = 0</span><br><span class="line"></span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(29):</span><br><span class="line">        p += 25</span><br><span class="line">        if i&lt;7 or i&gt;21:</span><br><span class="line">            continue</span><br><span class="line">        else:</span><br><span class="line">            if i%2==0:</span><br><span class="line">                img[p-25:p+1,:]=cv2.bitwise_not(img[p-25:p+1,:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">img=cv2.imread(&quot;8E2A248B-0EE8-42b2-B19B-C6A9CE0D47F8.png&quot;)</span><br><span class="line">img=split4db(img)</span><br><span class="line">cv2.imwrite(&#x27;new0.png&#x27;, img)</span><br></pre></td></tr></table></figure></div>
-<p>结果：<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/new0.png"
-                      alt="new0.png"
-                ><br>扫一下，出了。</p>
-<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><h4 id="有关为什么这个结果这么丑陋："><a href="#有关为什么这个结果这么丑陋：" class="headerlink" title="有关为什么这个结果这么丑陋："></a>有关为什么这个结果这么丑陋：</h4><p>实际上，这张二维码的图片如果拖进画图等可以数像素的软件里人力分析一下，很容易发现，它是25像素对齐的，也就是一个黑点或白点理论上是25*25像素。<br>然而，黑色并不完全遵循这个25对齐，只有当有另一个黑点和它接壤时，他才会在连接处满足25个像素对齐，否则就是24个黑色像素加上一行或一列多余的白色像素。<br>一开始我的确想要处理掉这些像素，方案为统统改为24像素对齐，但是写到一半的时候考虑到<strong>二维码有很好的反混淆性</strong>，说实话1对于24来说就是一个很小的噪声，所以就忽略不计了，把最外围的1像素白边切掉后直接处理图像就ok了。</p>
-<h4 id="有关二维码有很好的反混淆性："><a href="#有关二维码有很好的反混淆性：" class="headerlink" title="有关二维码有很好的反混淆性："></a>有关二维码有很好的反混淆性：</h4><p>这实际上是一个很有意思的知识，二维码是有自己的版本以及纠错级别的，每个二维码出生的时候就被选择了能承载多少的什么形式的信息，但是具体的就不说了，网上有非常多讲这块讲的很清楚的。<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img_2.png"
-                      alt="img_2.png"
-                ><br>可以看到，如果我想要容纳更多的噪声（纠错能力变强），那么能够实际留存的有效信息越少，很符合直觉。<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/img_3.png"
-                      alt="img_3.png"
-                ></p>
-]]></content>
-      <tags>
-        <tag>wp</tag>
-        <tag>Misc</tag>
+        <tag>AI</tag>
+        <tag>Paper Reading</tag>
         <tag>CV</tag>
       </tags>
   </entry>
@@ -183,22 +84,56 @@
       </tags>
   </entry>
   <entry>
-    <title>视觉、深度学习相关论文分享</title>
-    <url>/z1nax5.github.io/2024/04/11/AI-2.0-01/</url>
-    <content><![CDATA[<p><em>φ</em>(．．)</p>
-<ol>
-<li>Attention Is All You Need|2017</li>
-<li>An image is worth 16 x 16 words:transformers for image recognition at scale|2021|ICLR</li>
-<li>Masked Autoencoders Are Scalable Vision Learners|2022|CVPR</li>
-</ol>
-<blockquote>
-<p>更新：对于第一篇paper，你可能需要清楚什么是<code>Attention</code>,<code>encoder-decoder</code>,以及一些深度学习的基础知识。这样你会更快了解什么是<code>transformer</code><br>第二篇,你可能需要清楚什么是<code>patch</code>,<code>CNN</code>,以及一些CV的基础知识，他的成果基于<code>transformer</code>,所以也请大致知道<code>transformer</code>是什么。这样你会更快了解什么是<code>VIT</code><br>第三篇，你看到了<code>VIT</code>的无限潜力，在<code>Self-Supervised Learning</code>后，对于像素这样级别很低的输出依然有惊人的表现，这得益于它的非对称<code>encoder-decoder</code>，或许图片里的信息真的太冗余了呢？  </p>
-</blockquote>
+    <title>2024矩阵杯wp 两级反转</title>
+    <url>/z1nax5.github.io/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/</url>
+    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
+<h2 id="两级反转"><a href="#两级反转" class="headerlink" title="两级反转"></a>两级反转</h2><p>两极反转，黑白不分<br>奇变偶不变，横变竖不变<br>(PS:或许你要非常熟悉二维码的结构  </p>
+<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>光看提示大概可以猜到是奇数的横行颜色黑白反转了<br>但是有个问题是index是从0还是1开始计数呢？都很合理啊<br>而且位置探测的三个方块很明显是正确的，那就是处理图像是要跳过这些正确的部分（？</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/0.png"
+                      alt="0.png"
+                ></p>
+<p>没关系，还有一条PS：让我熟悉二维码结构</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img.png"
+                      alt="img.png"
+                ></p>
+<p>对照一下我们的图片，初见端倪啊。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_1.png"
+                      alt="img_1.png"
+                ><br>红框一列的地方黑白是固定的，奇偶的问题解决了；<br>图像处理的范围其实不能完全确定，不是整张图是肯定的，但具体一定要多少呢？其实没有足够明确的证据来佐证<br>但是没关系，二维码图形本身有很好的反混淆，我们既是没有完全复原依旧可以尝试能不能读出信息</p>
+<p>先复原红框的部分<br>拿上次的RCTF脚本略略修改一下</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=1, offset_y=1, flag=0):</span><br><span class="line">    # 跳过外围白边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    p = 0</span><br><span class="line"></span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(29):</span><br><span class="line">        p += 25</span><br><span class="line">        if i&lt;7 or i&gt;21:</span><br><span class="line">            continue</span><br><span class="line">        else:</span><br><span class="line">            if i%2==0:</span><br><span class="line">                img[p-25:p+1,:]=cv2.bitwise_not(img[p-25:p+1,:])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">img=cv2.imread(&quot;8E2A248B-0EE8-42b2-B19B-C6A9CE0D47F8.png&quot;)</span><br><span class="line">img=split4db(img)</span><br><span class="line">cv2.imwrite(&#x27;new0.png&#x27;, img)</span><br></pre></td></tr></table></figure></div>
+<p>结果：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/new0.png"
+                      alt="new0.png"
+                ><br>扫一下，出了。</p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><h4 id="有关为什么这个结果这么丑陋："><a href="#有关为什么这个结果这么丑陋：" class="headerlink" title="有关为什么这个结果这么丑陋："></a>有关为什么这个结果这么丑陋：</h4><p>实际上，这张二维码的图片如果拖进画图等可以数像素的软件里人力分析一下，很容易发现，它是25像素对齐的，也就是一个黑点或白点理论上是25*25像素。<br>然而，黑色并不完全遵循这个25对齐，只有当有另一个黑点和它接壤时，他才会在连接处满足25个像素对齐，否则就是24个黑色像素加上一行或一列多余的白色像素。<br>一开始我的确想要处理掉这些像素，方案为统统改为24像素对齐，但是写到一半的时候考虑到<strong>二维码有很好的反混淆性</strong>，说实话1对于24来说就是一个很小的噪声，所以就忽略不计了，把最外围的1像素白边切掉后直接处理图像就ok了。</p>
+<h4 id="有关二维码有很好的反混淆性："><a href="#有关二维码有很好的反混淆性：" class="headerlink" title="有关二维码有很好的反混淆性："></a>有关二维码有很好的反混淆性：</h4><p>这实际上是一个很有意思的知识，二维码是有自己的版本以及纠错级别的，每个二维码出生的时候就被选择了能承载多少的什么形式的信息，但是具体的就不说了，网上有非常多讲这块讲的很清楚的。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_2.png"
+                      alt="img_2.png"
+                ><br>可以看到，如果我想要容纳更多的噪声（纠错能力变强），那么能够实际留存的有效信息越少，很符合直觉。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_3.png"
+                      alt="img_3.png"
+                ></p>
 ]]></content>
       <tags>
         <tag>CV</tag>
-        <tag>AI</tag>
-        <tag>Paper Reading</tag>
+        <tag>wp</tag>
+        <tag>Misc</tag>
       </tags>
   </entry>
   <entry>
@@ -345,12 +280,148 @@
       </tags>
   </entry>
   <entry>
-    <title>unsortedbin attack &amp; largebin attack</title>
-    <url>/z1nax5.github.io/2024/06/23/really-ez-largebin/</url>
-    <content><![CDATA[]]></content>
+    <title>四月猫饼周记</title>
+    <url>/z1nax5.github.io/2024/04/20/%E5%85%B6%E5%AE%9E%E6%88%91%E6%A0%B9%E6%9C%AC%E4%B8%8D%E4%BC%9ACTF%EF%BC%8C%E6%88%91%E5%8F%AA%E4%BC%9A%E7%9E%8E%E5%87%A0%E6%8A%8A%E4%B9%B1%E6%8C%89/</url>
+    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
+<p>为了避免博客里水货太多就还是把这些东西放在一起啦，，反正一般就我自己看。</p>
+<h2 id="四月之前"><a href="#四月之前" class="headerlink" title="四月之前"></a>四月之前</h2><p><code>date: 2024-03-31 16:13:35</code>  </p>
+<p>(&#x3D;◉ᆽ◉&#x3D;)</p>
+<p>总算是在3.31号把自己的博客搭出来了，拖了这么久其实最后也没花多久，大概也就半个小时不到，加上处理一些小的报错20分钟也就好了。。。总的来说还是太能拖了。</p>
+<p>✧<em>｡ (ˊᗜˋ</em>) ✧*</p>
+<p>今天也是vidar见面会，感觉菜鸟误入高手区（（（主要是自己打不了比赛却因为别的特长进入了且其实本来都做好了再来一年的准备(っ◞‸◟c)。但愿之后一切都顺利。</p>
+<p>其实当时加美工群的时候就对Vidar很有归属感，因为这里的人都是喵喵教，喵喵圣火！</p>
+<p>L0学姐好美(✧∇✧)，想当初貌似就是做杂项的时候看了L0学姐的博客从杂项误入pwn途，但是现在貌似要被打回杂项力。不过pwn是真的帅，‘pwn’的一声把你的电脑控制了，就是看了这句话鬼迷心窍wwww。<br>可惜这块我实在是天赋不强。。。没有以前硬刚就能达到一个丝滑飞升的感觉。（希望早日龙场悟道。(・ ・)</p>
+<p>下一步重心还是先放在AI上吧。。有一个好的起点不发展也可惜了这下得从头开始机器学习力，想当初去年雄姿英发一力降十会（主打一个程序员80%的代码都不是自己写的但是我看得懂就行了）</p>
+<h2 id="搭建博客9天后，一只猫猫发生了这样的变化"><a href="#搭建博客9天后，一只猫猫发生了这样的变化" class="headerlink" title="搭建博客9天后，一只猫猫发生了这样的变化"></a>搭建博客9天后，一只猫猫发生了这样的变化</h2><p><code>date: 2024-04-09 20:54:28</code>  </p>
+<p><em>_φ</em>_(．．)</p>
+<p>好累啊，清明后要连上6天。我还拖延了好多事没做&#x2F;ᐠᵕ̩̩̥ ‸ᵕ̩̩̥ ᐟ\ﾉ</p>
+<p>在AI上面小有长进，_(嘿嘿<strong>臭狗</strong>的课我也是蹭上了_，大概是从0.01到0.05的进步吧，满分是10，我说的（<br>但是还是得赶快把AI的一周总结写出来，不然又要忘记了，自己再写一遍肯定能加深印象。</p>
+<p>live2d把Vidar娘的头九轴做了，<strong>战斗，爽！！</strong><br>眼球用了新技术，少了好多后期调试，可惜习得新技术的时候花了好多时间测试_(:3 」∠ )_<br>而且还入了正版ಥ_ಥ有点小贵，不过学生优惠很划算主要心痛在感觉我的盗版4.2也能完成这些任务啊啊啊啊啊，没有新软件才能搞的啊啊啊啊<br>此次九轴比起上次也是有进步啦，这个后脑勺做的有模有样地，而且后期补的拆分侧发也很合适(●´ω｀●)ゞ也总结了些小经验，不过感觉更加稳定丝滑的九轴经验总归是要到下一代才能用上啦<br>至于物理什么的。。下辈子吧，看样子这个拆分还有重新补图的必要性(๑•́ ₃ •̀๑)不过拆分的死哥还是超级伟大！！</p>
+<p>周一机缘巧合进了一个导师的项目组，本来跟导师这种事对我肯定是很犹豫的。。但是我室友邀请我的时候问了两句，做的和神经网络密切相关。。。这个世界是一个巨大的神经网络，，，</p>
+<h4 id="现论证如下："><a href="#现论证如下：" class="headerlink" title="现论证如下："></a>现论证如下：</h4><p>这个世界有很多人；<br>人是神金，又是一切社会关系的总和；<br>社会关系是网络；<br>所以这个个世界是一个巨大的神金网络(≖＿≖)✧<br>现在好了，导师催我一周看三篇神金论文了இдஇ<br>这次小小AI还不束手就擒！</p>
+<p>这次学会了md怎么换行而不是换段（好像并不值得骄傲呵呵<br>之后应该会把那个项目组的学习成果里一些能够同步的稳定上传了maybe<br>CTF这块看来真的是要脱节了。。d3怎么办啊。。都没有我的赛道我做鸡毛啊，10天可以速成什么谁来救救我(╥﹏╥)</p>
+<h2 id="我又滚回来做视觉了"><a href="#我又滚回来做视觉了" class="headerlink" title="我又滚回来做视觉了"></a>我又滚回来做视觉了</h2><p><code>date: 2024-04-17 00:18:06</code></p>
+<p>(◞‸◟)</p>
+<p>第六第七周，又忙又累</p>
+<p>首先想早点和辩论队做切割，，真的是客观主观都不适合，，辩论队是个好队，嗯。</p>
+<p>清明结束，，爽上六天课，感觉自己是尸体，每天早上都在做傻事</p>
+<p>另外我收回上学期我对视觉不感兴趣的话，PlaidCTF一个两小时闹鬼小视频给姐们吊成翘嘴了，要不是我去团建了两个我必拿下好吧！现在已经做到了相对很成功的追踪了，有空肯定是会来复现这道题的，但是我最近怎么这么忙啊啊啊啊<br>Misc真好玩嘿嘿(ㆆᴗㆆ)，是时候回家了，回到最初的温暖嘻嘻</p>
+<p>第一次写学习笔记的博客，本来是希望一边复习一边能写成猴子都能看懂的，，最起码让能看到这篇的友友不要和我当初一样苦，但是自己写了才知道原来互联网上那么多垃圾不是没由来的，我也好拉，感觉那些真正有用的东西想要清晰的、实用的写出来确实很难。。<br>但是也很幸运的在网上挖到宝了，尽管停更于2020年。<br>之后博客的工作要暂停一阵子了，最近没有时间写了，今天组会就开了超级久，但是感觉都是些没劲的东西。<br>还有一个原因是组会的老师让我们看2023年之后的论文，但是我现在写的东西可能连05年的进度都还没到。。<br>不过AI本身就和他的算法一样，是迭代的技术啦，就是有的老东西一直留下来，而有的被更替。<br>所以我觉得可能我对前沿的了解多一点之后，会更有写blog的重点。而且对我来说写blog也算放松的一种啦，只是最近没时间放松。(☍﹏⁰。)</p>
+<p>┌|◎o◎|┘好像没啥要说了 大物 期中 救救</p>
+<h2 id="我只会瞎jb乱按"><a href="#我只会瞎jb乱按" class="headerlink" title="我只会瞎jb乱按"></a>我只会瞎jb乱按</h2><p><code>date: 2024-04-20 22:53:39</code></p>
+<p>(´Ａ｀。)</p>
+<p>内容被作者撤回啦，可公开的情报：</p>
+<p>想重新学python，，；<br>C不会了，，；<br>web知识为0；<br>因为不喜欢AI所以对pwn念念不忘，其实CV和机器学习这两块在我大脑里结合的不是很好；<br>谴责<strong>臭狗</strong>不会好好看我的博客；</p>
+]]></content>
       <tags>
-        <tag>学习日志</tag>
-        <tag>Pwn</tag>
+        <tag>喵喵</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2024RCTFwp sec-image</title>
+    <url>/z1nax5.github.io/2024/05/28/RCTF2024-wp-sec-image/</url>
+    <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
+<h2 id="sec-image"><a href="#sec-image" class="headerlink" title="sec-image"></a>sec-image</h2><p>information: real sec ??</p>
+<h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>下了文件解包之后应该映入眼帘的是flag0.png~flag9.png这样十张图<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img.png"
+                     
+                ><br>来看第一张图：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/flag0.png"
+                     
+                ><br>其实我没太看出来（（，但是大伙都说肉眼可看是RCTF<br>ok，可看&#x3D;&#x3D;可打<br>很明显他是四个字母叠在一起<br>放大看看，我首先去看了字母T中间那一竖的地方：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_1.png"
+                     
+                ><br><strong>以普遍理性而言，一个小白格子对于一个字母应该是只有单一的信息</strong><br>所以只应该关注重复的小黑点，那些大大小小的就看作是噪声，可以看到对字母T的特征就是一种整体往左下偏移的网点阵<br>猜想别的字母也是网点阵<br>可以再看一个比较复杂的区域<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_2.png"
+                     
+                ><br>很明显都是一些有规律的图形，每个重复的单元都可以用2*2的大小表示，就像铺地砖一样铺出来，<br>这里就基本证实我们的猜想，这张图是把不同偏移的网点图叠加在一起：<br>简单分析一下得到这张图的偏移是：</p>
+<table>
+<thead>
+<tr>
+<th align="center">R</th>
+<th align="center">C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">T</td>
+<td align="center">F</td>
+</tr>
+</tbody></table>
+<p>ok，那就很简单了如果我们把这张图表示这个字母的地方截取出来再拼接，就能看到flag了。<br>以下是脚本：</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def split4db(img, offset_x=4, offset_y=4, flag=0):</span><br><span class="line">    # 跳过外围黑边</span><br><span class="line">    img = img[offset_y:, offset_x:]</span><br><span class="line">    x = 0</span><br><span class="line">    y = 0</span><br><span class="line">    p = 0</span><br><span class="line">    if flag == 1:</span><br><span class="line">        pass</span><br><span class="line">    elif flag == 2:</span><br><span class="line">        x += 1</span><br><span class="line">    elif flag == 3:</span><br><span class="line">        y += 1</span><br><span class="line">    else:</span><br><span class="line">        x += 1</span><br><span class="line">        y += 1</span><br><span class="line">    # 先切x</span><br><span class="line">    for i in range(40):</span><br><span class="line">        for _ in range(6):</span><br><span class="line">            img1 = img[:, :x ]</span><br><span class="line">            img2 = img[:, x + 1:]</span><br><span class="line">            img = cv2.hconcat([img1, img2])</span><br><span class="line">            x+=1</span><br><span class="line">        if i == 39:</span><br><span class="line">            break</span><br><span class="line">        p += 6</span><br><span class="line">        img1=img[:, :p]</span><br><span class="line">        img2=img[:, p+8:]</span><br><span class="line">        img = cv2.hconcat([img1, img2])</span><br><span class="line">    # 再切y</span><br><span class="line">    p=0</span><br><span class="line">    for i in range(40):</span><br><span class="line">        for j in range(7):</span><br><span class="line">            img1 = img[:y , :]</span><br><span class="line">            img2 = img[y + 1:, :]</span><br><span class="line">            img = cv2.vconcat([img1, img2])</span><br><span class="line">            y+=1</span><br><span class="line">        if i == 39:</span><br><span class="line">            break</span><br><span class="line">        p += 7</span><br><span class="line">        img1 = img[ : p , :]</span><br><span class="line">        img2 = img[ p+6 : , :]</span><br><span class="line">        img = cv2.vconcat([img1, img2])</span><br><span class="line"></span><br><span class="line">    return img</span><br><span class="line"></span><br><span class="line">for i in range(10):</span><br><span class="line">    filename = f&quot;flag&#123;i&#125;.png&quot;</span><br><span class="line">    img0 = cv2.imread(filename)</span><br><span class="line">    for j in range(4):</span><br><span class="line">        img = split4db(img=img0, flag=(j + 1))</span><br><span class="line">        savename = f&quot;rctf&#123;(i+1) * 4 -j&#125;.png&quot;</span><br><span class="line">        cv2.imwrite(savename, img)</span><br></pre></td></tr></table></figure></div>
+<p>结果：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/img_3.png"
+                     
+                ></p>
+<h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>为了维持干净的wp,把一些思路还是放在后面<br>所以在这个答案之前，我也有过这样的想法：</p>
+<blockquote>
+<p>去根据灰度标记每个白色小方格标志为[0,1,2,3,4]中一个，来表示这个块有几个字母，因为每个图其实都有一个能看出来的字母，然后把这个字母所在方格的标志减掉一，然后反向操作，从标志到灰度，再看看有什么能看出来的字符。</p>
+</blockquote>
+<p>当然，这个思路弊端很明显：</p>
+<ul>
+<li>没有位置信息</li>
+<li>把看的出结果的方格减一很难做得很准确，尤其是在文字边缘</li>
+<li>更有可能出现把已知得字符减去之后，找不到新的字符的情况</li>
+</ul>
+<p>所以放弃这个思路，更仔细的去看每一块的内容，或许cv的题真的可以从出题的角度去看题，从这个题是怎么构成出出来的考虑。<br>于是就想到要去看看具体每一块的内容。</p>
+<p>完结撒花<em>★,°</em>:.☆(￣▽￣)&#x2F;$:<em>.°★</em> 。<br>题的脚本不是很难构造，想到就是想到，很misc的一道题</p>
+]]></content>
+      <tags>
+        <tag>CV</tag>
+        <tag>wp</tag>
+        <tag>Misc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>火车摇啊摇</title>
+    <url>/z1nax5.github.io/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
+    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
+<p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
+<p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
+<h6 id="一"><a href="#一" class="headerlink" title="一"></a>一</h6><p>最先当说的应是高中生活，本就是这句“人生小满，既是圆满”一下把我的思绪拉到了高中。</p>
+<p>差不多去年今日，准备高考时买了一本作文书里面收录了一些和我调性相符还算认可的高考作文，这里还算认可的意思大概是说写得细腻，在限时考试的背景下我仍能从里面看到些许的文字的斟酌或者追求。</p>
+<p>扯远了，这样显得我写东西多清高了，不过文人相轻是常态嘛，也该轮到我清高清高了。</p>
+<p>那时读到有一篇议论文的立意就是“人生小满，既是圆满”，也一样是从节气、自然讲到人生，佐以中华传统文化等素材一道写的饱满充实。不过可能到现在我还是就记住了“人生小满”，也可能当时那些辞藻、结构、渲染就没看进去，当时神经衰弱（现在也神经衰弱）压力挺大的，也就只能看见“人生小满”。</p>
+<h6 id="二"><a href="#二" class="headerlink" title="二"></a>二</h6><p>说到压力大，我前段时间压力就还蛮大的，忙到天天被迫熬夜还看了两次凌晨四点的杭电，不过我还是忙里偷闲会写博客，反而五一忙完了就一直在睡觉或者打打游戏，总之称不上多有营养。</p>
+<p>在忙的时候，时常想着忙完了就狠狠更新博客，把这天上地下的都点评一番，我对象挺不能理解为什么我这么喜欢写博客，还要催他去开一个。除了可以偷窥他在干什么，对我而言博客的意义是这里的确是我可以把心剖开了的地方。这里是如同群聊一样的私域链接，也不会像群聊一样提示你谁更新了，后悔了也能直接撤了文章。我清楚地知道谁可能会看，我也不介意，能知道这个地址的朋友若是有心关心我，来看看我我也挺乐意的。</p>
+<h6 id="三"><a href="#三" class="headerlink" title="三"></a>三</h6><p>原本想要写的一篇，名字就叫“火车摇啊摇”，也就是现在这篇的名字。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/z1nax5.github.io/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png"
+                      alt="img.png"
+                ></p>
+<p>许久不坐绿皮车了，但我以前坐的实在多，以至于一上车闻到那股淡淡烟草味混合着微生物腐臭味的气息时，回忆能一下冲垮了我推论的思路。下午的正赛有点难打，我们是劣势持方，从结果评委的点评来看，我们的言辞需要更精准，论证需要更多环节，要将辩题外的东西来围猎对面，也需要讲辩题外的东西为什么可以讲。对于正方，他们只要简单的讲讲自己就好。</p>
+<p>我从没有为一场辩论模辩过三次，写四五千字的稿子，甚至于失掉辩论的自信。</p>
+<p>在此之前，我一直认为，辩论是一件我擅长却不敢兴趣的事，如果生活不冲突的话，在自己擅长的地方大杀四方当然畅快，但是如果冲突了，那我当然不会忙不感兴趣的事了。</p>
+<p>不过这“最后一场辩论”，让我连是否擅长辩论都不太确信了。或许是我的前置位队友不够给力，让我每次发言都很难受；或许是来找我的学姐言辞凛然，让我总觉得自己做得不够好；或许是真的就是太难了，这个辩题在网上你都找不到一场我方持方打赢的视频…………</p>
+<p>这“最后一场辩论”里我的表现，自我感觉是不好的。我问学长，“感觉我今天打的还没新生杯的时候好”，学长说，“怎么会呢，辩论肯定是越打越好的”。</p>
+<p>火车摇啊摇，胡思乱想。</p>
+<p>绿皮车的气味真是难闻，坐了几十上百次我还是没适应。如果不是我把一周半准备三个辩题误以为一周半准备一个辩题，我应当也不会接下这场全国范围的竞技辩，也不会退掉五一回上海的车票，而买了偏远的杭州南为了确保一定能在下午前到嘉兴比赛。</p>
+<p>杭州南，好像都是绿皮车。</p>
+<p>我记得以前在嘉兴-上海的绿皮车上，我也总爱胡思乱想，过去想想没写完的作业就像现在想想没推完的论，就连不知所措和时间紧迫的焦虑也大差不差。</p>
+<h6 id="四"><a href="#四" class="headerlink" title="四"></a>四</h6><p>输了辩论，但和辩论队的纠葛很难完全了断。</p>
+<p>协会的学长其实都觉得这是没什么大不了的小事，脸皮厚一点就好了。</p>
+<p>但我是个耳根子软的人，旁人随意说两句，我很容易就在意。就像现在准备转专业一样，原本坚定了一个半学期，但是有人在我面前真诚的说上两句，加上一个我确实没考虑过的角度，我就很听劝的开始咨询转专业。</p>
+<p>这种无条件无意义的在意，除了让我费神之外，也给我加上了一层社交体面的被动。“火车摇啊摇”，其实是朋友圈的真心话版，而朋友圈，只是宣告离别辩论的社交仪式。</p>
+<h6 id="五"><a href="#五" class="headerlink" title="五"></a>五</h6><p><em>*上传的时候发现这里被我手滑空格删掉了，那就这样吧，本来这段写的也不好,弥补的事少做一点，前进的事多做一点</em></p>
+<h6 id="六"><a href="#六" class="headerlink" title="六"></a>六</h6><p>人生小满，既是圆满。</p>
+<p>有感触还是因为觉得最近也算人生小满，说人生太大了，要把眼光放的局限一点，再局限一点。</p>
+<p>我5号染了个还不错的头，小满。</p>
+]]></content>
+      <tags>
+        <tag>喵喵</tag>
+        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -397,41 +468,25 @@
       </tags>
   </entry>
   <entry>
-    <title>四月猫饼周记</title>
-    <url>/z1nax5.github.io/2024/04/20/%E5%85%B6%E5%AE%9E%E6%88%91%E6%A0%B9%E6%9C%AC%E4%B8%8D%E4%BC%9ACTF%EF%BC%8C%E6%88%91%E5%8F%AA%E4%BC%9A%E7%9E%8E%E5%87%A0%E6%8A%8A%E4%B9%B1%E6%8C%89/</url>
+    <title>不定时更新小诗</title>
+    <url>/z1nax5.github.io/2024/05/13/%E7%99%BD%E9%B8%9F%E8%BF%87%E6%B2%B3%E6%BB%A9/</url>
     <content><![CDATA[<p><em>_φ</em>_(．．)</p>
-<p>为了避免博客里水货太多就还是把这些东西放在一起啦，，反正一般就我自己看。</p>
-<h2 id="四月之前"><a href="#四月之前" class="headerlink" title="四月之前"></a>四月之前</h2><p><code>date: 2024-03-31 16:13:35</code>  </p>
-<p>(&#x3D;◉ᆽ◉&#x3D;)</p>
-<p>总算是在3.31号把自己的博客搭出来了，拖了这么久其实最后也没花多久，大概也就半个小时不到，加上处理一些小的报错20分钟也就好了。。。总的来说还是太能拖了。</p>
-<p>✧<em>｡ (ˊᗜˋ</em>) ✧*</p>
-<p>今天也是vidar见面会，感觉菜鸟误入高手区（（（主要是自己打不了比赛却因为别的特长进入了且其实本来都做好了再来一年的准备(っ◞‸◟c)。但愿之后一切都顺利。</p>
-<p>其实当时加美工群的时候就对Vidar很有归属感，因为这里的人都是喵喵教，喵喵圣火！</p>
-<p>L0学姐好美(✧∇✧)，想当初貌似就是做杂项的时候看了L0学姐的博客从杂项误入pwn途，但是现在貌似要被打回杂项力。不过pwn是真的帅，‘pwn’的一声把你的电脑控制了，就是看了这句话鬼迷心窍wwww。<br>可惜这块我实在是天赋不强。。。没有以前硬刚就能达到一个丝滑飞升的感觉。（希望早日龙场悟道。(・ ・)</p>
-<p>下一步重心还是先放在AI上吧。。有一个好的起点不发展也可惜了这下得从头开始机器学习力，想当初去年雄姿英发一力降十会（主打一个程序员80%的代码都不是自己写的但是我看得懂就行了）</p>
-<h2 id="搭建博客9天后，一只猫猫发生了这样的变化"><a href="#搭建博客9天后，一只猫猫发生了这样的变化" class="headerlink" title="搭建博客9天后，一只猫猫发生了这样的变化"></a>搭建博客9天后，一只猫猫发生了这样的变化</h2><p><code>date: 2024-04-09 20:54:28</code>  </p>
-<p><em>_φ</em>_(．．)</p>
-<p>好累啊，清明后要连上6天。我还拖延了好多事没做&#x2F;ᐠᵕ̩̩̥ ‸ᵕ̩̩̥ ᐟ\ﾉ</p>
-<p>在AI上面小有长进，_(嘿嘿<strong>臭狗</strong>的课我也是蹭上了_，大概是从0.01到0.05的进步吧，满分是10，我说的（<br>但是还是得赶快把AI的一周总结写出来，不然又要忘记了，自己再写一遍肯定能加深印象。</p>
-<p>live2d把Vidar娘的头九轴做了，<strong>战斗，爽！！</strong><br>眼球用了新技术，少了好多后期调试，可惜习得新技术的时候花了好多时间测试_(:3 」∠ )_<br>而且还入了正版ಥ_ಥ有点小贵，不过学生优惠很划算主要心痛在感觉我的盗版4.2也能完成这些任务啊啊啊啊啊，没有新软件才能搞的啊啊啊啊<br>此次九轴比起上次也是有进步啦，这个后脑勺做的有模有样地，而且后期补的拆分侧发也很合适(●´ω｀●)ゞ也总结了些小经验，不过感觉更加稳定丝滑的九轴经验总归是要到下一代才能用上啦<br>至于物理什么的。。下辈子吧，看样子这个拆分还有重新补图的必要性(๑•́ ₃ •̀๑)不过拆分的死哥还是超级伟大！！</p>
-<p>周一机缘巧合进了一个导师的项目组，本来跟导师这种事对我肯定是很犹豫的。。但是我室友邀请我的时候问了两句，做的和神经网络密切相关。。。这个世界是一个巨大的神经网络，，，</p>
-<h4 id="现论证如下："><a href="#现论证如下：" class="headerlink" title="现论证如下："></a>现论证如下：</h4><p>这个世界有很多人；<br>人是神金，又是一切社会关系的总和；<br>社会关系是网络；<br>所以这个个世界是一个巨大的神金网络(≖＿≖)✧<br>现在好了，导师催我一周看三篇神金论文了இдஇ<br>这次小小AI还不束手就擒！</p>
-<p>这次学会了md怎么换行而不是换段（好像并不值得骄傲呵呵<br>之后应该会把那个项目组的学习成果里一些能够同步的稳定上传了maybe<br>CTF这块看来真的是要脱节了。。d3怎么办啊。。都没有我的赛道我做鸡毛啊，10天可以速成什么谁来救救我(╥﹏╥)</p>
-<h2 id="我又滚回来做视觉了"><a href="#我又滚回来做视觉了" class="headerlink" title="我又滚回来做视觉了"></a>我又滚回来做视觉了</h2><p><code>date: 2024-04-17 00:18:06</code></p>
-<p>(◞‸◟)</p>
-<p>第六第七周，又忙又累</p>
-<p>首先想早点和辩论队做切割，，真的是客观主观都不适合，，辩论队是个好队，嗯。</p>
-<p>清明结束，，爽上六天课，感觉自己是尸体，每天早上都在做傻事</p>
-<p>另外我收回上学期我对视觉不感兴趣的话，PlaidCTF一个两小时闹鬼小视频给姐们吊成翘嘴了，要不是我去团建了两个我必拿下好吧！现在已经做到了相对很成功的追踪了，有空肯定是会来复现这道题的，但是我最近怎么这么忙啊啊啊啊<br>Misc真好玩嘿嘿(ㆆᴗㆆ)，是时候回家了，回到最初的温暖嘻嘻</p>
-<p>第一次写学习笔记的博客，本来是希望一边复习一边能写成猴子都能看懂的，，最起码让能看到这篇的友友不要和我当初一样苦，但是自己写了才知道原来互联网上那么多垃圾不是没由来的，我也好拉，感觉那些真正有用的东西想要清晰的、实用的写出来确实很难。。<br>但是也很幸运的在网上挖到宝了，尽管停更于2020年。<br>之后博客的工作要暂停一阵子了，最近没有时间写了，今天组会就开了超级久，但是感觉都是些没劲的东西。<br>还有一个原因是组会的老师让我们看2023年之后的论文，但是我现在写的东西可能连05年的进度都还没到。。<br>不过AI本身就和他的算法一样，是迭代的技术啦，就是有的老东西一直留下来，而有的被更替。<br>所以我觉得可能我对前沿的了解多一点之后，会更有写blog的重点。而且对我来说写blog也算放松的一种啦，只是最近没时间放松。(☍﹏⁰。)</p>
-<p>┌|◎o◎|┘好像没啥要说了 大物 期中 救救</p>
-<h2 id="我只会瞎jb乱按"><a href="#我只会瞎jb乱按" class="headerlink" title="我只会瞎jb乱按"></a>我只会瞎jb乱按</h2><p><code>date: 2024-04-20 22:53:39</code></p>
-<p>(´Ａ｀。)</p>
-<p>内容被作者撤回啦，可公开的情报：</p>
-<p>想重新学python，，；<br>C不会了，，；<br>web知识为0；<br>因为不喜欢AI所以对pwn念念不忘，其实CV和机器学习这两块在我大脑里结合的不是很好；<br>谴责<strong>臭狗</strong>不会好好看我的博客；</p>
+<h4 id="五月十一日深夜记"><a href="#五月十一日深夜记" class="headerlink" title="五月十一日深夜记"></a>五月十一日深夜记</h4><blockquote>
+<p>翻山过重嶂，步步惊梦。循声暗道，踏花零落木叠叠。</p>
+<p>浮云比肩绕，魂系高阁。高阁空算，昔时海棠钗雪，灭。</p>
+</blockquote>
+<p><em>想了想把之前还能找到的也po上来，也算是备份吧</em></p>
+<h4 id="无题"><a href="#无题" class="headerlink" title="无题"></a>无题</h4><p><em>（写于二月十六日）</em>  </p>
+<blockquote>
+<p>旧故曲调重唱，莫怪多情烦扰。可怜辩白寥寥，争先抢高。天朗气清春日早，只叹小屋地偏少见光。借我酒一杯，慢叙愁百千。心事墨池留，魂浪天涯乡。</p>
+</blockquote>
+<h4 id="今夜月升影重重"><a href="#今夜月升影重重" class="headerlink" title="今夜月升影重重"></a>今夜月升影重重</h4><p><em>（写于六月五日）</em></p>
+<blockquote>
+<p>今夜月升影重重，风飘树摇兴阑珊。<br>小山无言醉晚意，明朝梦醒两相忘。</p>
+</blockquote>
 ]]></content>
       <tags>
-        <tag>喵喵</tag>
+        <tag>白鸟</tag>
       </tags>
   </entry>
   <entry>
@@ -519,70 +574,6 @@
       <tags>
         <tag>学习日志</tag>
         <tag>Pwn</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>不定时更新小诗</title>
-    <url>/z1nax5.github.io/2024/05/13/%E7%99%BD%E9%B8%9F%E8%BF%87%E6%B2%B3%E6%BB%A9/</url>
-    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
-<h4 id="五月十一日深夜记"><a href="#五月十一日深夜记" class="headerlink" title="五月十一日深夜记"></a>五月十一日深夜记</h4><blockquote>
-<p>翻山过重嶂，步步惊梦。循声暗道，踏花零落木叠叠。</p>
-<p>浮云比肩绕，魂系高阁。高阁空算，昔时海棠钗雪，灭。</p>
-</blockquote>
-<p><em>想了想把之前还能找到的也po上来，也算是备份吧</em></p>
-<h4 id="无题"><a href="#无题" class="headerlink" title="无题"></a>无题</h4><p><em>（写于二月十六日）</em>  </p>
-<blockquote>
-<p>旧故曲调重唱，莫怪多情烦扰。可怜辩白寥寥，争先抢高。天朗气清春日早，只叹小屋地偏少见光。借我酒一杯，慢叙愁百千。心事墨池留，魂浪天涯乡。</p>
-</blockquote>
-<h4 id="今夜月升影重重"><a href="#今夜月升影重重" class="headerlink" title="今夜月升影重重"></a>今夜月升影重重</h4><p><em>（写于六月五日）</em></p>
-<blockquote>
-<p>今夜月升影重重，风飘树摇兴阑珊。<br>小山无言醉晚意，明朝梦醒两相忘。</p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>白鸟</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>火车摇啊摇</title>
-    <url>/z1nax5.github.io/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
-    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
-<p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
-<p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
-<h6 id="一"><a href="#一" class="headerlink" title="一"></a>一</h6><p>最先当说的应是高中生活，本就是这句“人生小满，既是圆满”一下把我的思绪拉到了高中。</p>
-<p>差不多去年今日，准备高考时买了一本作文书里面收录了一些和我调性相符还算认可的高考作文，这里还算认可的意思大概是说写得细腻，在限时考试的背景下我仍能从里面看到些许的文字的斟酌或者追求。</p>
-<p>扯远了，这样显得我写东西多清高了，不过文人相轻是常态嘛，也该轮到我清高清高了。</p>
-<p>那时读到有一篇议论文的立意就是“人生小满，既是圆满”，也一样是从节气、自然讲到人生，佐以中华传统文化等素材一道写的饱满充实。不过可能到现在我还是就记住了“人生小满”，也可能当时那些辞藻、结构、渲染就没看进去，当时神经衰弱（现在也神经衰弱）压力挺大的，也就只能看见“人生小满”。</p>
-<h6 id="二"><a href="#二" class="headerlink" title="二"></a>二</h6><p>说到压力大，我前段时间压力就还蛮大的，忙到天天被迫熬夜还看了两次凌晨四点的杭电，不过我还是忙里偷闲会写博客，反而五一忙完了就一直在睡觉或者打打游戏，总之称不上多有营养。</p>
-<p>在忙的时候，时常想着忙完了就狠狠更新博客，把这天上地下的都点评一番，我对象挺不能理解为什么我这么喜欢写博客，还要催他去开一个。除了可以偷窥他在干什么，对我而言博客的意义是这里的确是我可以把心剖开了的地方。这里是如同群聊一样的私域链接，也不会像群聊一样提示你谁更新了，后悔了也能直接撤了文章。我清楚地知道谁可能会看，我也不介意，能知道这个地址的朋友若是有心关心我，来看看我我也挺乐意的。</p>
-<h6 id="三"><a href="#三" class="headerlink" title="三"></a>三</h6><p>原本想要写的一篇，名字就叫“火车摇啊摇”，也就是现在这篇的名字。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/z1nax5.github.io/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png"
-                      alt="img.png"
-                ></p>
-<p>许久不坐绿皮车了，但我以前坐的实在多，以至于一上车闻到那股淡淡烟草味混合着微生物腐臭味的气息时，回忆能一下冲垮了我推论的思路。下午的正赛有点难打，我们是劣势持方，从结果评委的点评来看，我们的言辞需要更精准，论证需要更多环节，要将辩题外的东西来围猎对面，也需要讲辩题外的东西为什么可以讲。对于正方，他们只要简单的讲讲自己就好。</p>
-<p>我从没有为一场辩论模辩过三次，写四五千字的稿子，甚至于失掉辩论的自信。</p>
-<p>在此之前，我一直认为，辩论是一件我擅长却不敢兴趣的事，如果生活不冲突的话，在自己擅长的地方大杀四方当然畅快，但是如果冲突了，那我当然不会忙不感兴趣的事了。</p>
-<p>不过这“最后一场辩论”，让我连是否擅长辩论都不太确信了。或许是我的前置位队友不够给力，让我每次发言都很难受；或许是来找我的学姐言辞凛然，让我总觉得自己做得不够好；或许是真的就是太难了，这个辩题在网上你都找不到一场我方持方打赢的视频…………</p>
-<p>这“最后一场辩论”里我的表现，自我感觉是不好的。我问学长，“感觉我今天打的还没新生杯的时候好”，学长说，“怎么会呢，辩论肯定是越打越好的”。</p>
-<p>火车摇啊摇，胡思乱想。</p>
-<p>绿皮车的气味真是难闻，坐了几十上百次我还是没适应。如果不是我把一周半准备三个辩题误以为一周半准备一个辩题，我应当也不会接下这场全国范围的竞技辩，也不会退掉五一回上海的车票，而买了偏远的杭州南为了确保一定能在下午前到嘉兴比赛。</p>
-<p>杭州南，好像都是绿皮车。</p>
-<p>我记得以前在嘉兴-上海的绿皮车上，我也总爱胡思乱想，过去想想没写完的作业就像现在想想没推完的论，就连不知所措和时间紧迫的焦虑也大差不差。</p>
-<h6 id="四"><a href="#四" class="headerlink" title="四"></a>四</h6><p>输了辩论，但和辩论队的纠葛很难完全了断。</p>
-<p>协会的学长其实都觉得这是没什么大不了的小事，脸皮厚一点就好了。</p>
-<p>但我是个耳根子软的人，旁人随意说两句，我很容易就在意。就像现在准备转专业一样，原本坚定了一个半学期，但是有人在我面前真诚的说上两句，加上一个我确实没考虑过的角度，我就很听劝的开始咨询转专业。</p>
-<p>这种无条件无意义的在意，除了让我费神之外，也给我加上了一层社交体面的被动。“火车摇啊摇”，其实是朋友圈的真心话版，而朋友圈，只是宣告离别辩论的社交仪式。</p>
-<h6 id="五"><a href="#五" class="headerlink" title="五"></a>五</h6><p><em>*上传的时候发现这里被我手滑空格删掉了，那就这样吧，本来这段写的也不好,弥补的事少做一点，前进的事多做一点</em></p>
-<h6 id="六"><a href="#六" class="headerlink" title="六"></a>六</h6><p>人生小满，既是圆满。</p>
-<p>有感触还是因为觉得最近也算人生小满，说人生太大了，要把眼光放的局限一点，再局限一点。</p>
-<p>我5号染了个还不错的头，小满。</p>
-]]></content>
-      <tags>
-        <tag>喵喵</tag>
-        <tag>随笔</tag>
       </tags>
   </entry>
 </search>
