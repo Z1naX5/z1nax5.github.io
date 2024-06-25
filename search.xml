@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>视觉、深度学习相关论文分享</title>
-    <url>/z1nax5.github.io/2024/04/11/AI-2.0-01/</url>
+    <url>/2024/04/11/AI-2.0-01/</url>
     <content><![CDATA[<p><em>φ</em>(．．)</p>
 <ol>
 <li>Attention Is All You Need|2017</li>
@@ -21,7 +21,7 @@
   </entry>
   <entry>
     <title>Wandering</title>
-    <url>/z1nax5.github.io/2024/06/22/Wandering/</url>
+    <url>/2024/06/22/Wandering/</url>
     <content><![CDATA[<p>(・ε・)</p>
 <p>意外<del>蹭上了</del>参加了杭高院的队伍一起做一个CV有关的比赛，大家都在杭州，于是去线下讨论了一下，总要碰面的。<br>不过因为我早上在考试，其实没有和所有的学长们都见面。</p>
 <p><img  
@@ -85,7 +85,7 @@
   </entry>
   <entry>
     <title>2024矩阵杯wp 两级反转</title>
-    <url>/z1nax5.github.io/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/</url>
+    <url>/2024/06/19/2024%E7%9F%A9%E9%98%B5%E6%9D%AFwp-%E4%B8%A4%E7%BA%A7%E5%8F%8D%E8%BD%AC/</url>
     <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
 <h2 id="两级反转"><a href="#两级反转" class="headerlink" title="两级反转"></a>两级反转</h2><p>两极反转，黑白不分<br>奇变偶不变，横变竖不变<br>(PS:或许你要非常熟悉二维码的结构  </p>
 <h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>光看提示大概可以猜到是奇数的横行颜色黑白反转了<br>但是有个问题是index是从0还是1开始计数呢？都很合理啊<br>而且位置探测的三个方块很明显是正确的，那就是处理图像是要跳过这些正确的部分（？</p>
@@ -138,7 +138,7 @@
   </entry>
   <entry>
     <title>heap初探 | Hgame2024 week2&amp;week3 堆部分知识分析</title>
-    <url>/z1nax5.github.io/2024/06/21/heap%E5%88%9D%E6%8E%A2/</url>
+    <url>/2024/06/21/heap%E5%88%9D%E6%8E%A2/</url>
     <content><![CDATA[<p>(っ●ω●)っ</p>
 <h3 id="对堆的简单认识"><a href="#对堆的简单认识" class="headerlink" title="对堆的简单认识"></a>对堆的简单认识</h3><p>堆管理器：ptmalloc2 - glibc<br>内存分配区：arena，收发内存的地方<br>内存的单位：chunk </p>
 <p> <em>malloc 一个 chunk 的结构</em></p>
@@ -281,7 +281,7 @@
   </entry>
   <entry>
     <title>四月猫饼周记</title>
-    <url>/z1nax5.github.io/2024/04/20/%E5%85%B6%E5%AE%9E%E6%88%91%E6%A0%B9%E6%9C%AC%E4%B8%8D%E4%BC%9ACTF%EF%BC%8C%E6%88%91%E5%8F%AA%E4%BC%9A%E7%9E%8E%E5%87%A0%E6%8A%8A%E4%B9%B1%E6%8C%89/</url>
+    <url>/2024/04/20/%E5%85%B6%E5%AE%9E%E6%88%91%E6%A0%B9%E6%9C%AC%E4%B8%8D%E4%BC%9ACTF%EF%BC%8C%E6%88%91%E5%8F%AA%E4%BC%9A%E7%9E%8E%E5%87%A0%E6%8A%8A%E4%B9%B1%E6%8C%89/</url>
     <content><![CDATA[<p><em>_φ</em>_(．．)</p>
 <p>为了避免博客里水货太多就还是把这些东西放在一起啦，，反正一般就我自己看。</p>
 <h2 id="四月之前"><a href="#四月之前" class="headerlink" title="四月之前"></a>四月之前</h2><p><code>date: 2024-03-31 16:13:35</code>  </p>
@@ -319,7 +319,7 @@
   </entry>
   <entry>
     <title>2024RCTFwp sec-image</title>
-    <url>/z1nax5.github.io/2024/05/28/RCTF2024-wp-sec-image/</url>
+    <url>/2024/05/28/RCTF2024-wp-sec-image/</url>
     <content><![CDATA[<p>｡:.ﾟヽ(*´∀&#96;)ﾉﾟ.:｡</p>
 <h2 id="sec-image"><a href="#sec-image" class="headerlink" title="sec-image"></a>sec-image</h2><p>information: real sec ??</p>
 <h3 id="write-up"><a href="#write-up" class="headerlink" title="write up"></a>write up</h3><p>下了文件解包之后应该映入眼帘的是flag0.png~flag9.png这样十张图<br><img  
@@ -384,7 +384,7 @@
   </entry>
   <entry>
     <title>火车摇啊摇</title>
-    <url>/z1nax5.github.io/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
+    <url>/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
     <content><![CDATA[<p><em>_φ</em>_(．．)</p>
 <p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
 <p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
@@ -426,7 +426,7 @@
   </entry>
   <entry>
     <title>今夜月升影重重</title>
-    <url>/z1nax5.github.io/2024/06/04/%E4%BB%8A%E5%A4%9C%E6%9C%88%E5%8D%87%E5%BD%B1%E9%87%8D%E9%87%8D/</url>
+    <url>/2024/06/04/%E4%BB%8A%E5%A4%9C%E6%9C%88%E5%8D%87%E5%BD%B1%E9%87%8D%E9%87%8D/</url>
     <content><![CDATA[<p><em>_φ</em>_(．．)</p>
 <blockquote>
 <p>其实本来说的是<code>白鸟</code>里不会有其他的博客了<br>但想想，还是想写点东西<br><code>白鸟</code>里无论是诗还是文都真假参半，不要代入作者，至于哪些是真的这种问题她高兴了可能会说的</p>
@@ -469,7 +469,7 @@
   </entry>
   <entry>
     <title>不定时更新小诗</title>
-    <url>/z1nax5.github.io/2024/05/13/%E7%99%BD%E9%B8%9F%E8%BF%87%E6%B2%B3%E6%BB%A9/</url>
+    <url>/2024/05/13/%E7%99%BD%E9%B8%9F%E8%BF%87%E6%B2%B3%E6%BB%A9/</url>
     <content><![CDATA[<p><em>_φ</em>_(．．)</p>
 <h4 id="五月十一日深夜记"><a href="#五月十一日深夜记" class="headerlink" title="五月十一日深夜记"></a>五月十一日深夜记</h4><blockquote>
 <p>翻山过重嶂，步步惊梦。循声暗道，踏花零落木叠叠。</p>
@@ -491,7 +491,7 @@
   </entry>
   <entry>
     <title>记录一次栈迁移|Hgame2024-Elden Ring I</title>
-    <url>/z1nax5.github.io/2024/05/24/%E6%87%92%E5%BE%97%E5%96%B7/</url>
+    <url>/2024/05/24/%E6%87%92%E5%BE%97%E5%96%B7/</url>
     <content><![CDATA[<p>( ºΔº )</p>
 <p>很有意义的一次做题，尤其对我这种。。</p>
 <h3 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h3><p>按照流程应该先看一下保护和文件信息，但是因为我是知道答案找过程所以就略过。</p>
