@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240623132504.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/!%5Bimg.png%5D(img.png).png">
 <meta property="article:published_time" content="2024-06-21T13:35:53.000Z">
-<meta property="article:modified_time" content="2024-07-19T18:46:36.471Z">
+<meta property="article:modified_time" content="2024-07-19T18:59:39.467Z">
 <meta property="article:author" content="Z1naX5">
 <meta property="article:tag" content="学习日志">
 <meta property="article:tag" content="Pwn">
@@ -543,8 +543,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-07-20 02:46:36</span>
-            <span class="mobile">2024-07-20 02:46:36</span>
+            <span class="desktop">2024-07-20 02:59:39</span>
+            <span class="mobile">2024-07-20 02:59:39</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -697,7 +697,7 @@
 <h4 id="off-by-null"><a href="#off-by-null" class="headerlink" title="off-by-null"></a>off-by-null</h4><p>。</p>
 <h5 id="PRVE-SIZE位共用"><a href="#PRVE-SIZE位共用" class="headerlink" title="PRVE_SIZE位共用"></a><code>PRVE_SIZE</code>位共用</h5><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* pad request bytes into a usable size -- internal version */</span></span><br><span class="line"><span class="comment">//MALLOC_ALIGN_MASK = 2 * SIZE_SZ -1     </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> request2size(req)                                                      \</span></span><br><span class="line"><span class="meta">    (((req) + SIZE_SZ + MALLOC_ALIGN_MASK &lt; MINSIZE)                           \</span></span><br><span class="line"><span class="meta">         ? MINSIZE                                                             \</span></span><br><span class="line"><span class="meta">         : ((req) + SIZE_SZ + MALLOC_ALIGN_MASK) &amp; ~MALLOC_ALIGN_MASK) <span class="comment">//请求大小+0x17与0x0 and运算</span></span></span><br></pre></td></tr></table></figure></div>
 <p><em>虽然0x0我想表达的是16进制下最后一位都是0,就是二进制下0000，但是0的表达是有些抽象下面还是老实的用(~0xf)</em></p>
-<p><strong>以64位为例</strong><br>其实可以看作（请求大小+0x10）+0x07 &amp; (<del>0xf)<br>当请求大小的最后一位（16进制）小于 8 时，没有进位 （请求大小+0x10）+0x07 &amp; (</del>0xf) &#x3D; （请求大小 &amp; (<del>0xf) + 0x10）<br>否则 （请求大小+0x10）+ 0x07 &amp; (</del>0xf) &#x3D; （请求大小+0x20）- 0x09 &amp; (<del>0xf) &#x3D;（请求大小 &amp; (</del>0xf) + 0x20）</p>
+<p><strong>以64位为例</strong><br>其实可以看作（请求大小+0x10）+0x07 &amp; (~0xf)<br>当请求大小的最后一位（16进制）小于 8 时，没有进位 （请求大小+0x10）+0x07 &amp; (~0xf) &#x3D; （请求大小 &amp; (~0xf) + 0x10）<br>否则 （请求大小+0x10）+ 0x07 &amp; (~0xf) &#x3D; （请求大小+0x20）- 0x09 &amp; (~0xf) &#x3D;（请求大小 &amp; (~0xf) + 0x20）</p>
 <p>也就是说，如果你申请0x18的 chunk,malloc给你分配的将会是 0x20 的大小，去掉 0x10 的头，只剩下 0x10 的堆空间。<br>而剩下的0x08其实是和下一个chunk的<code>PRVE_SIZE</code>位共用的。<br>这里的逻辑大概是<code>PRVE_SIZE</code>仅在前一个 chunk free的状态下使用，但现在我正在往这个 chunk 里写东西，即非 free 状态，那么就可以覆盖。</p>
 <p>还是有点意思的节省空间的方式。给了我们改写<code>PRVE_SIZE</code>的机会。</p>
 <h5 id="off-by-null-1"><a href="#off-by-null-1" class="headerlink" title="off by null"></a>off by null</h5><p>溢出了一个空字节，常见利用是，配合 malloc 的 0x10 对齐和双向链表里的<code>unlink</code>整理机制，改变<code>PRVE_SIZE</code>以及<code>PREV_INUSE</code>置0，把一个没有<code>free</code>过的 chunk 包进bin里面。</p>
@@ -743,7 +743,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-07-20 02:46:36
+                    :</strong> 2024-07-20 02:59:39
             </li>
         
         <li>

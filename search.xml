@@ -243,7 +243,7 @@
 <h4 id="off-by-null"><a href="#off-by-null" class="headerlink" title="off-by-null"></a>off-by-null</h4><p>。</p>
 <h5 id="PRVE-SIZE位共用"><a href="#PRVE-SIZE位共用" class="headerlink" title="PRVE_SIZE位共用"></a><code>PRVE_SIZE</code>位共用</h5><div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* pad request bytes into a usable size -- internal version */</span></span><br><span class="line"><span class="comment">//MALLOC_ALIGN_MASK = 2 * SIZE_SZ -1     </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> request2size(req)                                                      \</span></span><br><span class="line"><span class="meta">    (((req) + SIZE_SZ + MALLOC_ALIGN_MASK &lt; MINSIZE)                           \</span></span><br><span class="line"><span class="meta">         ? MINSIZE                                                             \</span></span><br><span class="line"><span class="meta">         : ((req) + SIZE_SZ + MALLOC_ALIGN_MASK) &amp; ~MALLOC_ALIGN_MASK) <span class="comment">//请求大小+0x17与0x0 and运算</span></span></span><br></pre></td></tr></table></figure></div>
 <p><em>虽然0x0我想表达的是16进制下最后一位都是0,就是二进制下0000，但是0的表达是有些抽象下面还是老实的用(~0xf)</em></p>
-<p><strong>以64位为例</strong><br>其实可以看作（请求大小+0x10）+0x07 &amp; (<del>0xf)<br>当请求大小的最后一位（16进制）小于 8 时，没有进位 （请求大小+0x10）+0x07 &amp; (</del>0xf) &#x3D; （请求大小 &amp; (<del>0xf) + 0x10）<br>否则 （请求大小+0x10）+ 0x07 &amp; (</del>0xf) &#x3D; （请求大小+0x20）- 0x09 &amp; (<del>0xf) &#x3D;（请求大小 &amp; (</del>0xf) + 0x20）</p>
+<p><strong>以64位为例</strong><br>其实可以看作（请求大小+0x10）+0x07 &amp; (~0xf)<br>当请求大小的最后一位（16进制）小于 8 时，没有进位 （请求大小+0x10）+0x07 &amp; (~0xf) &#x3D; （请求大小 &amp; (~0xf) + 0x10）<br>否则 （请求大小+0x10）+ 0x07 &amp; (~0xf) &#x3D; （请求大小+0x20）- 0x09 &amp; (~0xf) &#x3D;（请求大小 &amp; (~0xf) + 0x20）</p>
 <p>也就是说，如果你申请0x18的 chunk,malloc给你分配的将会是 0x20 的大小，去掉 0x10 的头，只剩下 0x10 的堆空间。<br>而剩下的0x08其实是和下一个chunk的<code>PRVE_SIZE</code>位共用的。<br>这里的逻辑大概是<code>PRVE_SIZE</code>仅在前一个 chunk free的状态下使用，但现在我正在往这个 chunk 里写东西，即非 free 状态，那么就可以覆盖。</p>
 <p>还是有点意思的节省空间的方式。给了我们改写<code>PRVE_SIZE</code>的机会。</p>
 <h5 id="off-by-null-1"><a href="#off-by-null-1" class="headerlink" title="off by null"></a>off by null</h5><p>溢出了一个空字节，常见利用是，配合 malloc 的 0x10 对齐和双向链表里的<code>unlink</code>整理机制，改变<code>PRVE_SIZE</code>以及<code>PREV_INUSE</code>置0，把一个没有<code>free</code>过的 chunk 包进bin里面。</p>
@@ -594,6 +594,7 @@
 <p>(╥﹏╥)<br>对于关系的变动尤为在意的在于就这样结束了？其实描述起来很浓墨重彩但是现实里很轻描淡写。就像这一整段关系一样。感觉会有不熟悉，但更多的是是为自己的果决和现实的干脆不可思议吧。</p>
 <p>赶在没有电脑之前把vidar娘皮套的1.0.0推了。(*´∀&#96;)~♥<br>当时还想着旅游回来赶紧把小毛病修了哈哈，结果忙的真的是像陀螺一样。这个新皮套其实有很多问题，我尤其不满意进了面捕之后很多效果都不对了，但是就像大家想的一样，的确，能全部流程走下了就很厉害啦。现在面世的1.0.0也是在未发布的base版上完全重做来的。很明显感受到因为是兼职所以没有明确的工作流导致效率经常突然十分低下（应该是偶尔高效）。<br>ʅ（´◔౪◔）ʃ重做的时候因为稍微明晰了一点点工作流所以稍微快一点点（，然而物理什么的还是。。害细节真的很多喵，live2d。</p>
 <p>在CV上可喜的算是我过去的经验还是很宝贵的，而且虽然认识很浅薄但是也没白学（，可悲的是我真的远程协作不了一点（，从各个角度来讲我现在还是不熟悉CLI实在是一件很不应该的事哈哈（不过也比当时好了一万倍了，可能我会对熟悉的要求比较高吧<br>而且做视觉以及美工熟悉点GUI怎么了（</p>
+<p>暑实好麻烦( ˘･з･)</p>
 <p>虽然旅游完有很多事要做我是知道的，但也没想到这么焦头烂额哈哈<br>和RT一起在做的比赛，草稿箱里欠着的largebin一篇，杂谈一篇，还有曾经的yolov8一些介绍，之前说要做的plaidctf复现，协会出题（期待1zs好兄弟），，，，，还有青协的事情哈哈，感觉刷两道pwn题或者再沉淀一下基础什么的都。。。。。我还是一直想重学一下自己学过的或者说，正在用的语言的？比如说python,不过这种事情很重要但是不紧急的话肯定永远被插队啦。</p>
 <p>羡慕睡得香的人。<br>晚安(￣o￣) . z Z</p>
 ]]></content>
