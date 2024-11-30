@@ -1172,4 +1172,12 @@
         <tag>复现</tag>
       </tags>
   </entry>
+  <entry>
+    <title>SCTFpwn下</title>
+    <url>/2024/11/14/SCTFpwn%E4%B8%8B/</url>
+    <content><![CDATA[<h2 id="c-or-go"><a href="#c-or-go" class="headerlink" title="c_or_go"></a>c_or_go</h2><p>碰到一些比较少见的函数，记一下函数原型：</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="code"><pre><span class="line">runtime_morestack_noctxt（）生长栈</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+]]></content>
+  </entry>
 </search>
