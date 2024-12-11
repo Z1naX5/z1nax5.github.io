@@ -18,12 +18,12 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="可能有点钻牛角尖的源码分析。 bin_at; 可能不是很重要但我不能白花时间。。">
+        <meta name="description" content="可能有点钻牛角尖的源码分析。 bin_at; 可能不是很重要但我不能白花时间。。 largebin attack高低版本不同路径的分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="图解unsortedbin attack &amp; largebin attack">
 <meta property="og:url" content="http://example.com/2024/07/23/really-ez-largebin/index.html">
 <meta property="og:site_name" content="Z1naX5">
-<meta property="og:description" content="可能有点钻牛角尖的源码分析。 bin_at; 可能不是很重要但我不能白花时间。。">
+<meta property="og:description" content="可能有点钻牛角尖的源码分析。 bin_at; 可能不是很重要但我不能白花时间。。 largebin attack高低版本不同路径的分析">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240925013408.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240925013528.png">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240928014016.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240929175706.png">
 <meta property="article:published_time" content="2024-07-23T14:21:52.000Z">
-<meta property="article:modified_time" content="2024-09-29T10:12:13.918Z">
+<meta property="article:modified_time" content="2024-12-04T03:26:00.327Z">
 <meta property="article:author" content="Z1naX5">
 <meta property="article:tag" content="学习日志">
 <meta property="article:tag" content="Pwn">
@@ -92,7 +92,7 @@
 
     <script id="hexo-configurations">
     window.config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"};
-    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":true,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#3850AB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":false,"style":"fixed","image":{"light":"/pic/light_background.jpg","dark":"/pic/dark_background.png"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#363636","dark":"#d2dde8"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":25},"width":{"home":"1200px","pages":"1200px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives/","icon":"fa-regular fa-archive"},"Links":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":10}},"footerStart":"2022/8/17 11:45:14"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":true,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#3850AB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/pic/light_background.jpg","dark":"/pic/dark_background.png"},"title":"Miaoo0bin's Blog","subtitle":{"text":["晚安喵(,,・ω・,,)"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#363636","dark":"#d2dde8"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":25},"width":{"home":"1200px","pages":"1200px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives/","icon":"fa-regular fa-archive"},"About":{"path":"/about","icon":"fa-regular fa-user"},"Links":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":10}},"footerStart":"2022/8/17 11:45:14"};
     window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
     window.data = {"masonry":false};
   </script>
@@ -345,6 +345,23 @@
                             <li class="navbar-item">
                                 <!-- Menu -->
                                 <a class=""
+                                   href="/about"
+                                        >
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
                                    href="/links"
                                         >
                                     <i class="fa-regular fa-link fa-fw"></i>
@@ -426,6 +443,26 @@
                     <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
                         
                         <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-regular fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
                            href="/links"
                         >
                             <span>
@@ -455,7 +492,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">20</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -511,8 +548,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-09-29 18:12:13</span>
-            <span class="mobile">2024-09-29 18:12:13</span>
+            <span class="desktop">2024-12-04 11:26</span>
+            <span class="mobile">2024-12-04 11:26</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -538,12 +575,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.7k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.3k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>9 Mins</span>
         </span>
     
     
@@ -601,9 +638,80 @@
 <p>不过在libc2.28及之后<br>这里的源码变成了：</p>
 <div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* remove from unsorted list */</span></span><br><span class="line">    <span class="keyword">if</span> (__glibc_unlikely (bck-&gt;fd != victim))</span><br><span class="line">    malloc_printerr (<span class="string">&quot;malloc(): corrupted unsorted chunks 3&quot;</span>);</span><br><span class="line">    unsorted_chunks (av)-&gt;bk = bck;</span><br><span class="line">    bck-&gt;fd = unsorted_chunks (av);</span><br></pre></td></tr></table></figure></div>
 <p>因为有了安全性检查，所以 unsortedbin attack 失效了，不过如果要是能泄露堆地址以及堆溢出可以改写很多的话或许还是可以绕过的。</p>
-<h3 id="largebin-attack"><a href="#largebin-attack" class="headerlink" title="largebin attack"></a>largebin attack</h3><p>先是一坨largebin源码</p>
-<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        victim_index = largebin_index (size);</span><br><span class="line">        bck = bin_at (av, victim_index);</span><br><span class="line">        fwd = bck-&gt;fd;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* maintain large bins in sorted order */</span></span><br><span class="line">        <span class="keyword">if</span> (fwd != bck)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">/* Or with inuse bit to speed comparisons */</span></span><br><span class="line">            size |= PREV_INUSE;</span><br><span class="line">            <span class="comment">/* if smaller than smallest, bypass loop below */</span></span><br><span class="line">            assert ((bck-&gt;bk-&gt;size &amp; NON_MAIN_ARENA) == <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) (size) &lt; (<span class="type">unsigned</span> <span class="type">long</span>) (bck-&gt;bk-&gt;size))</span><br><span class="line">            &#123;</span><br><span class="line">                fwd = bck;</span><br><span class="line">                bck = bck-&gt;bk;</span><br><span class="line"></span><br><span class="line">                victim-&gt;fd_nextsize = fwd-&gt;fd;</span><br><span class="line">                victim-&gt;bk_nextsize = fwd-&gt;fd-&gt;bk_nextsize;</span><br><span class="line">                fwd-&gt;fd-&gt;bk_nextsize = victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                assert ((fwd-&gt;size &amp; NON_MAIN_ARENA) == <span class="number">0</span>);</span><br><span class="line">                <span class="keyword">while</span> ((<span class="type">unsigned</span> <span class="type">long</span>) size &lt; fwd-&gt;size)</span><br><span class="line">                &#123;</span><br><span class="line">                    fwd = fwd-&gt;fd_nextsize;</span><br><span class="line">                    assert ((fwd-&gt;size &amp; NON_MAIN_ARENA) == <span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) size == (<span class="type">unsigned</span> <span class="type">long</span>) fwd-&gt;size)</span><br><span class="line">                <span class="comment">/* Always insert in the second position.  */</span></span><br><span class="line">                fwd = fwd-&gt;fd;</span><br><span class="line">                <span class="comment">// largebin attack 1</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    victim-&gt;fd_nextsize = fwd;</span><br><span class="line">                    victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">                    fwd-&gt;bk_nextsize = victim;</span><br><span class="line">                    victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">                &#125;</span><br><span class="line">                bck = fwd-&gt;bk;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        victim-&gt;fd_nextsize = victim-&gt;bk_nextsize = victim;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// largebin attack 2</span></span><br><span class="line">mark_bin(av, victim_index);</span><br><span class="line">victim-&gt;bk = bck;</span><br><span class="line">victim-&gt;fd = fwd;</span><br><span class="line">fwd-&gt;bk = victim;</span><br><span class="line">bck-&gt;fd = victim;</span><br></pre></td></tr></table></figure></div>
-
+<h3 id="largebin-attack"><a href="#largebin-attack" class="headerlink" title="largebin attack"></a>largebin attack</h3><p>先是 largebin 结构的介绍：</p>
+<p>large bin链表总共有63个链表</p>
+<p>bins 中占据 64 到 126 这个范围的位置</p>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>64</td>
+<td>[0x400,0x440)</td>
+</tr>
+<tr>
+<td>65</td>
+<td>[0x440,0x480)</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>126</td>
+<td>&gt;0x40000</td>
+</tr>
+</tbody></table>
+<p>每个 bin 内部管理一段范围大小的 chunk，bin 的公差也并补固定，从0x40逐渐增大。</p>
+<p>有关公差的设计，遵循下面这个表格：</p>
+<table>
+<thead>
+<tr>
+<th>组</th>
+<th>数量</th>
+<th>差值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>32</td>
+<td>64(0x40)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>16</td>
+<td>512(0x200)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>8</td>
+<td>4096(0x1000)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td>32768(0x8000)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>262144(0x40000)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1</td>
+<td>无限制</td>
+</tr>
+</tbody></table>
+<p>在每个 bin 管理的内部，<code>fd</code>,<code>bk</code>指针仍然指向同样大小的 chunk ,而不同大小的 chunk 通过 <code>fd_nextsize</code>,<code>bk_nextsize</code>链接，并且<code>fd_nextsize</code>,<code>bk_nextsize</code>实际上管理的是一套双向循环链表。这套链表内是每个不同大小但 size 满足同一个 largebin 的 第一个放入 largebin 的 chunk。</p>
+<p>把<code>fd_nextsize</code>,<code>bk_nextsize</code>指针去掉来看，整个链表又被<code>fd</code>,<code>bk</code>链接成一套双向循环链表。这套链表管理的是所有放入 largebin 的 chunk ，以及 bin 头。</p>
+<p>所以<code>fd_nextsize</code>,<code>bk_nextsize</code>也可以看成是一套跳表，比起只有<code>fd</code>,<code>bk</code>的情况，更快的找到指定大小的 chunk 。</p>
+<p><code>fd</code>,<code>fd_nextsize</code>总指向更小的chunk，<code>bk</code>,<code>bk_nextsize</code>总指向更大的 chunk。</p>
+<p>再是一坨 malloc 分配 largebin 源码</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        victim_index = largebin_index (size);</span><br><span class="line">        bck = bin_at (av, victim_index);</span><br><span class="line">        fwd = bck-&gt;fd;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* maintain large bins in sorted order */</span></span><br><span class="line">        <span class="keyword">if</span> (fwd != bck)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">/* Or with inuse bit to speed comparisons */</span></span><br><span class="line">            size |= PREV_INUSE;</span><br><span class="line">            <span class="comment">/* if smaller than smallest, bypass loop below */</span></span><br><span class="line">            assert ((bck-&gt;bk-&gt;size &amp; NON_MAIN_ARENA) == <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) (size) &lt; (<span class="type">unsigned</span> <span class="type">long</span>) (bck-&gt;bk-&gt;size))</span><br><span class="line">            &#123;</span><br><span class="line">                fwd = bck;</span><br><span class="line">                bck = bck-&gt;bk;</span><br><span class="line">                <span class="comment">// largebin attack 1-1</span></span><br><span class="line">                victim-&gt;fd_nextsize = fwd-&gt;fd;</span><br><span class="line">                victim-&gt;bk_nextsize = fwd-&gt;fd-&gt;bk_nextsize;</span><br><span class="line">                fwd-&gt;fd-&gt;bk_nextsize = victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                assert ((fwd-&gt;size &amp; NON_MAIN_ARENA) == <span class="number">0</span>);</span><br><span class="line">                <span class="keyword">while</span> ((<span class="type">unsigned</span> <span class="type">long</span>) size &lt; fwd-&gt;size)</span><br><span class="line">                &#123;</span><br><span class="line">                    fwd = fwd-&gt;fd_nextsize;</span><br><span class="line">                    assert ((fwd-&gt;size &amp; NON_MAIN_ARENA) == <span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> ((<span class="type">unsigned</span> <span class="type">long</span>) size == (<span class="type">unsigned</span> <span class="type">long</span>) fwd-&gt;size)</span><br><span class="line">                <span class="comment">/* Always insert in the second position.  */</span></span><br><span class="line">                fwd = fwd-&gt;fd;</span><br><span class="line">                <span class="comment">// largebin attack 1-2</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    victim-&gt;fd_nextsize = fwd;</span><br><span class="line">                    victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">                    fwd-&gt;bk_nextsize = victim;</span><br><span class="line">                    victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">                &#125;</span><br><span class="line">                bck = fwd-&gt;bk;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        victim-&gt;fd_nextsize = victim-&gt;bk_nextsize = victim;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// largebin attack 2</span></span><br><span class="line">mark_bin(av, victim_index);</span><br><span class="line">victim-&gt;bk = bck;</span><br><span class="line">victim-&gt;fd = fwd;</span><br><span class="line">fwd-&gt;bk = victim;</span><br><span class="line">bck-&gt;fd = victim;</span><br></pre></td></tr></table></figure></div>
 
 <h4 id="从bin-at开始讲起"><a href="#从bin-at开始讲起" class="headerlink" title="从bin_at开始讲起"></a>从bin_at开始讲起</h4><p>其实这和利用的部分没什么关系，只是在了解后觉得这种省空间的方式很有趣。</p>
 <p>数组中的 bin 依次如下</p>
@@ -612,6 +720,7 @@
 <li>索引为 2-63 的是 small bin，同一个 small bin 链表中的 chunk 的大小相同。两个相邻索引的 small bin 链表中的 chunk 大小相差的字节数为 2 个机器字长，即 32 位相差 8 字节，64 位相差 16 字节。</li>
 <li>索引为 63-126 的是 large bins。large bins 中的每一个 bin 都包含一定范围内的 chunk，其中的 chunk 按 fd 指针的顺序从大到小排列。相同大小的 chunk 同样按照最近使用顺序排列。</li>
 </ul>
+<p>而这一块 bin 就放在 arena 中。</p>
 <p>bin_at宏定义源码</p>
 <div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> bin_at(m, i) \</span></span><br><span class="line"><span class="meta">  (mbinptr) (((char *) &amp;((m)-&gt;bins[((i) - 1) * 2]))                              \</span></span><br><span class="line"><span class="meta">             - offsetof (struct malloc_chunk, fd))</span></span><br></pre></td></tr></table></figure></div>
 <p>m 代表的是分配区的地址，配合上不同类型的 bins 的索引就可以找到每个 bin 链表的头。bin_at 的作用就是通过不同 bin 的索引找到链表头。</p>
@@ -623,21 +732,42 @@
                       alt="20240928014016"
                 ><br><em>（图中bins(0),bins(1)即为 unsortedbin 的 fd,bk）</em></p>
 <p>对于 bin 的链表头来说，其实<code>prev_size</code>与<code>size</code>也不是很重要，于是只是把得到的结果强行转化为malloc_chunk*类型，可以有正常的链表链接操作，而实际在内存上并不是 malloc_chunk 结构体。</p>
-<h4 id="源码分析-1"><a href="#源码分析-1" class="headerlink" title="源码分析"></a>源码分析</h4><p>注意上文中注释<code>//largebin attack 1</code>的部分，</p>
+<h4 id="源码分析-1"><a href="#源码分析-1" class="headerlink" title="源码分析"></a>源码分析</h4><p>注意上文中注释<code>//largebin attack 1-2</code>的部分，</p>
 <div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    victim-&gt;fd_nextsize = fwd;</span><br><span class="line">    victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">    fwd-&gt;bk_nextsize = victim;</span><br><span class="line">    victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-<p>进入这里的 else 的情况是：largebin 非空；victim 不是 largebin 中最小的堆块；victim 的 size 和原 chunk 大小不相等。<br>这段的本意就是插入<code>fd_nextsize</code>,<code>bk_nextsize</code>链接的跳表中，但是因为没有检查 fwd 的 bk_nextsize 是否被更改，所以如果提前更改 fwd 的 bk_nextsize 那么也能塞出一条指针</p>
+<p>进入这里的 else 的情况是：</p>
+<ul>
+<li>largebin 非空</li>
+<li>victim 不是 largebin 中最小的堆块</li>
+<li>victim 的 size 和原 chunk 大小不相等。<br>这段的本意就是插入<code>fd_nextsize</code>,<code>bk_nextsize</code>链接的跳表中，但是因为没有检查 fwd 的 bk_nextsize 是否被更改，所以如果提前更改 fwd 的 bk_nextsize 那么也能塞出一条指针</li>
+</ul>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240929175706.png"
                       alt="20240929175706"
                 ><br><em>(左为正常插入流程，右为伪造 bk_nextsize)</em></p>
-<p>同理，<code>//largebin attack 2</code>的地方也是伪造了 bk 。</p>
-<p>然而同样的，在libc2.30及之后，largebin也加入了相应的校验。</p>
-<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    victim_index = largebin_index (size);</span><br><span class="line">    bck = bin_at (av, victim_index);</span><br><span class="line">    fwd = bck-&gt;fd;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* maintain large bins in sorted order */</span></span><br><span class="line">    <span class="keyword">if</span> (fwd != bck)</span><br><span class="line">    &#123;</span><br><span class="line">        ......</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//largebin attack</span></span><br><span class="line">                victim-&gt;fd_nextsize = fwd;</span><br><span class="line">                victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">                <span class="keyword">if</span> (__glibc_unlikely (fwd-&gt;bk_nextsize-&gt;fd_nextsize != fwd))</span><br><span class="line">                malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (nextsize)&quot;</span>);</span><br><span class="line">                fwd-&gt;bk_nextsize = victim;</span><br><span class="line">                victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">            &#125;</span><br><span class="line">            bck = fwd-&gt;bk;</span><br><span class="line">            <span class="keyword">if</span> (bck-&gt;fd != fwd)</span><br><span class="line">            malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (bk)&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br></pre></td></tr></table></figure></div>
-<h4 id="攻击-1"><a href="#攻击-1" class="headerlink" title="攻击"></a>攻击</h4><p><a class="link"   target="_blank" rel="noopener" href="http://zenaxu.cn/2024/06/21/heap%E5%88%9D%E6%8E%A2/" >hgame2024 week3 Elden Ring III <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>同理，当 victim 是 largebin 中最小的堆块时，则会走向<code>//largebin attack 1-1</code>，一样是在循环链表插入的时候发生</p>
+<p>又同理，<code>//largebin attack 2</code>的地方也是伪造了 bk 。</p>
+<h5 id="攻击-1"><a href="#攻击-1" class="headerlink" title="攻击"></a>攻击</h5><p>在老版本下，我们有两条路径（即选择<code>//largebin attack 1-1</code>还是<code>//largebin attack 1-2</code>），最多两个位置可以修改<br>不过修改的都是<code>bk_nextsize</code>与<code>bk</code>，造成 target_chunk 处 <code>fd_nextsize</code>与 <code>fd</code> 的链接错误。</p>
+<p>最经典的 poc 就是 how2heap 的演示，选择走<code>//largebin attack 1-2</code> + <code>//largebin attack 2</code></p>
+<p>这里不过多赘述具体操作，大致思想是：</p>
+<ul>
+<li>向 largebin 中放入一个 chunk1 ,同时在 unsortedbin 里预备一个大于 largebin 的 chunk2。</li>
+<li>修改 chunk1 的 <code>bk_nextsize</code> 为 <code>target_chunk-0x20</code>, <code>bk</code>为<code>target_chunk-0x10</code></li>
+<li>malloc一个堆块，触发 unsortedbin 整理机制，chunk2 链入 largebin，完成攻击。</li>
+</ul>
+<h4 id="libc-2-31"><a href="#libc-2-31" class="headerlink" title="libc-2.31"></a>libc-2.31</h4><p>然而同样的，在libc2.30及之后，largebin也加入了相应的校验。</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    victim_index = largebin_index (size);</span><br><span class="line">    bck = bin_at (av, victim_index);</span><br><span class="line">    fwd = bck-&gt;fd;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* maintain large bins in sorted order */</span></span><br><span class="line">    <span class="keyword">if</span> (fwd != bck)</span><br><span class="line">    &#123;</span><br><span class="line">        ......</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//largebin attack 1-2</span></span><br><span class="line">                victim-&gt;fd_nextsize = fwd;</span><br><span class="line">                victim-&gt;bk_nextsize = fwd-&gt;bk_nextsize;</span><br><span class="line">                <span class="keyword">if</span> (__glibc_unlikely (fwd-&gt;bk_nextsize-&gt;fd_nextsize != fwd))</span><br><span class="line">                malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (nextsize)&quot;</span>);</span><br><span class="line">                fwd-&gt;bk_nextsize = victim;</span><br><span class="line">                victim-&gt;bk_nextsize-&gt;fd_nextsize = victim;</span><br><span class="line">            &#125;</span><br><span class="line">            bck = fwd-&gt;bk;</span><br><span class="line">            <span class="keyword">if</span> (bck-&gt;fd != fwd)</span><br><span class="line">            malloc_printerr (<span class="string">&quot;malloc(): largebin double linked list corrupted (bk)&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ......</span><br></pre></td></tr></table></figure></div>
+<p>那么现在<br>对于第一个检查： victim 不是 largebin 中最小的堆块时不能随意更改 bk_nextsize,<code>//largebin attack 1-2</code>失效。<br>对于第二个检查：bk 的位置无法随意更改了，<code>//largebin attack 2</code>失效。<br>所幸，<code>//largebin attack 1-1</code>仍然保留</p>
+<h5 id="攻击-2"><a href="#攻击-2" class="headerlink" title="攻击"></a>攻击</h5><p>题目：<a class="link"   target="_blank" rel="noopener" href="http://zenaxu.cn/2024/06/21/heap%E5%88%9D%E6%8E%A2/" >hgame2024 week3 Elden Ring III <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ul>
+<li>向 largebin 中放入一个 chunk1 ,同时在 unsortedbin 里预备一个小于 largebin 的 chunk2。</li>
+<li>修改 chunk1 的 <code>bk_nextsize</code> 为 <code>target_chunk-0x20</code>,</li>
+<li>malloc一个堆块，触发 unsortedbin 整理机制，chunk2 链入 largebin，完成攻击。</li>
+</ul>
 <p>(づ′▽&#96;)づ</p>
 <h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>迟到了非常久，久到我有点忘记了为什么要把他们写在一起，可能是因为都是双向链表，然后都是任意地址非任意写，只是改大数。暑假没写是因为真的要忘光了，然后刚回忆起来一点就又去忙干别的事。总之希望这篇能够讲清楚这两种利用，变成未来的记忆胶囊（（。</p>
+<p>后后后记：没讲清楚，之后又回来补充了一些东西</p>
 
         </div>
 
@@ -652,7 +782,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-09-29 18:12:13
+                    :</strong> 2024-12-04 11:26:00
             </li>
         
         <li>
@@ -737,7 +867,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">图解unsortedbin attack &amp; largebin attack</div>
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#unsortedbin-attack"><span class="nav-number">1.</span> <span class="nav-text">unsortedbin attack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#unsortedbin-%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">unsortedbin 结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%BB%E5%87%BB"><span class="nav-number">1.3.</span> <span class="nav-text">攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#largebin-attack"><span class="nav-number">2.</span> <span class="nav-text">largebin attack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8Ebin-at%E5%BC%80%E5%A7%8B%E8%AE%B2%E8%B5%B7"><span class="nav-number">2.1.</span> <span class="nav-text">从bin_at开始讲起</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="nav-number">2.2.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%BB%E5%87%BB-1"><span class="nav-number">2.3.</span> <span class="nav-text">攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#unsortedbin-attack"><span class="nav-number">1.</span> <span class="nav-text">unsortedbin attack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#unsortedbin-%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">unsortedbin 结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">1.2.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%BB%E5%87%BB"><span class="nav-number">1.3.</span> <span class="nav-text">攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#largebin-attack"><span class="nav-number">2.</span> <span class="nav-text">largebin attack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8Ebin-at%E5%BC%80%E5%A7%8B%E8%AE%B2%E8%B5%B7"><span class="nav-number">2.1.</span> <span class="nav-text">从bin_at开始讲起</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="nav-number">2.2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BB%E5%87%BB-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">攻击</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#libc-2-31"><span class="nav-number">2.3.</span> <span class="nav-text">libc-2.31</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BB%E5%87%BB-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">攻击</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol>
 
     </div>
 </div>

