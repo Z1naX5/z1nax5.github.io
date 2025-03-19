@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/6a7ac6c71e01146411ae716c4cb887b0.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250319092322.png">
 <meta property="article:published_time" content="2025-03-18T11:42:18.000Z">
-<meta property="article:modified_time" content="2025-03-19T07:09:05.615Z">
+<meta property="article:modified_time" content="2025-03-19T11:06:05.371Z">
 <meta property="article:author" content="Z1naX5">
 <meta property="article:tag" content="Pwn">
 <meta property="article:tag" content="出题手记">
@@ -540,8 +540,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-03-19 15:09:05</span>
-            <span class="mobile">2025-03-19 15:09:05</span>
+            <span class="desktop">2025-03-19 19:06:05</span>
+            <span class="mobile">2025-03-19 19:06:05</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -624,7 +624,7 @@
 <p>尽管我没有编译过原题，比对二进制文件，但在后文中，我们看到<code>puts@plt address: 0x4005e7</code>，所以这个 stop 应当是一个 plt 表上的函数。</p>
 <p>也就是说，有某个函数可以使程序挂起。比如说 read ，就可以起到阻塞的作用。那既然 read 可以，其他函数可不可以。read@plt 可以，那么下一行的 read@got 可不可以？plt 表上的函数可以，程序里的函数可不可以？</p>
 <p>显然，stop_gadget 是不止一个的。</p>
-<p>那么，我们再来讨论什么是 stop_gadget 。讨论这个问题的意义主要在于，read 并不是一个性质足够完美的来帮助我们爆破或者利用的函数，这里的阻塞很有可能会因为一些收发输入而该改变计划，尤其如果在一个更大更复杂的程序中。stop_gadget 最主要是为了能够<strong>找到一个不会使程序崩溃的返回地址</strong>，他最好像不会影响我们的任何操作。</p>
+<p>那么，我们再来讨论什么是 stop_gadget 。讨论这个问题的意义主要在于，read 并不是一个性质足够完美的来帮助我们爆破或者利用的函数，这里的阻塞很有可能会因为一些收发输入而该改变计划，尤其如果在一个更大更复杂的程序中。stop_gadget 最主要是为了能够<strong>找到一个不会使程序崩溃的返回地址</strong>，他最好不会影响我们的任何操作。</p>
 <p>在测题的过程中，我认为 exit 就是一个很好的 stop_gadget ，合法且可以快速的结束进程。</p>
 <h5 id="什么时候回到-main-函数？"><a href="#什么时候回到-main-函数？" class="headerlink" title="什么时候回到 main 函数？"></a>什么时候回到 main 函数？</h5><p>除了直接在 ret 的位置上填上 main 的入口地址或者 main 函数上的合法地址，还有一些程序的初始化函数。</p>
 <p>虽然 main 作为程序的入口函数，在程序中是唯一的。一般情况下，我们也不会在子函数中调用 main 。但是 main 函数的执行前，程序会执行一些初始化函数，比如 __libc_csu_init ，这些函数在 main 函数执行前执行，在 main 函数执行后结束。</p>
@@ -672,7 +672,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-03-19 15:09:05
+                    :</strong> 2025-03-19 19:06:05
             </li>
         
         <li>
