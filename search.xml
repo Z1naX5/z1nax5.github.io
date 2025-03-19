@@ -1370,7 +1370,7 @@
                 ></p>
 <p>和原题有一个很大的区别就是，原题没有 canary 保护，以及程序崩溃后就结束了，而我的会在崩溃后重新再拉起一个，这也是此题 exp 中与原题非常大的一个差别，我们不会使用 close() 主动断开链接再拉起。</p>
 <p>这里给出保护的意义主要在于告诉大家程序的地址头来爆破，这道题之所以出成崩溃后在拉起是因为一开始想开启 PIE 保护，贴近真实环境，然而在测试后发现花费的时间过长，再加上每次还要爆破 canary ,所以最后还是关了。</p>
-<p>同时，即便是全盲，有没有 canary 也是可以测出来的。即通过测出填充 buf 长度后再加 b’\x00’ ，程序不奔溃且如果无 canary ,即返回地址最低两位为 00 是小概率事件，而如果崩溃了，则一定是无 canary 的。</p>
+<p>同时，即便是全盲，有没有 canary 也是可以测出来的。即通过测出填充 buf 长度后再加 b’\x00’ ，程序不崩溃则认为有 canary ,即返回地址最低两位为 00 是小概率事件，而如果崩溃了，则一定是无 canary 的。</p>
 <p>大部分的思路，我想下面几篇文章讲得是很清楚的，不多赘述，就直接放出exp了。</p>
 <blockquote>
 <p><a class="link"   href="https://www.scs.stanford.edu/brop/bittau-brop.pd00f" >论文原文 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   href="http://pwn4.fun/2017/02/13/Blind-Return-Oriented-Programming-BROP-Attack%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86/" >Blind Return Oriented Programming (BROP) Attack攻击原理 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/6.1.1_pwn_hctf2016_brop.html" >pwn HCTF2016 brop <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
