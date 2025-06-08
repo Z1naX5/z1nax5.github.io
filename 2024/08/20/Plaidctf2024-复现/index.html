@@ -31,11 +31,12 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240907220443.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240907220547.png">
 <meta property="article:published_time" content="2024-08-20T06:06:58.000Z">
-<meta property="article:modified_time" content="2024-09-08T19:46:45.716Z">
+<meta property="article:modified_time" content="2025-06-02T17:08:03.628Z">
 <meta property="article:author" content="Z1naX5">
 <meta property="article:tag" content="wp">
 <meta property="article:tag" content="CV">
 <meta property="article:tag" content="Paper Reading">
+<meta property="article:tag" content="学习日志">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240819223048.png">
     
@@ -547,8 +548,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-09-09 03:46:45</span>
-            <span class="mobile">2024-09-09 03:46:45</span>
+            <span class="desktop">2025-06-03 01:08:03</span>
+            <span class="mobile">2025-06-03 01:08:03</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -571,6 +572,10 @@
                         | <a href="/tags/Paper-Reading/">Paper Reading</a>&nbsp;
                     </li>
                 
+                    <li>
+                        | <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/">学习日志</a>&nbsp;
+                    </li>
+                
             </ul>
         </span>
     
@@ -578,7 +583,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.3k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.2k Words</span>
         </span>
     
     
@@ -613,9 +618,12 @@
 <p>然后他就开始在这个取字板上漂移了两个小时了。</p>
 <p>我们的目标是把它取到的字用脚本爆出来，正确率如上图，除了后期加了空格没有别的处理了。<br>虽然后期编码的部分很难去校对，但是前面语句传达信息的部分可以看到100%正确，每个单词都没有错字，漏字。</p>
 <p>思路大致是先对原视频做一点预处理，然后追踪中间的取字板，同时记录下追踪框的中心点坐标（也可以是中心偏下的点），一连串的中心点坐标完全可以表达取字板的运动信息，和一张固定的坐标表比对就可以知道现在是运动还是静止，静止的话选中了什么字。</p>
-<h4 id="Why-not-Deep-Learning"><a href="#Why-not-Deep-Learning" class="headerlink" title="Why not Deep Learning?"></a>Why not Deep Learning?</h4><p>因为我犟。</p>
-<p>其实真没啥别的原因，只是直觉上感觉深度学习为这个炼一个丹比较耗费人力<br>首先数据准备就要标注很多，目标也不明确。是要直接目标检测到每一个具体的字母还是要做单纯的取字板追踪。<br>前者太多数据了，而且必须要把取字板也截到图像里，复杂的光线+不太优质的像素注定了这是一个要炼相对久的大丹；后者则太亏了，仅用深度学习做到这一步后续还是有很多的处理，大材小用。</p>
-<p>总之，我觉得作为一个限时赛题不太想用这样的方式解决，我也不太乐意炼一颗不太能迁移使用的丹，所以完全都是依托opencv做的。</p>
+<h4 id="Why-not-Deep-Learning"><a href="#Why-not-Deep-Learning" class="headerlink" title="Why not Deep Learning?"></a>Why not Deep Learning?</h4><ul>
+<li>标注数据过于耗费人力，类似直接看 </li>
+<li>复杂的光线+不太优质的像素注定了这是一个不易收敛的模型</li>
+<li>且仅用深度学习做到这一步后续还是有很多的处理，大材小用</li>
+</ul>
+<p>总之，我觉得作为一个限时赛题不太想用这样的方式解决，以及训练一个不便迁移的模型，最终都依赖opencv库实现。</p>
 <p>当然，也可能是我对这些任务不够熟悉，没有更好的解决思路。(☍﹏⁰)<br>或许真有符合要求够用的某个预训练模板可以简单快速的梭了。</p>
 <p>在此博客之后的讨论中都不包含任何与深度学习有关的内容。</p>
 <p>我把这次的脚本整理成了几个<del>并不实用的</del>小工具：</p>
@@ -630,7 +638,7 @@
 <ul>
 <li>视频里面灯光是闪动的，显然对画面干扰太大了</li>
 <li>两个小时的视频对于追踪仍然有挑战，依旧需要切片</li>
-<li>视频里面的信息过暗了，人眼都看不清机器怎么识别（机器确实不能用人眼的要求去看，不过处理过后的数据会有显著提升）</li>
+<li>视频里面的信息过暗了，人眼也看不清楚，且处理过后的数据的确会有显著提升</li>
 </ul>
 <h5 id="ROI"><a href="#ROI" class="headerlink" title="ROI"></a>ROI</h5><p><em>这个处理在最后的解题版本里有可能是没有用的，不过我没有做对比实验，这里仅介绍一下做了这个处理以及为什么</em></p>
 <p>ROI(region of interest),就是从原始图像中选择一个区域作为感兴趣区域，目的就是排除不感兴趣区域的干扰，同时仅对感兴趣的部分进行运算。既可以提高准确率，只对部分区域高精度运算也可以节省算力加快速度。</p>
@@ -674,7 +682,7 @@
                      data-src="https://raw.githubusercontent.com/Z1naX5/PicGo/master/images/20240907220547.png"
                       alt="20240907220547"
                 ><br>我们的追踪失败了。</p>
-<p>出现这样的问题不得不说的就是PlaidCTF的主办方真的很有意思能想出这样一个点子，并且使用实拍来完成它，使得这个任务变得富有挑战性和趣味性。<br>最简单的解决方案就是直接以此为分界重新切片，在技术上只需要找到对应的帧数就好，也不难实现。</p>
+<p>出现这样的问题不得不说的就是 PlaidCTF 的主办方真的很有意思能想出这样一个点子，并且使用实拍来完成它，使得这个任务变得富有挑战性和趣味性。<br>最简单的解决方案就是直接以此为分界重新切片，在技术上只需要找到对应的帧数就好，也不难实现。</p>
 <p>不过或许还有一个可以尝试的思路就是不要使用裁切过的视频，因为这能够为边缘在形态学处理的时候提供更多的可能的暗部信息。<br>追踪与运动的区别还在于追踪的概念是对一个已经确定的目标，而运动则是在全局画面中发现移动的目标，而最后使用的追踪的流程并不与闪动的灯光相关，所以也不用担心算法反复选中<code>运动的灯光</code>。</p>
 <h3 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h3><p>这个题过了这么久还在研究完全是以熟悉opencv库与计算机视觉技术的角度出发，在没有引入简单的预训练模型时，就从人工智能图像处理的角度看能够做到什么程度。效果我觉得还行，差强人意吧。</p>
 <h4 id="இдஇ"><a href="#இдஇ" class="headerlink" title="இдஇ"></a>இдஇ</h4><p>看上去是那么的流畅，但是实际上踩了超级多坑</p>
@@ -718,7 +726,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2024-09-09 03:46:45
+                    :</strong> 2025-06-03 01:08:03
             </li>
         
         <li>
@@ -753,6 +761,10 @@
                 
                     <li class="tag-item mx-0.5">
                         <a href="/tags/Paper-Reading/">#Paper Reading</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/">#学习日志</a>&nbsp;
                     </li>
                 
             </ul>
