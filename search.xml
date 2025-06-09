@@ -1259,7 +1259,7 @@
     <url>/2025/03/18/Hgamefinal2025/</url>
     <content><![CDATA[<p>_(:3 」∠ )_</p>
 <h2 id="BackTo2016"><a href="#BackTo2016" class="headerlink" title="BackTo2016"></a>BackTo2016</h2><p>记一次程序运行时的小小型实验。</p>
-<h3 id="wp"><a href="#wp" class="headerlink" title="wp"></a>wp</h3><h4 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h4><p>很容易找到这题的原型是 HCTF2016 的 出题人失踪了，也在赛时作为免费hint放出了，所以这里主要聊一些大家可能没有注意到的我给出的细节。</p>
+<h3 id="wp"><a href="#wp" class="headerlink" title="wp"></a>wp</h3><h4 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h4><p>很容易找到这道只给靶机的纯黑盒pwn题的原型是 HCTF2016 的 出题人失踪了，也在赛时作为免费hint放出了，所以这里主要聊一些大家可能没有注意到的我给出的细节。</p>
 <p><img  
                      lazyload
                      src="/images/loading.svg"
